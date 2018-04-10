@@ -1,0 +1,72 @@
+﻿@using PlusAndComment.Common
+@model PlusAndComment.Models.MainPostVM
+
+<div class="well-sm commentPartial">
+    @Html.HiddenFor(m => m.ID)
+    <div id="userNameCommentPartial">
+        @Html.DisplayFor(m => m.User.UserName)
+
+        @{
+            string clas = string.Empty;
+            if (Model.UsersVotesOnThisPost != null && Model.UsersVotesOnThisPost.Select(m => m.UserName).Contains(User.Identity.Name))
+            {
+                clas = "background-color: green !important";
+            }
+            @Ajax.RawActionLink("<i class='glyphicon glyphicon-ok'></i> " + Html.DisplayFor(m => m.PlusAmount).ToString(),
+                 "AddPlusToPostAsync",
+                 "Home",
+                 new { id = Model.ID },
+                 new AjaxOptions
+                 {
+                     HttpMethod = "Post",
+                     OnFailure = "actionFailure",
+                     OnSuccess = "actionAddPlusSuccess"
+                 },
+                 new { @style = clas, @id = "plusLabel" + Model.ID, @class = "btn-xs btn-labeled btn-success-pc pull-right" })
+        }
+    </div>
+    <hr class="horizontalLine" />
+    @if (Model.Removed)
+    {
+        <span style="color: lightgrey; font-size: 11px;">Komentarz został usunięty.</span>
+    }
+    else
+    {
+        @Html.DisplayFor(m => m.LongDescription)
+    }
+    <div>
+        <hr class="horizontalLine" />
+        <a href="#" id="showLeaveCommentButton_@(Model.ID)" onclick="return showleaveComment(@(Model.ID), @(User.Identity.IsAuthenticated.ToString().ToLower()))">komentarz</a>
+
+        @if (ViewContext.HttpContext.User.IsInRole("Moderator") || ViewContext.HttpContext.User.IsInRole("Admin") ||  (Model.User != null && Model.User.UserName == User.Identity.Name))
+        {
+            @Ajax.ActionLink("Usuń komentarz",
+                     "RemovePost",
+                     new { id = Model.ID },
+                     new AjaxOptions
+                     {
+                         UpdateTargetId = "CustomerList",
+                         InsertionMode = InsertionMode.Replace,
+                         HttpMethod = "GET"
+                     });
+        }
+    </div>
+</div>
+<div id="leaveCommentPartial_@(Model.ID)" style="display: none">
+    @Html.Action("LeaveComment", new { id = Model.ID, type = ViewData["postType"], isMainComment = ViewData["isMainComment"] })
+</div>
+
+<div id="targetXXX_@(Model.ID)"></div>
+
+@*Show child if exists*@
+@if (Model.Posts != null && Model.Posts.Count > 0)
+{
+    foreach (var item in Model.Posts)
+    {
+        if (ViewBag.showAllComments == false || ViewData["showAllPosts"] == "false" ) { break; }
+
+        <div id="abc_@(item.ID)" style="margin-left: 20px;">
+            @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", ViewData["showAllPosts"] }, {"postType", ViewData["postType"] }, { "isMainComment", false } })
+        </div>
+    }
+}

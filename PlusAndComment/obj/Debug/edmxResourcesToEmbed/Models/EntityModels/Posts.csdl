@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="PostEntity">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Header" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ApplicationUser_Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="PostEntity_ID" Type="Int32" />
+    <Property Name="PlusAmount" Type="Int32" Nullable="false" />
+    <Property Name="MinusAmount" Type="Int32" Nullable="false" />
+    <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ReferenceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Removed" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="PostEntity1" Relationship="Self.FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID" FromRole="PostEntity" ToRole="PostEntity1" />
+  </EntityType>
+  <Association Name="FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID">
+    <End Role="PostEntity" Type="Self.PostEntity" Multiplicity="0..1" />
+    <End Role="PostEntity1" Type="Self.PostEntity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PostEntity">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PostEntity1">
+        <PropertyRef Name="PostEntity_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PostsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="PostEntity" EntityType="Self.PostEntity" />
+    <AssociationSet Name="FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID" Association="Self.FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID">
+      <End Role="PostEntity" EntitySet="PostEntity" />
+      <End Role="PostEntity1" EntitySet="PostEntity" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

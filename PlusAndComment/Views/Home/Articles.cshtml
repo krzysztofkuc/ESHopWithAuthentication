@@ -1,0 +1,12 @@
+﻿@model PlusAndComment.Models.ArticlesVM
+@{
+    ViewBag.Title = Model.Header;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top: 20px;">
+    @foreach (var article in Model.Articles)
+    {
+        @Html.Partial("_ArticleRowPartial", article, new ViewDataDictionary() { {"postType", "Article" }, { "isMainComment", true } })
+    }
+</div>

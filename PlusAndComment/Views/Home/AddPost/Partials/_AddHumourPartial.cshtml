@@ -1,0 +1,15 @@
+﻿@model PlusAndComment.Models.AddPostVMs.AddHumourVM
+
+@using (Html.BeginForm("AddPostHumour", "Home", FormMethod.Post))
+{
+    <div style="padding: 24px 10px 10px 10px">
+        <div>
+            @Html.TextAreaFor(model => model.Content, new { @class = "input contentText", @rows = 6, placeholder = "Wpisz tekst" })
+            @Html.ValidationMessageFor(model => model.Content)
+        </div>
+        <hr style="margin: 0 0 0 0">
+        <div class="text-right">
+            <input type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+        </div>
+    </div>
+}

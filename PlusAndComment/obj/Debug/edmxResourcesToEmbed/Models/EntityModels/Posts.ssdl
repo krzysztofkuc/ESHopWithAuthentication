@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="PostEntity">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Header" Type="nvarchar(max)" />
+    <Property Name="FilePath" Type="nvarchar(max)" />
+    <Property Name="ApplicationUser_Id" Type="nvarchar" MaxLength="128" />
+    <Property Name="PostEntity_ID" Type="int" />
+    <Property Name="PlusAmount" Type="int" Nullable="false" />
+    <Property Name="MinusAmount" Type="int" Nullable="false" />
+    <Property Name="ShortDescription" Type="nvarchar(max)" />
+    <Property Name="LongDescription" Type="nvarchar(max)" />
+    <Property Name="ReferenceUrl" Type="nvarchar(max)" />
+    <Property Name="Url" Type="nvarchar(max)" />
+    <Property Name="Removed" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID">
+    <End Role="PostEntity" Type="Self.PostEntity" Multiplicity="0..1" />
+    <End Role="PostEntity1" Type="Self.PostEntity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PostEntity">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PostEntity1">
+        <PropertyRef Name="PostEntity_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="PostEntity" EntityType="Self.PostEntity" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID" Association="Self.FK_dbo_PostEntity_dbo_PostEntity_PostEntity_ID">
+      <End Role="PostEntity" EntitySet="PostEntity" />
+      <End Role="PostEntity1" EntitySet="PostEntity" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

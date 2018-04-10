@@ -1,0 +1,41 @@
+﻿@using PlusAndComment.Common
+@model ICollection<PlusAndComment.Models.MainPostVM>
+
+@*<div id="leaveCommentPartial_@(Model.ID)" style="display: none">
+        @Html.Action("LeaveComment", new { id = Model.ID, type = ViewData["postType"], isMainComment = ViewData["isMainComment"] })
+    </div>*@
+
+@*<div id="commentsMain_@(Model.ID)">*@
+@if (Model.Count > 0)
+{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", "false" }, { "postType", ViewData["postType"] }, { "isMainComment", ViewData["isMainComment"] } })
+
+        if (item.AmountOfAllcommens > 2)
+        {
+            @Ajax.RawActionLink("<div class='btn-default btn-xs btn-pokaz-wszystkie' id='buttonAllComments_" + item.ID + "' style='text-align: center; width: calc(100% - 6px); margin-left: 3px;'> Pokaż wszystkie (" + item.AmountOfAllcommens + ")</div><div style='width: 100%; text-align: center'><img src='..//Storage//ajax-loader.gif' id='loadingIndiComment_" + item.ID + "' style='width: 15px; display: none'/></div>",
+                                            "ShowAllMainPostComments",
+                                            "Home",
+                                            new { id = item.ID, type = item.PostType },
+                                            new AjaxOptions
+                                            {
+                                                UpdateTargetId = "commentsMain_" + item.ID,
+                                                InsertionMode = InsertionMode.Replace,
+                                                HttpMethod = "GET",
+                                                OnBegin = "showCommentsLoader(" + item.ID + ")"
+                                            },
+                                            new { @id = "showCommentsButton_" + item.ID })
+        }
+
+        i++;
+        if (i > 1) { break; }
+
+
+    }
+}
+
+
+
+@*</div>*@

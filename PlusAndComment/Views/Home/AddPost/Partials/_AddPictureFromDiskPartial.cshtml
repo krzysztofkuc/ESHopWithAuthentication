@@ -1,0 +1,26 @@
+﻿@model PlusAndComment.Models.AddPostVMs.AddPictureFromDiskVM
+
+@using (Html.BeginForm("AddPostPicturefromDisk", "Home", FormMethod.Post, new { @id = "AddPost" }))
+{
+    @Html.HiddenFor(m => m.Type, new { @class = "postTypeImageUpload" })
+    @Html.HiddenFor(m => m.Picture.PathRelative, new { @class = "photoReferenceUrl" })
+    @Html.HiddenFor(m => m.Gif.PathRelative, new { @class = "gifReferenceUrl" })
+    @Html.HiddenFor(m => m.Gif.FirstFramePathRelative, new { id = "firstFramePathRelative" })
+
+<div style="padding: 24px 10px 10px 10px">
+        <div>
+            @Html.TextAreaFor(model => model.Header, new { @class = "input ContentDescription", placeholder = "Dodaj opis" })
+            <hr style="margin: 0 0 0 0">
+        </div>
+        <label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn btn-orange">
+            <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;<i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie / GIF
+        </label>
+        <input type="file" id="userImageUploadForm" class="custom-file-upload " />
+        @{ Html.RenderPartial(Url.Content("~\\Views\\Home\\AddPost\\Partials\\_PictureFromDiskPreviewPartial.cshtml"), Model, new ViewDataDictionary() { { "id", "UserPhotoPreview" } });}
+        <div class="text-right">
+            <input type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+        </div>
+
+        <img id="loadingAddPostPhoto" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
+    </div>
+}

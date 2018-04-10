@@ -1,0 +1,13 @@
+﻿@model PlusAndComment.Models.SucharyVM
+
+<div class="container" style="max-width: 750px; margin-top: 30px;">
+
+    <div class="col-md-12" style="background-color: #465861; border-radius: 4px;">
+
+        @foreach (var suchar in Model.Suchary)
+        {
+            @Html.Partial("_SucharPartial", suchar)
+        }
+        <hr class="horizontalLine" />
+    </div>
+</div>

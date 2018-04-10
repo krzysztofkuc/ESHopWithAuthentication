@@ -1,0 +1,24 @@
+﻿@model PlusAndComment.Models.ArticleVM
+
+<div class="row">
+    <div class="thumbnail" style="background-color: #6b8694; margin: 8px 8px 8px 8px; border-color: #D87904;">
+        <img src="@Url.Content(Model.RelThumbPath)" style="width: auto;  text-overflow: ellipsis;" />
+                <div class="caption">
+            <h4>@Html.DisplayFor(m => m.Header)</h4>
+                    <div style="color: #b8c5cc;">
+                        @if (Model.LongDesc != null && Model.LongDesc.Length > 200)
+                        {
+                            @Model.LongDesc.Substring(0, 200)
+                        }
+                        else
+                        {
+                            @Model.LongDesc
+                        }
+            ...
+                        </div>
+            <div style="margin-top: 5px; width: 100%; display: block; word-wrap: break-word;">
+                <a href=@Model.Url>@Model.Url</a>
+            </div>
+        </div>
+    </div>
+</div>

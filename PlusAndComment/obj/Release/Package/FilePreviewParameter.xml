@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="trudnezarty.hostingasp.pl" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." value="Data Source=mssql5.webio.pl,2401;Initial Catalog=chrisk_trudnedb;User ID=chrisk_chrisk;Password=Ziemniaki1!.;Integrated Security=False" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+</parameters>

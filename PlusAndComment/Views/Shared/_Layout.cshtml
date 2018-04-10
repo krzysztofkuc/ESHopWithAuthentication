@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html xmlns:og="http://ogp.me/ns#">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trudneŻarty.pl</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    <meta property="og:url" content="http://www.trudneżarty.pl" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Trudny humor" />
+    <meta property="og:description" content="Strona z czarnym humorem" />
+    @*<meta property="og:image" content="@Url.Content("~/Storage/logoFB.png")"/>*@
+    <meta property="og:image" content="../../Storage/logo.png" />
+    <link rel="icon" href="@Url.Content("~/Storage/logoIcon.ico")">
+
+    @functions 
+    {
+        public string CheckActive(string actionName, string controllerName)
+        {
+            return (ViewContext.RouteData.Values["action"].ToString().ToLower() == actionName.ToLower() && ViewContext.RouteData.Values["controller"].ToString().ToLower() == controllerName.ToLower()) ? "active".ToString() : "".ToString();
+        }
+    }
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+                <a href='@Url.Action("index", "Home")'>
+                    <img src='@Url.Content("~/Storage/logo.png")' style="max-height: 50px;"/>
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="@CheckActive("Articles", "Home")"style="padding-top: 9px;"><a href="/Home/Articles" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="glyphicon glyphicon-list-alt" style="padding-right: 5px;"></span>Z sieci</a></li>
+                    <li class="@CheckActive("Suchary", "Home")" style="padding-top: 9px;"><a href="/Home/Suchary" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Suchary</a></li>
+                    <li class="@CheckActive("MemGenerator", "Home")" style="padding-top: 9px;"><a href="/Home/MemGenerator" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Generator memów</a></li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+        <div id="infoCopied">
+            Skopiowano
+        </div>
+    </div>
+
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            @*<p>stopka</p>*@
+        </footer>
+    </div>
+
+    
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/site")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

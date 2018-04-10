@@ -1,0 +1,112 @@
+﻿@model PlusAndComment.Models.MenageRolesVM
+
+@{
+    ViewBag.Title = "Zarządzanie rolami";
+}
+
+<style>
+
+</style>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MenageRoles</title>
+</head>
+<body>
+    <div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Rola</th>
+                        <th>Nadaj rolę moderatora</th>
+                        <th>Usuń rolę moderatora</th>
+                        <th>Zbanuj</th>
+                        <th>Zbanowany</th>
+                        <th>Zbanowany do</th>
+                        <th>Zbanuj do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        @Html.HiddenFor(u => user.BannEndDate, new { id = "hiddenBannEndDate_"+@user.Id });
+                        <tr>
+                            <td>@Html.DisplayFor(u => user.Name)</td>
+                            <td>@Html.DisplayFor(u => user.Rola.Name)</td>
+                            <td>@Html.ActionLink("Nadaj", "AddUserToRole", "Manage", new { userId = user.Id, role = "Moderator" }, null)</td>
+                            <td>@Html.ActionLink("Usuń", "RemoveUserFromRole", "Manage", new { userId = user.Id, role = "Moderator" }, null)</td>
+
+                            @if (user.Banned)
+                            {
+                                <td><a href="#" class="bannButton" id="unbann_@(user.Id)">Odbanuj</a></td>
+                            }
+                            else
+                            {
+                                <td><a href="#" class="bannButton" id="bann_@user.Id">Zbanuj</a></td>
+                            }
+                            <td>@Html.DisplayFor(u => user.Banned)</td>
+                            <td>@Html.DisplayFor(u => user.BannEndDate)</td>
+                            <td>
+                                <div class='input-group date datetimepicker' id='datetimepicker'>
+                                <input type='text' class="form-control" id="bannEndDate_@(user.Id)"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </td>
+
+                            @*@if (user.LockoutEnabled)
+                                {<td>@Html.ActionLink("Odbanuj", "LockoutUser", "Manage", new { userId = user.Id, lockout = false }, null)</td>}
+                                else
+                                {<td>@Html.ActionLink("Zbanuj", "LockoutUser", "Manage", new { userId = user.Id, lockout = true }, null)</td>}
+                                <td>@Html.DisplayFor(u => user.LockoutEnabled)</td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $('.datetimepicker').datetimepicker();
+
+        $('.datetimepicker').datetimepicker().on('dp.change', function (e) {
+            var _this = this;
+            var date = e.date._d.toISOString();
+            var id = _this.id.split('_')[1];
+
+            $("#hiddenBannEndDate_" + id).val(new Date().toLocaleString());
+        });
+
+        $(".bannButton").click(function (e) {
+
+            var id = e.target.id.split("_")[1];
+            var bann = false;
+            var bannEndDate = "";
+            if (e.target.text == "Zbanuj") {
+                bann = true;
+                bannEndDate = $("#bannEndDate_" + id).val();
+            }
+
+            $.post({
+                type: "POST",
+                url: '@Url.Action("BannUser", "Account")',
+                data: { userId: id, bann: bann, bannEndDate: bannEndDate },
+                success: function (resultData) {
+                    $("body").html(resultData);
+                },
+                failure: function (resultData) {
+                alert("faileure Complete");
+            }
+            });
+        });
+    });
+</script>
+

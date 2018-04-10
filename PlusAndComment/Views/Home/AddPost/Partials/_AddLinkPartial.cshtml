@@ -1,0 +1,27 @@
+﻿@model PlusAndComment.Models.AddPostVMs.AddLinkVM
+
+@using (Html.BeginForm("AddPostLink", "Home", FormMethod.Post, new { @id = "AddPost" }))
+{
+    <div style="padding: 24px 10px 10px 10px">
+        <div>
+            @Html.TextAreaFor(model => model.Url, new { @class = "input contentLink", style = "max-width: 498px !important; border-style: none;", placeholder = "Wklej link" })
+            @Html.ValidationMessageFor(model => model.Url)
+        </div>
+        <hr style="margin-top: 1px; margin-bottom: 1px">
+        <div>
+            @Html.TextAreaFor(model => model.Header, new { @class = "input ContentDescription", placeholder = "Dodaj opis" })
+        </div>
+        <hr style="margin: 0 0 0 0">
+        @{ Html.RenderPartial(Url.Content("~/Views/Home/AddPost/Partials/_PostLinkPreviewPartial.cshtml"), Model, new ViewDataDictionary() { { "id", "AddLinkPreview" } }); }
+        <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
+        <div class="text-right">
+            <div style="display: inline-block; color: #b73434; max-width: 30px;">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(m => m.NeedAge)
+                    @Html.DisplayNameFor(m => m.NeedAge)
+                </div>
+            </div>
+            <input id="addPostButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+        </div>
+    </div>
+}

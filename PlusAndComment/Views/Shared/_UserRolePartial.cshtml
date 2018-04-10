@@ -1,0 +1,18 @@
+﻿@model PlusAndComment.Models.ApplicationUser
+@{
+    ViewBag.Title = "Menage Roles";
+}
+
+<div style="">
+    <div>
+        <label>Nazwa użytkownika:</label> <span>@Html.DisplayFor(m => m.UserName)</span>
+    </div>
+    <div>
+        <label>Role:</label>
+        @foreach (var rule in Model.Roles)
+        {
+            @Html.DisplayName(rule.Role.Name);
+        }
+    </div>
+</div>
+

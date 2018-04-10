@@ -1,0 +1,26 @@
+﻿@using PlusAndComment.Common
+@model PlusAndComment.Models.AddPostVMs.AddPictureFromDiskVM
+
+<img id="loadingPageThumb" src="~/Storage/ajax-loader.gif" style="display: none; max-width: 20px; max-height: 20px; margin-top: 20px;" />
+@{
+
+    if (Model.Gif != null && Model.Type == Enums.PostType.gif.ToFriendlyString())
+    {
+        <img class="imageThumb_@(ViewData["id"])" src="" />
+        @Url.Content(Model.Gif.Url)
+        <div style="text-align: left; color:#B0B0B0; font-size: 11px">
+            źródło:@Html.DisplayFor(m => m.Header)
+        </div>
+    }
+    else if (Model.Picture != null && Model.Type == Enums.PostType.img.ToFriendlyString())
+    {
+        <img src="@Model.Picture.Url" data-wait="true" />
+        <div style="text-align: left; color:#B0B0B0; font-size: 11px">
+            źródło:@Html.DisplayFor(m => m.Header)
+        </div>
+    }
+}
+<div>
+    <img class="imageThumb_@(ViewData["id"])" src="" style="width: 100% !important" />
+    <iframe id="movieThumb" width="420" height="315" src="" frameborder="0" allowfullscreen style="display: none"></iframe>
+</div>

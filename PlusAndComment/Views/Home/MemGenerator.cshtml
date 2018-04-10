@@ -1,0 +1,318 @@
+﻿@*@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+
+<style>
+    input[type="range"] {
+        width: auto !important;
+    }
+</style>
+    <div ng-app="myApp" ng-controller="myCtrl">
+
+        <div class="container">
+
+            <div class="col-md-12 text-center">
+                <hr>
+                <div class="center">
+                    <label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn btn-orange">
+                        <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;<i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie / GIF
+                    </label>
+                    <input type="file" id="userImageUploadForm" name="myFile" class="custom-file-upload" file-upload />
+                </div>
+
+                <img id="start-image" style="display: none" src="" alt="" imageOnload />
+
+                <div class="col-md-12">
+                    <canvas id="memecanvas"
+                            ng-mousedown="handleMouseDown($event)"
+                            ng-mouseup="handleMouseUp($event)"
+                            ng-mouseout="handleMouseOut($event)"
+                            ng-mouseMove="handleMouseMove($event)">
+                        Sorry, canvas not supported
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <hr>
+            </div>
+
+            <div class="col-md-4">
+                
+                <span style="display: block">Linia 1: <input style="width: 80%" ng-model="texts[0].textX" ng-change="drawText()" /></span>
+                <span style="display: block">Linia 2: <input style="width: 80%" ng-model="texts[1].textX" ng-change="drawText()" /></span>
+                <span style="display: block">Linia 3: <input style="width: 80%" ng-model="texts[2].textX" ng-change="drawText()" /></span>
+                <span style="display: block">Linia 4: <input style="width: 80%" ng-model="texts[3].textX" ng-change="drawText()" /></span>
+            </div>
+
+            <div class="col-md-4">
+                
+                    Tło górne: <input max={{MaxHeightBckg}} min=0 step="1" type="range" ng-model="bckgTop" ng-change="drawText()" />
+                
+                    <span style="display: block">Tło dolne: <input max={{MaxHeightBckg}} min=0 step="1" type="range" ng-model="bckgBottom" ng-change="drawText()" /></span>
+                    <span style="display: block;">Wielkość czcnionki: <input max=50 min=0 step="1" type="range" ng-model="fontSize" ng-change="drawText()" /></span>
+                </div>
+            <div class="col-md-4">
+
+            </div>
+        </div>
+    </div>
+
+@Scripts.Render("~/bundles/angularjs")
+
+<script>
+    var app = angular.module('myApp', []);
+
+    app.controller('myCtrl', function ($scope, $http) {
+
+        var canvas = document.getElementById('memecanvas');
+        canvas.width = 1;
+        canvas.height = 1;
+	var ctx = canvas.getContext('2d');
+    var img = document.getElementById('start-image');
+	var startX = 0;
+	var startY = 0;
+	var selectedText = -1;
+	$scope.canvasMaxWidth = 640;
+	$scope.canvasMaxHeight = 480;
+	var x = null;
+    var y = null;
+    var offsetX = null;
+    var offsetY = null;
+    $scope.scale = 1;
+    $scope.MaxHeightBckg = null;
+    $scope.bckgTop = this.MaxHeightBckg;
+    $scope.bckgBottom = this.MaxHeightBckg;
+    $scope.canvasMaxWidth = 640;
+    $scope.canvasMaxHeight = 480;
+    $scope.fontSize = 10;
+
+	img.onload= function (e) 
+    {
+        $scope.MaxHeightBckg = img.height / 7;
+
+	    var deviceWidth = window.innerWidth;;
+	    canvasWidth = Math.min($scope.canvasMaxWidth, deviceWidth-20);
+        canvasHeight = Math.min($scope.canvasMaxHeight, deviceWidth - 20);
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        var rect = canvas.getBoundingClientRect();
+        offsetX = rect.left;
+        offsetY = rect.top;
+
+        $scope.scale = $scope.getScaleToCanvas(img);
+        $scope.fontSize = img.width / 13 * $scope.scale;
+
+        x = canvas.width / 2 - img.width * $scope.scale / 2;
+        y = canvas.height / 2 - img.height * $scope.scale / 2;
+
+	    $scope.texts = [
+            { textX: "", x: x + 10, y: y - $scope.fontSize * 1.2 },
+            { textX: "", x: x + 10, y: y + $scope.fontSize * 1.2 },
+            { textX: "", x: x + 10, y: y + (img.height * $scope.scale)  },
+            { textX: "", x: x + 10, y: y + (img.height * $scope.scale) + $scope.fontSize * 1.2 }
+	    ];
+        
+        $scope.drawText();
+	}
+
+	$scope.textHittest = function(x, y, textIndex) {
+		var text = this.texts[textIndex];
+		return (x >= text.x && x <= text.x + text.width && y >= text.y - text.height && y >= text.y && y <= text.y + this.fontSize);
+	}
+
+	$scope.handleMouseDown = function (e) {
+
+	    if (this.texts == null)
+	        return;
+
+		e.preventDefault();
+		startX = parseInt(e.clientX - offsetX);
+		startY = parseInt(e.clientY - offsetY);
+
+		// Put your mousedown stuff here
+		for (var i = 0; i < this.texts.length; i++) {
+			this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/10;
+			this.texts[i].height = this.fontSize;
+
+			if (this.textHittest(startX, startY, i)) {
+				selectedText = i;
+			}
+		}
+	}
+
+	// done dragging
+	$scope.handleMouseUp = function(e) {
+		e.preventDefault();
+		selectedText = -1;
+	}
+
+	$scope.isOnText = function(e)
+	{
+	    if (this.texts == null)
+	        return;
+
+	for (var i = 0; i < this.texts.length; i++) {
+
+		this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/10;
+		this.texts[i].height = this.fontSize;
+		mX = parseInt(e.clientX - offsetX);
+		mY = parseInt(e.clientY - offsetY);
+
+		if (this.textHittest(mX, mY, i)) {
+			document.body.style.cursor = 'pointer';
+			return;
+		}
+		else { document.body.style.cursor = 'default';}
+	}}
+
+	// also done dragging
+	$scope.handleMouseOut= function(e) {
+		e.preventDefault();
+		selectedText = -1;
+	}
+
+	$scope.handleMouseMove = function(e) {
+
+	    this.isOnText(e);
+		if (selectedText < 0) {
+			return;
+		}
+
+		//e.preventDefault();
+		mouseX = parseInt(e.clientX - offsetX);
+		mouseY = parseInt(e.clientY - offsetY);
+
+		// Put your mousemove stuff here
+		var dx = mouseX - startX;
+		var dy = mouseY - startY;
+		startX = mouseX;
+		startY = mouseY;
+
+		var text = this.texts[selectedText];
+		text.x += dx;
+		text.y += dy;
+        $scope.drawText();
+	}
+
+    $scope.getScaleToCanvas = function (imgLocal) {
+
+        var scale = 1;
+
+        if (imgLocal.width >= $scope.canvasMaxWidth) {
+            scale = $scope.canvasMaxWidth / imgLocal.width;
+
+            if (imgLocal.height * scale >= $scope.canvasMaxHeight) {
+                scale -= $scope.canvasMaxHeight / (imgLocal.height * scale);
+            }
+        } else if (imgLocal.height >= $scope.canvasMaxHeight) {
+            scale = $scope.canvasMaxHeight / img.height;
+            if (imgLocal.width * scale >= $scope.canvasMaxWidth) {
+                scale -= $scope.canvasMaxWidth / (imgLocal.width * scale);
+            }
+        }
+
+        var newImgHeight = canvas.height - ((img.height * scale) * 0.25);
+
+        var scaleX = newImgHeight / canvas.height;
+
+        scale = scale * scaleX;
+
+        return scale;
+    }
+
+  $scope.drawText = function() {
+
+	ctx.save();
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //var img = document.getElementById('start-image');
+
+    x = (canvas.width / 2) - (img.width / 2 * $scope.scale);
+    y = (canvas.height / 2) - (img.height / 2 * $scope.scale);
+
+    ctx.drawImage(img, 0, 0, img.width, img.height, x, y, img.width * $scope.scale, img.height * $scope.scale);
+    ctx.fillStyle = "white";
+	ctx.strokeStyle = "black";
+	ctx.stroke();
+	ctx.lineWidth = 5;
+
+    ctx.font = this.fontSize + "px sans-serif";
+    ctx.textBaseline = 'top';
+
+	//draw bckg
+    ctx.fillStyle = "black";
+    ctx.fillRect(x, y + img.height * $scope.scale, img.width * $scope.scale, this.bckgBottom);
+    ctx.fillRect(x, y, img.width * $scope.scale, -this.bckgTop);
+
+	//Draw text
+	ctx.fillStyle = "white";
+    angular.forEach(this.texts, function (txt) {
+        ctx.strokeText(txt.textX, txt.x, txt.y);
+        ctx.fillText(txt.textX, txt.x, txt.y);
+	});
+
+	ctx.restore();
+  };
+
+  //upload file
+  $scope.$on("fileSelected", function (event, args) {
+      $scope.$apply(function () {
+          switch (args.field) {
+              case "myFile":
+                  $scope.myFile = args.file;
+                  $scope.uploadFileToUrl($scope.myFile,'@Url.Action("Upload", "Home")',)
+                  break;
+              default:
+                  break;
+          }
+      });
+  });
+
+  $scope.uploadFileToUrl = function (file, uploadUrl) {
+      return $http({
+          method: 'POST',
+          url: uploadUrl,
+          headers: { 'Content-Type': undefined },
+          transformRequest: function () {
+              var formData = new FormData();
+              if (file) {
+                  formData.append("myFile", file);
+              }
+              return formData;
+          }
+      }).then(function successCallback(response) {
+          this.imageUrl = response.data.FileName;
+
+          var myEl = angular.element('#start-image');
+          myEl.attr('src', @Url.Content("~/Storage/") + this.imageUrl);
+      }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+      });
+  }
+
+    });
+
+    angular.module("myApp").directive('fileUpload', function () {
+        return {
+            scope: true,
+            link: function (scope, el, attrs) {
+                el.bind('change', function (event) {
+                    var files = event.target.files;
+                    //iterate files since 'multiple' may be specified on the element
+                    if (files.length == 0) {
+                        scope.$emit("fileSelected", { file: null, field: event.target.name });
+                    } else {
+                        for (var i = 0; i < files.length; i++) {
+                            //emit event upward
+                            scope.$emit("fileSelected", { file: files[i], field: event.target.name });
+                        }
+                    }
+                });
+            }
+        };
+    });
+</script>

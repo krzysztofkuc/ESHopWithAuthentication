@@ -1,0 +1,81 @@
+﻿@model PlusAndComment.Models.HomeVM
+
+@{
+    ViewBag.Title = "Trudne żarty";
+}
+
+<head>
+    <meta property="og:image" content="@Url.Content("~/Storage/logo.png")" />
+</head>
+
+<div class="container" style="max-width: 750px; margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var item in Model.MainMems)
+            {
+                //render if post is main post
+                if (item.Post.PostEntity_ID == null && !item.Post.Removed)
+                {
+                    <div class="row" style="margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;">
+                        @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser }, { "PostType", "MainMeme" } })
+                    </div>
+                }
+            }
+
+            <div id="posts">
+            </div>
+            <div id="loading" style="text-align: center; display: none;">
+                <img src="~/Storage/ajax-loader.gif" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @*pagination*@
+        @{
+            int currentPage = Convert.ToInt16(Request.Params["page"]);
+
+            if (currentPage == 0) { currentPage = 1; }
+
+            var allPages = Math.Ceiling((double)Model.PostsCapacity / 10);
+            int prevPage = (currentPage - 1 < 0) ? 0 : (currentPage - 1);
+            int nextPage = (currentPage + 1 > allPages) ? currentPage : (currentPage + 1);
+
+            <div class="pagination-container wow zoomIn mar-b-1x" data-wow-duration="0.5s">
+                <ul class="pagination">
+
+                    @if (currentPage > 1)
+                    {
+                        <li class="pagination-item--wide first"> <a class="pagination-link--wide first" href='@Url.Action("Index", "Home", new { page = prevPage })'>Poprzednia</a> </li>
+                    }
+
+                    @for (int i = currentPage - 6; i < currentPage; i++)
+                    {
+                        if (i < 1) { continue; }
+
+                        <li class="pagination-item"> <a class="pagination-link" href='@Url.Action("Index", "Home", new { page = i })'>@i</a> </li>
+                    }
+
+                    @for (int i = currentPage; i < (currentPage + 5); i++)
+                    {
+                        if (i > allPages) { break; }
+
+                        if (i == currentPage)
+                        {
+                            <li class="pagination-item"> <a class="pagination-link is-active">@i</a> </li>
+                        }
+                        else
+                        {
+                            <li class="pagination-item"> <a class="pagination-link" href='@Url.Action("Index", "Home", new { page = i })'>@i</a> </li>
+                        }
+                    }
+
+                    @if (currentPage != allPages)
+                    {
+                        <li class="pagination-item--wide last"> <a class="pagination-link--wide last" href='@Url.Action("Index", "Home", new { page = nextPage })'>Następna</a> </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>

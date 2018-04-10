@@ -1,0 +1,15 @@
+﻿@model PlusAndComment.Models.AddPostVMs.AddLinkVM
+
+<img id="loadingPageThumb" src="~/Storage/ajax-loader.gif" style="display: none; max-width: 20px; max-height: 20px; margin-top: 20px;" />
+@Html.HiddenFor(m => m.EmbedUrl, new { id = "embedUrl" })
+@Html.HiddenFor(m => m.ReferenceUrl, new { id = "referenceUrl" })
+@Html.HiddenFor(m => m.Type, new { @class = "postType" })
+
+<iframe id="movieThumb" width="420" height="315" src="" frameborder="0" allowfullscreen style="display: none"></iframe>
+    
+<img class="imageThumb_@(ViewData["id"])" src="" style="width: 100%"/>
+
+<img src="@Model.Url" data-wait="true" />
+<div style="text-align: left; color:#B0B0B0; font-size: 11px">
+    źródło:<label id="lblUrl"></label>
+</div>
