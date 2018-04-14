@@ -1,13 +1,12 @@
-﻿using System.Data.Entity;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PlusAndComment.Models.Entities;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Owin.Security;
+using PlusAndComment.Models.ViewModel.Entities;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace PlusAndComment.Models
 {
@@ -45,12 +44,11 @@ namespace PlusAndComment.Models
             Database.SetInitializer<ApplicationDbContext>(null);
         }
 
-        public virtual DbSet<PostEntity> Posts { get; set; }
-        public virtual DbSet<UserPosts> UserPosts { get; set; }
         public virtual DbSet<ArticleEntity> Articles { get; set; }
-        public virtual DbSet<SucharEntity> Suchary { get; set; }
-        public virtual DbSet<MainMems> MainMems { get; set; }
         public virtual DbSet<UserProfileSettings> UserProfileSettings { get; set; }
+        public virtual DbSet<ProductEntity> Products { get; set; }
+        public virtual DbSet<CategoryEntity> Categories { get; set; }
+        public virtual DbSet<PictureEntity> Pictures { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{
@@ -67,10 +65,10 @@ namespace PlusAndComment.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddArticleVM> ArticleVMs { get; set; }
+        //public System.Data.Entity.DbSet<PlusAndComment.Models.ViewModel.AddPostVMs.AddArticleVM> ArticleVMs { get; set; }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddSucharVM> SucharVMs { get; set; }
+        //public System.Data.Entity.DbSet<PlusAndComment.Models.ViewModel.AddPostVMs.AddSucharVM> SucharVMs { get; set; }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddPostVM> AddPostVMs { get; set; }
+        //public System.Data.Entity.DbSet<PlusAndComment.Models.ViewModel.AddPostVMs.AddPostVM> AddPostVMs { get; set; }
     }
 }

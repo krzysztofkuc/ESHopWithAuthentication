@@ -11,7 +11,7 @@ namespace PlusAndComment.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "PlusAndComment.Models.ApplicationDbContext";
+            ContextKey = "PlusAndComment.Models.ViewModel.ApplicationDbContext";
         }
 
         protected override void Seed(PlusAndComment.Models.ApplicationDbContext context)

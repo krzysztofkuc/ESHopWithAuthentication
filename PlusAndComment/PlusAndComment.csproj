@@ -241,38 +241,39 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AddPostVMs\AddHumourVM.cs" />
-    <Compile Include="Models\AddPostVMs\AddLinkVM.cs" />
-    <Compile Include="Models\AddPostVMs\AddPictureFromDiskVM.cs" />
-    <Compile Include="Models\AddPostVMs\AddPostVM.cs" />
     <Compile Include="Models\ArticlesVM.cs" />
-    <Compile Include="Models\AddPostVMs\AddArticleVM.cs" />
     <Compile Include="Models\ArticleVM.cs" />
     <Compile Include="Models\ConfrimEmailVM.cs" />
     <Compile Include="Models\Entities\ArticleEntity.cs" />
-    <Compile Include="Models\Entities\MainMems.cs" />
-    <Compile Include="Models\Entities\PostEntity.cs" />
-    <Compile Include="Models\Entities\SucharEntity.cs" />
-    <Compile Include="Models\Entities\UserPosts.cs" />
+    <Compile Include="Models\Entities\CategoryEntity.cs" />
+    <Compile Include="Models\Entities\PictureEntity.cs" />
+    <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />
-    <Compile Include="Models\HomeVM.cs" />
+    <Compile Include="Models\ViewModel\HomeVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ImageInfo.cs" />
-    <Compile Include="Models\MainMemVM.cs" />
-    <Compile Include="Models\MainPostVM.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MenageRolesVM.cs" />
-    <Compile Include="Models\PostVM.cs" />
-    <Compile Include="Models\FrameVM.cs" />
     <Compile Include="Models\RolaVM.cs" />
-    <Compile Include="Models\SucharVM.cs" />
-    <Compile Include="Models\SucharyVM.cs" />
     <Compile Include="Models\UserProfileSettingsVM.cs" />
     <Compile Include="Models\UserVM.cs" />
+    <Compile Include="Models\ViewModel\AddCategoryVM.cs" />
+    <Compile Include="Models\ViewModel\AddProductVM.cs" />
+    <Compile Include="Models\ViewModel\AllProductsVM.cs" />
+    <Compile Include="Models\ViewModel\CategoryVM.cs" />
+    <Compile Include="Models\ViewModel\PictureVM.cs" />
+    <Compile Include="Models\ViewModel\ProductVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PluisAndCommentWithShop.ldf">
+      <DependentUpon>PluisAndCommentWithShop.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\PluisAndCommentWithShop.mdf" />
+    <Content Include="App_Data\PluisAndCommentWithShop_log.ldf">
+      <DependentUpon>PluisAndCommentWithShop.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />
@@ -396,7 +397,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Compile Include="Models\AddPostVMs\AddSucharVM.cs" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\fontawesome-webfont.woff" />
@@ -544,37 +544,19 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\AddPost.cshtml" />
-    <Content Include="Views\Shared\_PostPartial.cshtml" />
     <Content Include="Views\Shared\_UserRolePartial.cshtml" />
     <Content Include="Views\Manage\ManageRoles.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
-    <Content Include="Views\Shared\_LeaveCommentPartial.cshtml" />
     <Content Include="Views\Shared\_ShowCommentPartial.cshtml" />
-    <Content Include="Views\Shared\_ShowAllCommentsPartial.cshtml" />
-    <Content Include="Views\Home\SingleMainPost.cshtml" />
-    <Content Include="Views\Home\ManageArticles.cshtml" />
     <Content Include="Views\Shared\_ArticlesPartial.cshtml" />
-    <Content Include="Views\Shared\_SucharPartial.cshtml" />
-    <Content Include="Views\Home\Suchar.cshtml" />
-    <Content Include="Views\Home\Frame.cshtml" />
     <Content Include="Views\Home\Articles.cshtml" />
     <Content Include="Views\Shared\_ArticleRowPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_PostLinkPreviewPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_AddLinkPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_AddPictureFromDiskPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_PictureFromDiskPreviewPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_AddHumourPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_AddArticlePartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_AddSucharPartial.cshtml" />
-    <Content Include="Views\Home\Suchary.cshtml" />
-    <Content Include="Views\Home\MemGenerator.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Shared\_CommentsPartial.cshtml" />
+    <Content Include="Views\Home\AddCategory.cshtml" />
+    <Content Include="Views\Home\AddProduct.cshtml" />
+    <Content Include="Views\Home\EditProduct.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
