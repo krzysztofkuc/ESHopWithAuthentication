@@ -555,6 +555,7 @@
     <Content Include="Views\Home\AddCategory.cshtml" />
     <Content Include="Views\Home\AddProduct.cshtml" />
     <Content Include="Views\Home\EditProduct.cshtml" />
+    <Content Include="Views\Home\_CategoryResultsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

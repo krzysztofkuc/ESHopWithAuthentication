@@ -1,7 +1,7 @@
 ﻿@model PlusAndComment.Models.ViewModel.HomeVM
 
 @{
-    ViewBag.Title = "Trudne żarty";
+    ViewBag.Title = "Rapid Shop";
 }
 
 <head>
@@ -10,11 +10,61 @@
 
 <div class="container" style="max-width: 750px; margin-top: 20px;">
     <div class="row">
-        <div class="col-md-12">
-            @foreach (var product in Model.Prducts)
-            {
-                @Html.Label(product.Name)
-            }
+        <div class="col-md-4">
+            @DisplayRoots(Model.Categories)
+        </div>
+
+        <div class="col-md-8" id="dvCategoryResults">
+            @*@{Html.RenderPartial("_CategoryResultsPartial", Model.Prducts);}*@
+
+            @*@foreach (var product in Model.Prducts)
+                {
+                    @Html.Label(product.Name)
+                }*@
         </div>
     </div>
 </div>
+
+@helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+    {
+        <ul>
+            @foreach (var element in elements.Where(x => x.ParentId == null))
+            {
+            <li>
+                @Html.ActionLink(element.Name, "GetCategoryProducts", "Home", new { @categoryId = element.CategoryId }, null)
+
+                @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
+                @DisplayChild(element)
+            </li>
+            }
+        </ul>
+}
+
+@helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+    {
+        <ul>
+            @foreach (var elem in element.Categories)
+            {
+            <li>
+                @Html.ActionLink(elem.Name, "Products", "Home", new { @categoryId = element.CategoryId }, null)
+                @{
+                    if (elem.Categories.Count() > 0)
+                    {
+                        @DisplayChild(elem)
+                    }
+                }
+            </li>
+            }
+        </ul>
+}
+
+<script>
+    $('a').click(function (event)
+    {
+       event.preventDefault();
+
+       var url = $(this).attr('href');
+       $("#dvCategoryResults").html("<img src='@Url.Content("~/Storage/ajax-loader.gif")' />").load(url);
+
+    });
+</script>

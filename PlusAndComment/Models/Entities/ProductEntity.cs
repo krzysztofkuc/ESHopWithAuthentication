@@ -23,12 +23,12 @@ namespace PlusAndComment.Models.Entities
 
         public string ThumbPath { get; set; }
 
+        [ForeignKey("Category")]
         public int CatId { get; set; }
 
         //[ForeignKey("ProdId")]
         //public virtual ICollection<PictureEntity> Pictures { get; set; }
 
-        [ForeignKey("CatId")]
         public virtual CategoryEntity Category { get; set; }
 
     }

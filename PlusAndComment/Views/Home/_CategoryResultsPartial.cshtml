@@ -1,0 +1,19 @@
+﻿@model ICollection<PlusAndComment.Models.ViewModel.ProductVM>
+=========================
+<table border="1">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Product</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Category.Name</td>
+                <td>@product.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -7,6 +7,7 @@ using PlusAndComment.Models.ViewModel;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace PlusAndComment.Controllers
@@ -20,10 +21,11 @@ namespace PlusAndComment.Controllers
         public ActionResult Index(int page = 1, int pageSize = 10)
         {
             var products = db.Products.OrderByDescending(m => m.ProductId).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var categories = db.Categories.ToList();
 
             HomeVM homeVm = new HomeVM();
             homeVm.Prducts = Mapper.Map<ICollection<ProductVM>>(products);
-
+            homeVm.Categories = Mapper.Map<ICollection<CategoryVM>>(categories);
 
             //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             //if (User.Identity.IsAuthenticated)
@@ -40,6 +42,32 @@ namespace PlusAndComment.Controllers
             //}
 
             return View(homeVm);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetCategoryProducts(int categoryId)
+        {
+            var products = await db.Products.Where(product => product.CatId == categoryId ).OrderByDescending(m => m.ProductId).ToListAsync();
+
+            HomeVM homeVm = new HomeVM();
+            homeVm.Prducts = Mapper.Map<ICollection<ProductVM>>(products);
+
+            //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var currentUser = db.Users.Find(User.Identity.GetUserId());
+
+            //    if (currentUser != null)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        RedirectToAction("LogOff", "Account");
+            //    }
+            //}
+
+            return PartialView("_CategoryResultsPartial", homeVm.Prducts);
         }
 
         public ActionResult AddCategory()

@@ -22,7 +22,6 @@ namespace PlusAndComment.Models.Entities
         [ForeignKey("ParentId")]
         public virtual ICollection<CategoryEntity> Categories { get; set; }
 
-        [ForeignKey("CatId")]
         public virtual ICollection<ProductEntity> Products { get; set; }
     }
 }
