@@ -1,0 +1,27 @@
+﻿@model PlusAndComment.Models.ViewModel.ProductVM
+@{
+    ViewBag.Title = "Product - " + Model.Name;
+}
+
+<h2>@Model.Name</h2>
+<p>
+    @*<img alt="@Model.Name"
+         src="@Model.Pictures" />*@
+</p>
+<div id="album-details">
+    @*<p>
+        <em>Genre:</em>
+        @Model.Genre.Name
+    </p>
+    <p>
+        <em>Artist:</em>
+        @Model.Artist.Name
+    </p>*@
+    <p>
+        <em>Price:</em>
+        @String.Format("{0:F}", Model.Price)
+    </p>
+    <p class="button">
+        @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.ProductId }, "")
+    </p>
+</div>

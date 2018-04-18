@@ -27,6 +27,10 @@ namespace PlusAndComment.App_Start
                 //Product
                 cfg.CreateMap<ProductVM, ProductEntity>();
                 cfg.CreateMap<ProductEntity, ProductVM>();
+
+                //Cart
+                cfg.CreateMap<CartVM, CartEntity>();
+                cfg.CreateMap<CartEntity, CartVM>();
             });
 
             //config.AssertConfigurationIsValid();

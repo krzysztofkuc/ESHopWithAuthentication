@@ -7,11 +7,6 @@ namespace PlusAndComment.Models.Entities
     [Table("Product")]
     public class ProductEntity
     {
-        public ProductEntity()
-        {
-            //this.Pictures = new HashSet<PictureEntity>();
-        }
-
         [Key]
         public int ProductId { get; set; }
 
@@ -22,6 +17,8 @@ namespace PlusAndComment.Models.Entities
         public double Price { get; set; }
 
         public string ThumbPath { get; set; }
+
+        public string Title { get; set; }
 
         [ForeignKey("Category")]
         public int CatId { get; set; }

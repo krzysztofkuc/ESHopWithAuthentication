@@ -49,18 +49,22 @@ namespace PlusAndComment.Models
         public virtual DbSet<ProductEntity> Products { get; set; }
         public virtual DbSet<CategoryEntity> Categories { get; set; }
         public virtual DbSet<PictureEntity> Pictures { get; set; }
+        public virtual DbSet<CartEntity> Carts { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+    
 
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
+    //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    //{
 
-        //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+    //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-        //    modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(r => r.UserId);
-        //    modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-        //    modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
-        //}
+    //    modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(r => r.UserId);
+    //    modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+    //    modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+    //}
 
-        public static ApplicationDbContext Create()
+    public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }

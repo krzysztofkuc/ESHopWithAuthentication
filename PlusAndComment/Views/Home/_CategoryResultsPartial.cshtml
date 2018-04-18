@@ -13,6 +13,7 @@
             <tr>
                 <td>@product.Category.Name</td>
                 <td>@product.Name</td>
+                <td>@Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { @id = product.ProductId}, null)</td>
             </tr>
         }
     </tbody>

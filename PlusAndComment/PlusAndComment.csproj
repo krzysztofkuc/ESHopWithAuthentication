@@ -231,6 +231,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -245,10 +246,15 @@
     <Compile Include="Models\ArticleVM.cs" />
     <Compile Include="Models\ConfrimEmailVM.cs" />
     <Compile Include="Models\Entities\ArticleEntity.cs" />
+    <Compile Include="Models\Entities\CartEntity.cs" />
     <Compile Include="Models\Entities\CategoryEntity.cs" />
+    <Compile Include="Models\Entities\Order.cs" />
+    <Compile Include="Models\Entities\OrderDetail.cs" />
     <Compile Include="Models\Entities\PictureEntity.cs" />
     <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />
+    <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\ViewModel\CartVM.cs" />
     <Compile Include="Models\ViewModel\HomeVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ImageInfo.cs" />
@@ -263,6 +269,8 @@
     <Compile Include="Models\ViewModel\CategoryVM.cs" />
     <Compile Include="Models\ViewModel\PictureVM.cs" />
     <Compile Include="Models\ViewModel\ProductVM.cs" />
+    <Compile Include="Models\ViewModel\ShoppingCartRemoveVM.cs" />
+    <Compile Include="Models\ViewModel\ShoppingCartVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -556,6 +564,8 @@
     <Content Include="Views\Home\AddProduct.cshtml" />
     <Content Include="Views\Home\EditProduct.cshtml" />
     <Content Include="Views\Home\_CategoryResultsPartial.cshtml" />
+    <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\ShoppingCart\Product.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

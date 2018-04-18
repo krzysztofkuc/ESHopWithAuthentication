@@ -32,7 +32,6 @@
             {
             <li>
                 @Html.ActionLink(element.Name, "GetCategoryProducts", "Home", new { @categoryId = element.CategoryId }, null)
-
                 @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
                 @DisplayChild(element)
             </li>
