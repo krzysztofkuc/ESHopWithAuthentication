@@ -26,16 +26,24 @@
       }
     else
     {
-        <ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
-            <li class="dropdown" id="dropdownMenu2">
-                <img src="~/Storage/person-icon-8.png" id="iconPerson2" style="max-height: 45px;" />
-                <ul id="user-menu2" class="dropdown-menu clearfix" role="menu">
-                    <li><a href="/Account/Register" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-new-window" id="logIcon"></span> &nbsp;&nbsp; Zarejestruj</a></li>
-                    <li><a href="/Account/Login" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-log-in" id="logIcon"></span> &nbsp;&nbsp; Zaloguj</a></li>
-                    <li><a href="/Home/Contact" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-phone" id="logIcon"></span> &nbsp;&nbsp; Kontakt</a></li>
-                </ul>
-            </li>
-        </ul>
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
+                <li>
+                    <a href="/ShoppingCart/Index" style="display: inline-block; width: 100%;" id="trolleyItemsCountId">
+                        <span id="trolleyItemsCount" class="fa-stack fa-2x has-badge" data-count="@Context.Session["NumberOfAllItems"]">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                </li>
+                <li class="dropdown" id="dropdownMenu2">
+                    <img src="~/Storage/person-icon-8.png" id="iconPerson2" style="max-height: 45px;" />
+                    <ul id="user-menu2" class="dropdown-menu clearfix" role="menu">
+                        <li><a href="/Account/Register" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-new-window" id="logIcon"></span> &nbsp;&nbsp; Zarejestruj</a></li>
+                        <li><a href="/Account/Login" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-log-in" id="logIcon"></span> &nbsp;&nbsp; Zaloguj</a></li>
+                        <li><a href="/Home/Contact" style="display: inline-block; width: 100%;"><span class="glyphicon glyphicon-phone" id="logIcon"></span> &nbsp;&nbsp; Kontakt</a></li>
+                    </ul>
+                </li>
+            </ul>
     }
 }else
 if (Request.IsAuthenticated)

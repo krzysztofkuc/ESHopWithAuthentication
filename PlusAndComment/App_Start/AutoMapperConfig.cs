@@ -31,6 +31,11 @@ namespace PlusAndComment.App_Start
                 //Cart
                 cfg.CreateMap<CartVM, CartEntity>();
                 cfg.CreateMap<CartEntity, CartVM>();
+
+                //Order
+                cfg.CreateMap<OrderVM, OrderEntity>();
+                cfg.CreateMap<OrderEntity, OrderVM>();
+                
             });
 
             //config.AssertConfigurationIsValid();

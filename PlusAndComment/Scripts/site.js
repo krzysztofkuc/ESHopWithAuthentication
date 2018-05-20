@@ -38,134 +38,92 @@ function showleaveMainComment(id, isAuth) {
     return false;
 }
 
-function OnAddCommentCoplete(id) {
-    $("#wellLeaveComment_"+id).hide();
-    return false;
-}
+function UpdateTrolleyItemsCount(count) {
+    $("#trolleyItemsCount").attr("data-count", count);
+};
 
-function OnAddCommentFailure(params)
-{
-    var id = params.getResponseHeader("objectId")
-    $('#leaveCommentContainer_' + id).html(params.responseText);
-}
+//shopping cart
 
-function showCommentsLoader(id)
-{
-    $("#loadingIndiComment_" + id).show();
-    $("#buttonAllComments_" + id).hide();
-}
+    // Document.ready -> link up remove event handler
+    $(".RemoveLink").click(function () {
+        // Get the id from the link
+        var recordToDelete = $(this).attr("data-id");
+        if (recordToDelete != '') {
+            // Perform the ajax post
+            $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                function (data) {
+                    // Successful requests get here
+                    // Update the page elements
+                    if (data.ItemCount == 0) {
+                        $('#row-' + data.DeleteId).fadeOut('slow');
+                    } else {
+                        $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                    }
+                    $('#cart-total').text(data.CartTotal);
+                    $('#update-message').text(data.Message);
+                    $('#cart-status').text('Cart (' + data.CartCount + ')');
 
-function actionFailure(params)
-{
-    alert("Nie jesteś zalogowany");
-}
-
-function actionAddPlusSuccess(obj) {
-
-    var target = $("#plusLabel" + obj.postId);
-    target.html(obj.innerHtml);
-
-    if (obj.isPlused)
-    {
-        target.css("background-color", "green");
-    } else if (obj.isMinused)
-    {
-        target.css("background-color", "#2d383e");
-    }
-}
-
-/*Index View*/
-function NeedAgeChange(element) {
-    $.ajax({
-        url: '/Home/ChangeNeedAge',
-        type: "Post",
-        data: { id: element.id },
-        success: function (result) {
-            var id = result[0].Value;
-            var val = $("#checkBoxNeedAge_" + id).prop("checked");
-
-            if (val == true) {
-                CoverAge(id);
-            } else {
-                UncoverAge(id);
-            }
+                    $('#trolleyItemsCount').attr("data-count", data.CartCount);
+                });
         }
     });
-}
 
-$(document).ready(function () {
-    $('.gifplayer').gifplayer();
-    $('[data-toggle="tooltip"]').tooltip();
-    startCopy();
-});
+    function animateAddToCartButton(count) {
+        //$(this).preventDefault();
 
-function CoverAge(id) {
-    $("#coverForAge_" + id).show();
-    $("#blurForAge_" + id).addClass("blur");
-
-}
-
-function UncoverAge(id) {
-    $("#coverForAge_" + id).hide();
-    $("#blurForAge_" + id).removeClass("blur");
-}
-
-function startCopy() {
-
-  'use strict';
-
-  // click events
-  document.body.addEventListener('click', copy, true);
-
-  // event handler
-  function copy(e) {
-
-    // find target element
-    var
-      t = e.target,
-      c = t.dataset.copytarget,
-      inp = (c ? document.querySelector(c) : null);
-
-    // is element selectable?
-    if (inp && inp.select) {
-        // select text
-          $("#"+inp.id).show();
-          inp.select();
-      try {
-        // copy text
-        document.execCommand('copy');
-        inp.blur();
-        $("#" + inp.id).hide();
-      }
-      catch (err) {
-        alert('please press Ctrl/Cmd+C to copy');
-      }
+        newButton = $(this).clone(true);
+        moveButtonToTrolley(newButton, count);
     }
-  }
-}
+    
 
-function DisableCommentButton(id, disable)
-{
-    $("#CommentButton_" + id).attr("disabled", disable);
-}
+    function moveButtonToTrolley(element, count) {
 
-function CopyLinkClicked(obj)
-{
-    $("#infoCopied").slideToggle(true);
-    $('#infoCopied').delay(1500).slideToggle(false);
-}
+        var addToCartButton = document.getElementById("addToCartLink1");
+        var trolleyJSobj = document.getElementById("trolleyItemsCountId");
+        var trolleyJQobj = $("#trolleyItemsCountId");
+        var buttonAbsolutePos = getOffset(addToCartButton);
+        var trolleyAbsolutePos = getOffset(trolleyJSobj);
 
-$(".sucharThmb").click(function (e) {
+        element.css({ position: 'absolute' });
+        element.attr("z-index", "100000");
+        element.removeAttr("id");
+        element.css({ top: buttonAbsolutePos.top, left: buttonAbsolutePos.left });
+        element.appendTo('#cellAddToCart1');
 
-    var idX = e.target.id.split("_")[1];
+        element.animate({ left: trolleyAbsolutePos.left + 'px', top: trolleyAbsolutePos.top + 30 + 'px' },
+            {
+                duration: 500,
+                complete: function () {
+                    $(this).children(":first").toggle(
+                        {
+                            duration: 500,
+                            effect: "scale",
+                            direction: "horizontal",
+                            complete: function () {
+                                trolleyJQobj.addClass("run-animation");
+                                troolleyClone = trolleyJQobj.clone(true);
+                                trolleyJQobj.before(troolleyClone);
+                                $("#trolleyItemsCount").attr("data-count", count);
 
-    window.location.href = "Suchar/" + idX;
-});
 
+                                trolleyJQobj.remove();
+                                $(this).remove();
+                                this.remove();
+                                element.remove();
+                        }
+                    });
+                }
+            },
+        );
+    }
 
-//$(".nav li").on("click", function () {
-//    //$(".nav li").removeClass("active");
-//    $(this).addClass("active");
-//});
+    //get absoluite position from relative
+    function getOffset(el) {
+        el = el.getBoundingClientRect();
 
+        return {
+            left: el.left + window.scrollX,
+            top: el.top + window.scrollY
+        }
+    }
 

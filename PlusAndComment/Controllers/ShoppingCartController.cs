@@ -30,9 +30,10 @@ namespace PlusAndComment.Controllers
             // Return the view
             return View(viewModel);
         }
+
         //
         // GET: /Store/AddToCart/5
-        public async Task<ActionResult> AddToCart(int id)
+        public async Task<int> AddToCart(int id)
         {
             // Retrieve the album from the database
             var product = await storeDB.Products
@@ -43,9 +44,18 @@ namespace PlusAndComment.Controllers
 
             await cart.AddToCart(product);
 
+            // Set up our ViewModel
+
+            var CartItems = Mapper.Map<ICollection<CartVM>>(cart.GetCartItems());
+
+            var numberOfAllItems = (int)CartItems.Sum(m => m.Number);
+
+            this.HttpContext.Session["NumberOfAllItems"] = numberOfAllItems;
+
             // Go back to the main store page for more shopping
-            return RedirectToAction("Index");
+            return numberOfAllItems;
         }
+
         //
         // AJAX: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
@@ -71,6 +81,9 @@ namespace PlusAndComment.Controllers
                 ItemCount = itemCount,
                 DeleteId = id
             };
+
+            HttpContext.Session["NumberOfAllItems"] = cart.GetCount();
+
             return Json(results);
         }
         //

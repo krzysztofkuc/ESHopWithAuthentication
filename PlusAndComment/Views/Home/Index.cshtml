@@ -1,6 +1,7 @@
 ﻿@model PlusAndComment.Models.ViewModel.HomeVM
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Rapid Shop";
 }
 
@@ -13,39 +14,31 @@
         <div class="col-md-4">
             @DisplayRoots(Model.Categories)
         </div>
-
-        <div class="col-md-8" id="dvCategoryResults">
-            @*@{Html.RenderPartial("_CategoryResultsPartial", Model.Prducts);}*@
-
-            @*@foreach (var product in Model.Prducts)
-                {
-                    @Html.Label(product.Name)
-                }*@
-        </div>
+            @Html.Partial("_CategoryResultsPartial", Model.Prducts)
     </div>
 </div>
 
 @helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
-    {
-        <ul>
-            @foreach (var element in elements.Where(x => x.ParentId == null))
-            {
+{
+    <ul>
+        @foreach (var element in elements.Where(x => x.ParentId == null))
+        {
             <li>
-                @Html.ActionLink(element.Name, "GetCategoryProducts", "Home", new { @categoryId = element.CategoryId }, null)
+                @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
                 @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
                 @DisplayChild(element)
             </li>
-            }
-        </ul>
+        }
+    </ul>
 }
 
 @helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
-    {
-        <ul>
-            @foreach (var elem in element.Categories)
-            {
+{
+    <ul>
+        @foreach (var elem in element.Categories)
+        {
             <li>
-                @Html.ActionLink(elem.Name, "Products", "Home", new { @categoryId = element.CategoryId }, null)
+                @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
                 @{
                     if (elem.Categories.Count() > 0)
                     {
@@ -53,17 +46,6 @@
                     }
                 }
             </li>
-            }
-        </ul>
+        }
+    </ul>
 }
-
-<script>
-    $('a').click(function (event)
-    {
-       event.preventDefault();
-
-       var url = $(this).attr('href');
-       $("#dvCategoryResults").html("<img src='@Url.Content("~/Storage/ajax-loader.gif")' />").load(url);
-
-    });
-</script>

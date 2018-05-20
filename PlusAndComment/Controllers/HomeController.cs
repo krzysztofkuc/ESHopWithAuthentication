@@ -18,14 +18,23 @@ namespace PlusAndComment.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Index(int page = 1, int pageSize = 10)
+        public ActionResult Index(int? categoryId)
         {
-            var products = db.Products.OrderByDescending(m => m.ProductId).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var products = db.Products.Where(product => product.CatId == categoryId).OrderByDescending(m => m.ProductId).ToList();
             var categories = db.Categories.ToList();
 
-            HomeVM homeVm = new HomeVM();
-            homeVm.Prducts = Mapper.Map<ICollection<ProductVM>>(products);
-            homeVm.Categories = Mapper.Map<ICollection<CategoryVM>>(categories);
+            HomeVM homeVm = new HomeVM()
+            {
+                Prducts = Mapper.Map<ICollection<ProductVM>>(products),
+                Categories = Mapper.Map<ICollection<CategoryVM>>(categories)
+            };
+
+            //shopping cart
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+            var CartItems = Mapper.Map<ICollection<CartVM>>(cart.GetCartItems());
+            int numberOfItems = (int)CartItems.Sum(m => m.Number);
+
+            ViewData["TrolleyItemsCount"] = numberOfItems;
 
             //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             //if (User.Identity.IsAuthenticated)
@@ -43,6 +52,34 @@ namespace PlusAndComment.Controllers
 
             return View(homeVm);
         }
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public ActionResult Index(int page = 1, int pageSize = 10)
+        //{
+        //    var products = db.Products.OrderByDescending(m => m.ProductId).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //    var categories = db.Categories.ToList();
+
+        //    HomeVM homeVm = new HomeVM();
+        //    homeVm.Prducts = Mapper.Map<ICollection<ProductVM>>(products);
+        //    homeVm.Categories = Mapper.Map<ICollection<CategoryVM>>(categories);
+
+        //    //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+        //    //if (User.Identity.IsAuthenticated)
+        //    //{
+        //    //    var currentUser = db.Users.Find(User.Identity.GetUserId());
+
+        //    //    if (currentUser != null)
+        //    //    {
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        RedirectToAction("LogOff", "Account");
+        //    //    }
+        //    //}
+
+        //    return View(homeVm);
+        //}
 
         [HttpGet]
         [AllowAnonymous]

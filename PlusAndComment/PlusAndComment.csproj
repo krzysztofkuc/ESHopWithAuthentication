@@ -229,6 +229,7 @@
     <Compile Include="Common\HttpTools.cs" />
     <Compile Include="Common\Picture.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
@@ -248,12 +249,13 @@
     <Compile Include="Models\Entities\ArticleEntity.cs" />
     <Compile Include="Models\Entities\CartEntity.cs" />
     <Compile Include="Models\Entities\CategoryEntity.cs" />
-    <Compile Include="Models\Entities\Order.cs" />
-    <Compile Include="Models\Entities\OrderDetail.cs" />
+    <Compile Include="Models\Entities\OrderEntity.cs" />
+    <Compile Include="Models\Entities\OrderDetailEntity.cs" />
     <Compile Include="Models\Entities\PictureEntity.cs" />
     <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\ViewModel\AddressAndPaymentVM.cs" />
     <Compile Include="Models\ViewModel\CartVM.cs" />
     <Compile Include="Models\ViewModel\HomeVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -267,6 +269,8 @@
     <Compile Include="Models\ViewModel\AddProductVM.cs" />
     <Compile Include="Models\ViewModel\AllProductsVM.cs" />
     <Compile Include="Models\ViewModel\CategoryVM.cs" />
+    <Compile Include="Models\ViewModel\OrderDetailVM.cs" />
+    <Compile Include="Models\ViewModel\OrderVM.cs" />
     <Compile Include="Models\ViewModel\PictureVM.cs" />
     <Compile Include="Models\ViewModel\ProductVM.cs" />
     <Compile Include="Models\ViewModel\ShoppingCartRemoveVM.cs" />
@@ -282,6 +286,7 @@
     <Content Include="App_Data\PluisAndCommentWithShop_log.ldf">
       <DependentUpon>PluisAndCommentWithShop.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker.standalone.css" />
@@ -303,9 +308,12 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\icomoon\icomoon.dev.svg" />
+    <Content Include="fonts\icomoon\icomoon.svg" />
+    <Content Include="fonts\icomoon\license.txt" />
+    <Content Include="fonts\icomoon\Read Me.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -410,11 +418,15 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\icomoon\icomoon.eot" />
+    <Content Include="fonts\icomoon\icomoon.ttf" />
+    <Content Include="fonts\icomoon\icomoon.woff" />
     <None Include="Properties\PublishProfiles\trudnezarty.hostingasp.pl - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\xn--trudnearty-njc.pl - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\classie.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
@@ -422,7 +434,6 @@
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.gifplayer.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -566,6 +577,8 @@
     <Content Include="Views\Home\_CategoryResultsPartial.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Product.cshtml" />
+    <Content Include="Views\Checkout\AddressAndPayment.cshtml" />
+    <Content Include="Views\Checkout\CheckoutComplete.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

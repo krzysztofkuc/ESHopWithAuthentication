@@ -8,12 +8,13 @@ namespace PlusAndComment.Models.Entities
     {
         [Key]
         public int RecordId { get; set; }
+
         public string CartId { get; set; }
 
-        
         public int CartProductId { get; set; }
 
         public int Number { get; set; }
+
         public System.DateTime DateCreated { get; set; }
 
         [ForeignKey("CartProductId")]

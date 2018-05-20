@@ -50,8 +50,8 @@ namespace PlusAndComment.Models
         public virtual DbSet<CategoryEntity> Categories { get; set; }
         public virtual DbSet<PictureEntity> Pictures { get; set; }
         public virtual DbSet<CartEntity> Carts { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<OrderEntity> Orders { get; set; }
+        public virtual DbSet<OrderDetailEntity> OrderDetails { get; set; }
     
 
     //protected override void OnModelCreating(DbModelBuilder modelBuilder)

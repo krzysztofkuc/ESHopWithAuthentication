@@ -127,7 +127,20 @@ namespace PlusAndComment.Models
             return total;
         }
 
-        public int CreateOrder(Order order)
+        //public double GetTotalProductsNumber()
+        //{
+        //    // Multiply album price by count of that album to get 
+        //    // the current price for each of those albums in the cart
+        //    // sum all album price totals to get the cart total
+        //    double total = (from cartItems in storeDB.Carts
+        //                    where cartItems.CartId == ShoppingCartId
+        //                    select (int?)cartItems.Number *
+        //                    cartItems.Product.Price).Sum() ?? 0;
+
+        //    return total;
+        //}
+
+        public int CreateOrder(OrderEntity order)
         {
             double orderTotal = 0;
 
@@ -137,7 +150,7 @@ namespace PlusAndComment.Models
             // adding the order details for each
             foreach (var item in cartItems)
             {
-                var orderDetail = new OrderDetail
+                var orderDetail = new OrderDetailEntity
                 {
                     ProductId = item.CartProductId,
                     OrderId = order.OrderId,

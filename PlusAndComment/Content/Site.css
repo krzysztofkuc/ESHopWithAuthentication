@@ -107,74 +107,6 @@ textarea{
     margin-top: 20px
 }
 
-.btn-label {
-    position: relative;
-    left: -12px;
-    display: inline-block;
-    padding: 6px 12px;
-    background: rgba(0,0,0,0.15);
-    border-radius: 3px;
-}
-
-.btn-labeled {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.btn {
-    margin-bottom: 10px;
-}
-
-/*Leave Comment*/
-.commentText{
-    width: 100% !important;
-    max-width: 100%;
-}
-
-.wellLeaveComment{
-    margin-bottom: 0;
-    padding-right: 20px;
-    margin: 3px;
-    background-color: #4B5D67;
-}
-
-.btn-success-pc .btn-plus-main {
-    background-color: #487048;
-    color: #487048 !important;
-}
-
-.btn-pokaz-wszystkie{
-    padding-top: -35px !important;
-    background-color: #4b5e68 !important;
-    border-color: #2D383E !important;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.btn-pokaz-wszystkie:hover{
-    filter: brightness(95%);
-}
-
-.btn-success-pc
-{
-    color: white !important;
-    background-color: #2d383e;
-}
-
-.btn-success-pc:hover
-{
-    color: white !important;
-    opacity: 0.7;
-    /*background-color: #FF8F05 !important;*/
-    text-decoration: none !important;
-}
-
-.btn-success-pc:focus
-{
-    color: white !important;
-    text-decoration: none !important;
-}
-
 /*Add post*/
 img {
     /*max-height: 500px;
@@ -204,11 +136,6 @@ img {
     float: none;
     margin-left: auto;
     margin-right: auto;
-}
-
-.normalBtn:hover {
-    background-color: aliceblue;
-    cursor: pointer;
 }
 
 input[type="file"] {
@@ -611,11 +538,6 @@ textarea{
     background-color: #E6EAEB !important;
 }
 
-.btn-orange {
-    border: solid;
-    border-width: 1px;
-}
-
 /*==================== AddPost=================================*/
         img {
             max-height: 500px;
@@ -649,11 +571,6 @@ textarea{
             float: none;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .normalBtn:hover {
-            background-color: aliceblue;
-            cursor: pointer;
         }
 
         input[type="file"] {
@@ -722,3 +639,19 @@ textarea{
             padding-bottom: 5px;
             padding-top: 15px;
         }
+
+.fa-stack[data-count]:after {
+    position: absolute;
+    right: 0%;
+    top: 1%;
+    content: attr(data-count);
+    font-size: 35%;
+    padding: .6em;
+    border-radius: 999px;
+    line-height: .75em;
+    color: white;
+    background: rgba(255,0,0,.85);
+    text-align: center;
+    min-width: 2em;
+    font-weight: bold;
+}
