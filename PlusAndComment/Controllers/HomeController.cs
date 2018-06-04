@@ -200,5 +200,46 @@ namespace PlusAndComment.Controllers
             return RedirectToAction("AddProduct");
         }
 
+        [HttpGet]
+        public ActionResult ProductsAttributes()
+        {
+
+            ICollection<ProductAttriutesEntity> attrs = db.ProductsAttributes.ToList();
+
+            var vm = Mapper.Map<ICollection<ProductAttributeVM>>(db.ProductsAttributes);
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public ActionResult EditAttribute(int id)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CreateProductAttribute()
+        {
+
+            var vm = new AddProductAttributeVM();
+            vm.AllCategories= Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult CreateProductAttribute(AddProductAttributeVM attr)
+        {
+            var vm = new AddProductAttributeVM();
+ 
+            var attrVM = Mapper.Map<ProductAttributeVM>(attr);
+            var entity = Mapper.Map<ProductAttriutesEntity>(attrVM);
+            db.ProductsAttributes.Add(entity);
+            db.Entry(entity).State = EntityState.Added;
+
+            db.SaveChanges();
+
+            return View();
+        }
     }
 }

@@ -35,7 +35,22 @@ namespace PlusAndComment.App_Start
                 //Order
                 cfg.CreateMap<OrderVM, OrderEntity>();
                 cfg.CreateMap<OrderEntity, OrderVM>();
-                
+
+                //Order
+                cfg.CreateMap<CompanyInformationVM, CompanyInformationEntity>();
+                cfg.CreateMap<CompanyInformationEntity, CompanyInformationVM>();
+
+                //ProductAttributes
+                cfg.CreateMap<ProductAttributeVM, AddProductAttributeVM>()
+                .ForMember(x => x.AllAttributeTypes, opts => opts.Ignore())
+                .ForMember(x => x.AllCategories, opts => opts.Ignore());
+
+                cfg.CreateMap<AddProductAttributeVM, ProductAttributeVM>();
+
+                //ProductAttributeVM
+                cfg.CreateMap<ProductAttributeVM, ProductAttriutesEntity>();
+                cfg.CreateMap<ProductAttriutesEntity, ProductAttributeVM>();
+
             });
 
             //config.AssertConfigurationIsValid();

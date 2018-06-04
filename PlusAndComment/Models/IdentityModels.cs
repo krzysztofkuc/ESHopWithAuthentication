@@ -52,7 +52,9 @@ namespace PlusAndComment.Models
         public virtual DbSet<CartEntity> Carts { get; set; }
         public virtual DbSet<OrderEntity> Orders { get; set; }
         public virtual DbSet<OrderDetailEntity> OrderDetails { get; set; }
-    
+        public virtual DbSet<ProductAttriutesEntity> ProductsAttributes { get; set; }
+        
+
 
     //protected override void OnModelCreating(DbModelBuilder modelBuilder)
     //{
@@ -68,6 +70,8 @@ namespace PlusAndComment.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<PlusAndComment.Models.Entities.CompanyInformationEntity> CompanyInformationEntities { get; set; }
 
         //public System.Data.Entity.DbSet<PlusAndComment.Models.ViewModel.AddPostVMs.AddArticleVM> ArticleVMs { get; set; }
 

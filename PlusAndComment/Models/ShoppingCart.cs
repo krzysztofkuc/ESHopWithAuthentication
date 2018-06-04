@@ -96,6 +96,7 @@ namespace PlusAndComment.Models
             }
             // Save changes
             storeDB.SaveChanges();
+            //Session["NumberOfAllItems"] = 0;
         }
 
         public ICollection<CartEntity> GetCartItems()

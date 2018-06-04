@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using PlusAndComment.Models;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
@@ -15,45 +16,52 @@ namespace PlusAndComment
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            SmtpClient client = new SmtpClient();
-            client.Port = 587;
-            client.Host = "smtp.webio.pl";
-            client.EnableSsl = false;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
+            using (SmtpClient client = new SmtpClient())
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var serviceInfo = db.CompanyInformationEntities.FirstOrDefault();
 
-            System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
-                     new System.Net.Mail.MailAddress("kontakt@trudnezarty.hostingasp.pl", "trudneżarty.pl"),
-                     new System.Net.Mail.MailAddress(message.Destination));
+                    client.Port = serviceInfo.Port;
+                    client.Host = serviceInfo.SmtpServer;
+                    client.EnableSsl = false;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
 
-            m.BodyEncoding = Encoding.UTF8;
-            m.SubjectEncoding = Encoding.UTF8;
-            m.Subject = message.Subject;
-            m.IsBodyHtml = true;
+                    System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
+                             new System.Net.Mail.MailAddress(serviceInfo.Email, serviceInfo.Name),
+                             new System.Net.Mail.MailAddress(message.Destination));
 
-            AlternateView htmlView = AlternateView.CreateAlternateViewFromString(message.Body);
-            htmlView.ContentType = new System.Net.Mime.ContentType("text/html");
-            htmlView.ContentType.CharSet = Encoding.UTF8.WebName;
-            m.AlternateViews.Add(htmlView);
+                    m.BodyEncoding = Encoding.UTF8;
+                    m.SubjectEncoding = Encoding.UTF8;
+                    m.Subject = message.Subject;
+                    m.IsBodyHtml = true;
 
-            m.Body = message.Body;
+                    AlternateView htmlView = AlternateView.CreateAlternateViewFromString(message.Body);
+                    htmlView.ContentType = new System.Net.Mime.ContentType("text/html");
+                    htmlView.ContentType.CharSet = Encoding.UTF8.WebName;
+                    m.AlternateViews.Add(htmlView);
 
-            client.Credentials = new NetworkCredential("kontakt@trudnezarty.hostingasp.pl", "Ziemniaki1!.");
+                    m.Body = message.Body;
 
-            return client.SendMailAsync(m);
+                    client.Credentials = new NetworkCredential(serviceInfo.Email, serviceInfo.EmailPassword);
+
+                    await client.SendMailAsync(m);
+                }
+            }
         }
     }
 
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
-        }
-    }
+    //public class SmsService : IIdentityMessageService
+    //{
+    //    public Task SendAsync(IdentityMessage message)
+    //    {
+    //        // Plug in your SMS service here to send a text message.
+    //        return Task.FromResult(0);
+    //    }
+    //}
 
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<ApplicationUser>
@@ -100,7 +108,7 @@ namespace PlusAndComment
                 BodyFormat = "Your security code is {0}"
             });
             manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
+            //manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {

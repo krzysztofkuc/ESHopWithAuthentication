@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace PlusAndComment.Controllers
@@ -75,21 +78,87 @@ namespace PlusAndComment.Controllers
 
         //
         // GET: /Checkout/Complete
-        public ActionResult CheckoutComplete(int id)
+        public async Task<ActionResult> CheckoutComplete(int id)
         {
             // Validate customer owns this order
             bool isValid = db.Orders.Any(
                 o => o.OrderId == id &&
                 o.Username == User.Identity.Name);
 
+            var order = db.Orders.First(
+                o => o.OrderId == id &&
+                o.Username == User.Identity.Name);
+
+            var user = db.Users.FirstOrDefault(x => x.UserName ==  User.Identity.Name);
+
             if (isValid)
             {
+                await SendMessageOrderToCustomerAndTotheCompany(order, user);
                 return View(id);
             }
             else
             {
                 return View("Error");
             }
+        }
+
+        private async Task SendMessageOrderToCustomerAndTotheCompany(OrderEntity order, ApplicationUser user)
+        {
+            //var products = db.Products.Join(db.OrderDetails, product => product.ProductId, ord => ord.ProductId, (product, orderEnt) => new { ProductEntity = product, OrderDetailEntity = orderEnt })
+            //    .Where(o => o.OrderDetailEntity.OrderId == order.OrderId);
+
+            var products = db.OrderDetails.Where(x => x.OrderId == order.OrderId).Select(y => y.Product);
+            StringBuilder messageContent = new StringBuilder();
+
+            messageContent.Append("<div style:' margin: 50px'>");
+                messageContent.Append("Thank you for buying the products: ");
+                messageContent.Append("<br>");
+                messageContent.Append("<table border='1' cellpadding='10'>");
+                messageContent.Append("<th>Name</th>");
+                messageContent.Append("<th>Model</th>");
+                messageContent.Append("<th>Price</th>");
+
+                double summary = 0;
+                foreach (var product in products)
+                {
+                    messageContent.Append("<tr>");
+                        messageContent.Append("<td>");
+                            messageContent.Append(product.Name + " ");
+                        messageContent.Append("</td>");
+                        messageContent.Append("<td>");
+                            messageContent.Append("Model ????");
+                        messageContent.Append("</td>");
+
+                        messageContent.Append("<td>");
+                            messageContent.Append(product.Price);
+                        messageContent.Append("</td>");
+                    messageContent.Append("</tr>");
+
+                    summary += product.Price;
+                }
+
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                double sum = cart.GetTotal();
+
+                messageContent.Append("<td colspan='2'></td>");
+                messageContent.Append("<td>");
+                    messageContent.Append("Sum: " + summary);
+                messageContent.Append("</td>");
+
+                messageContent.Append("</table>");
+            messageContent.Append("</div>");
+
+
+
+            var message = new IdentityMessage
+            {
+                Destination = order.Email,
+                Body = messageContent.ToString()
+
+            };
+
+            EmailService service = new EmailService();
+            await service.SendAsync(message);
         }
     }
 }

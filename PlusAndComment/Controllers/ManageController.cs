@@ -3,14 +3,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PlusAndComment.Models;
+using PlusAndComment.Models.Entities;
+using PlusAndComment.Models.ViewModel;
 
 namespace PlusAndComment.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -418,6 +421,44 @@ namespace PlusAndComment.Controllers
             model.Users = usersFromDb.ToList();
 
             return View("ManageRoles", model);
+        }
+
+        //[Authorize(Roles = "Admin")]
+        public ActionResult EditCompanyInformation()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var entity = db.CompanyInformationEntities.FirstOrDefault();
+                var vm = Mapper.Map<CompanyInformationVM>(entity);
+
+                return View(vm);
+            }
+        }
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult EditCompanyInformation(CompanyInformationVM companyVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(companyVM);
+            }
+
+            using (var db = new ApplicationDbContext())
+            {
+                var ent = Mapper.Map<CompanyInformationEntity>(companyVM);
+
+                var entFromDB = db.CompanyInformationEntities.FirstOrDefault();
+
+                if (entFromDB == null)
+                    db.CompanyInformationEntities.Add(ent);
+                else
+                    db.Entry(entFromDB).CurrentValues.SetValues(ent);
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index","Home");
         }
 
         protected override void Dispose(bool disposing)

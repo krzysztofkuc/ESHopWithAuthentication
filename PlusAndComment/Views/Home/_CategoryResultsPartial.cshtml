@@ -16,18 +16,17 @@
                 <td>@product.Name</td>
                 <td id="cellAddToCart1">
                     @Ajax.RawActionLink("<div id='xxx_OnClick' class='xxx_OnClick btn btn-sm btn-primary addToCartLink'style='position: relative; z-index: 100000;'><span class='glyphicon glyphicon-ok'></span> Add to cart</div>",
-                       "AddToCart",
-                       "ShoppingCart",
-                       new { @id = product.ProductId },
-                       new AjaxOptions
-                       {
-                           HttpMethod = "GET",
-                           OnSuccess = "animateAddToCartButton"
-                       },
-                       new { @id = "addToCartLink1" })
+                         "AddToCart",
+                         "ShoppingCart",
+                         new { @id = product.ProductId },
+                         new AjaxOptions
+                         {
+                             HttpMethod = "GET",
+                             OnSuccess = "animateAddToCartButton"
+                         },
+                         new { @id = "addToCartLink1" })
 
                 </td>
-
             </tr>
         }
     </tbody>

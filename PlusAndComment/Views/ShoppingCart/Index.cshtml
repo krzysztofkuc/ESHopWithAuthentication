@@ -27,29 +27,28 @@
         <th>
             Quantity
         </th>
-        <th></th>
     </tr>
-    @foreach (var item in Model.CartItems)
-    {
-        <tr id="row-@item.RecordId">
-            <td>
-                @Html.ActionLink(item.Product.Title ?? "title generated", "Details", "Store", new { id = item.ProductId }, null)
-            </td>
-            <td>
-                @item.Product.Price
-            </td>
-            <td id="item-count-@item.RecordId">
-                @item.Number
-            </td>
-            <td>
-                <a href="#" class="RemoveLink"
-                   data-id="@item.RecordId">
-                    Remove
-                    from cart
-                </a>
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model.CartItems)
+        {
+            <tr id="row-@item.RecordId">
+                <td>
+                    @Html.ActionLink(item.Product.Title ?? "title generated", "Details", "Store", new { id = item.ProductId }, null)
+                </td>
+                <td>
+                    @item.Product.Price
+                </td>
+                <td id="item-count-@item.RecordId">
+                    @item.Number
+                </td>
+                <td>
+                    <a href="#" class="RemoveLink"
+                       data-id="@item.RecordId">
+                        Remove
+                        from cart
+                    </a>
+                </td>
+            </tr>
+        }
     <tr>
         <td>
             Total
@@ -61,3 +60,6 @@
         </td>
     </tr>
 </table>
+<div>
+    @Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout")
+</div>

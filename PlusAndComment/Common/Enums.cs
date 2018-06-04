@@ -12,6 +12,9 @@ namespace PlusAndComment.Common
         public enum UIPostType { Humour, MainMeme, Suchar, Article };
 
         public enum PictureType { img, gif };
+
+        public enum AllAttributeTypes { number, text };
+        
     }
 
     public static class PosTypeExtensions
