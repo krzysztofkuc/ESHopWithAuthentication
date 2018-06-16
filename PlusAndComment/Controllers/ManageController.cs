@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -19,6 +21,8 @@ namespace PlusAndComment.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ApplicationDbContext dbContext = new ApplicationDbContext();
+
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -523,6 +527,190 @@ namespace PlusAndComment.Controllers
             Error
         }
 
-#endregion
+        #endregion
+
+        #region Manage Products
+        [HttpGet]
+        public ActionResult EditProductAttribute(int id)
+        {
+            var entity = db.ProductsAttributes.Find(id);
+            var attrVm = Mapper.Map<ProductAttributeVM>(entity);
+            var vm = Mapper.Map<AddProductAttributeVM>(attrVm);
+            vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditProductAttribute(AddProductAttributeVM attr)
+        {
+            var attrVM = Mapper.Map<ProductAttributeVM>(attr);
+            var entity = Mapper.Map<ProductAttributesEntity>(attrVM);
+
+            if (ModelState.IsValid)
+            {
+                db.ProductsAttributes.Attach(entity);
+                db.Entry(entity).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            else
+            {
+                return View(attr);
+            }
+
+            return RedirectToAction("ProductsAttributes");
+        }
+
+
+        [HttpGet]
+        public ActionResult CreateProductAttribute()
+        {
+
+            var vm = new AddProductAttributeVM();
+            vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult CreateProductAttribute(AddProductAttributeVM attr)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var vm = new AddProductAttributeVM();
+                var attrVM = Mapper.Map<ProductAttributeVM>(attr);
+                var entity = Mapper.Map<ProductAttributesEntity>(attrVM);
+                db.ProductsAttributes.Add(entity);
+                db.Entry(entity).State = EntityState.Added;
+
+                db.SaveChanges();
+            }
+            else
+            {
+                return View(attr);
+            }
+
+            return RedirectToAction("ProductsAttributes");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteProductAttribute(int id)
+        {
+            var entity = db.ProductsAttributes.Find(id);
+            db.ProductsAttributes.Remove(entity);
+            db.Entry(entity).State = EntityState.Deleted;
+            db.SaveChanges();
+
+            return RedirectToAction("ProductsAttributes");
+        }
+
+        [HttpGet]
+        public ActionResult EditAllProductsAttributes(int id)
+        {
+            var entity = db.ProductsAttributes.Find(id);
+            db.ProductsAttributes.Remove(entity);
+            db.Entry(entity).State = EntityState.Deleted;
+            db.SaveChanges();
+
+            return RedirectToAction("ProductsAttributes");
+        }
+
+        //Category
+        public ActionResult AddCategory()
+        {
+            ViewBag.Message = "Add category page.";
+
+            AddCategoryVM acVM = new AddCategoryVM();
+            //var entities = db.Categories.ToList();
+
+            var cats = db.Categories.ToList();
+            acVM.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
+
+            return View(acVM);
+        }
+
+        [HttpPost]
+        public ActionResult AddCategory(AddCategoryVM cat)
+        {
+            if (ModelState.IsValid)
+            {
+                var category = Mapper.Map<CategoryEntity>(cat.Category);
+
+                db.Categories.Add(category);
+                db.SaveChanges();
+
+                ViewBag.Message = "Category Added succefully";
+            }
+            AddCategoryVM acVM = new AddCategoryVM();
+            // acVM.AllCategories = Mapper.Map<List<CategoryVM>>(db.Categories);
+
+            return View(acVM);
+        }
+
+        //Product
+
+        public ActionResult AddProduct()
+        {
+            ViewBag.Message = "Add product page.";
+            AddProductVM acVM = new AddProductVM();
+            var cats = db.Categories.ToList();
+            acVM.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
+            acVM.AllProducts = Mapper.Map<ICollection<ProductVM>>(db.Products);
+
+            acVM.CurrentProduct = new ProductVM();
+
+            return View(acVM);
+        }
+
+        [HttpPost]
+        public ActionResult AddProduct(AddProductVM product)
+        {
+            if (ModelState.IsValid)
+            {
+                var entity = Mapper.Map<ProductEntity>(product.CurrentProduct);
+                db.Products.Add(entity);
+                db.Entry(entity).State = EntityState.Added;
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("AddProduct");
+        }
+
+        [HttpGet]
+        public ActionResult EditProduct(int id)
+        {
+            var entity = db.Products.Find(id);
+            var vm = Mapper.Map<ProductVM>(entity);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditProduct(ProductVM product)
+        {
+            var entity = Mapper.Map<ProductEntity>(product);
+            db.Products.Attach(entity);
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("AddProduct");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteProduct(int id)
+        {
+            var entity = db.Products.Find(id);
+            db.Products.Remove(entity);
+            db.Entry(entity).State = EntityState.Deleted;
+
+            db.SaveChanges();
+
+            //var allProducts = Mapper.Map<ICollection<ProductVM>>(db.Products); 
+
+            return RedirectToAction("AddProduct");
+        }
+        #endregion ManageProducts
     }
 }

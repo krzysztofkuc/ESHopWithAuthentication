@@ -1,4 +1,9 @@
-﻿function showleaveComment(id, isAuth) {
+﻿
+$(function () {
+    $('.datepicker').datetimepicker();
+});
+
+function showleaveComment(id, isAuth) {
     if (!isAuth) {
         alert("Nie jesteś zalogowany")
         return false;

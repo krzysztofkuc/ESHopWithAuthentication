@@ -655,3 +655,6 @@ textarea{
     min-width: 2em;
     font-weight: bold;
 }
+.datepicker {
+    position: relative;
+}

@@ -40,9 +40,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="@CheckActive("Articles", "Home")"style="padding-top: 9px;"><a href="/Home/Articles" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="glyphicon glyphicon-list-alt" style="padding-right: 5px;"></span>Z sieci</a></li>
-                    <li class="@CheckActive("Suchary", "Home")" style="padding-top: 9px;"><a href="/Home/Suchary" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Suchary</a></li>
-                    <li class="@CheckActive("MemGenerator", "Home")" style="padding-top: 9px;"><a href="/Home/MemGenerator" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Generator memów</a></li>
+                    <li class="@CheckActive("Articles", "Home")" style="padding-top: 9px;"><a href="/Home/Articles" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="glyphicon glyphicon-list-alt" style="padding-right: 5px;"></span>Z sieci</a></li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -55,10 +53,6 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            @*<p>stopka</p>*@
-        </footer>
     </div>
 
     

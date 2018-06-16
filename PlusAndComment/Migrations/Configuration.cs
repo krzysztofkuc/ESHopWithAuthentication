@@ -7,12 +7,12 @@ namespace PlusAndComment.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<PlusAndComment.Models.ApplicationDbContext>
     {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
-            ContextKey = "PlusAndComment.Models.ViewModel.ApplicationDbContext";
-        }
+        //public Configuration()
+        //{
+        //    AutomaticMigrationsEnabled = true;
+        //    AutomaticMigrationDataLossAllowed = true;
+        //    ContextKey = "PlusAndComment.Models.ViewModel.ApplicationDbContext";
+        //}
 
         //protected override void Seed(PlusAndComment.Models.ApplicationDbContext context)
         //{

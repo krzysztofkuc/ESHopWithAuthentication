@@ -48,8 +48,8 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AddProductAttributeVM, ProductAttributeVM>();
 
                 //ProductAttributeVM
-                cfg.CreateMap<ProductAttributeVM, ProductAttriutesEntity>();
-                cfg.CreateMap<ProductAttriutesEntity, ProductAttributeVM>();
+                cfg.CreateMap<ProductAttributeVM, ProductAttributesEntity>();
+                cfg.CreateMap<ProductAttributesEntity, ProductAttributeVM>();
 
             });
 

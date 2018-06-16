@@ -5,6 +5,8 @@ namespace PlusAndComment.Models.ViewModel
 {
     public class AddProductAttributeVM
     {
+        public int ProductAttributeId { get; set; }
+
         public string Name { get; set; }
 
         public string Value { get; set; }

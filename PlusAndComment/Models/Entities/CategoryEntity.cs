@@ -19,12 +19,13 @@ namespace PlusAndComment.Models.Entities
 
         public int? ParentId { get; set; }
 
+        //it is childCategoryId
         [ForeignKey("ParentId")]
         public virtual ICollection<CategoryEntity> Categories { get; set; }
 
         public virtual ICollection<ProductEntity> Products { get; set; }
 
         [ForeignKey("ProductAttributeId")]
-        public virtual ICollection<ProductAttriutesEntity> Attributes { get; set; }
+        public virtual ICollection<ProductAttributesEntity> Attributes { get; set; }
     }
 }

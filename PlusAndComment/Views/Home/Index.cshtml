@@ -9,43 +9,97 @@
     <meta property="og:image" content="@Url.Content("~/Storage/logo.png")" />
 </head>
 
-<div class="container" style="max-width: 750px; margin-top: 20px;">
+<div style="max-width: 750px; margin-top: 20px;">
     <div class="row">
         <div class="col-md-4">
-            @DisplayRoots(Model.Categories)
+            <div class="row">
+                @DisplayRoots(Model.Categories)
+            </div>
+            <div class="row">
+                @Html.ActionLink("Add category", "AddCategory", "Manage", null, new { @class = "btn btn-primary btn-small" })
+            </div>
+            <div class="row">
+                <div style="position: relative">
+                    <label>Filters</label>
+                    <ul>
+                        @foreach (var attr in Model.CurrentAttributes)
+                    {
+                        <li>@attr.Name</li>
+                    switch (attr.AttributeType)
+                    {
+                        case "text":
+                            //add onclick event to search
+                            @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control" });
+                        break;
+                    case "number":
+                        //should be replaced to numebr value
+                        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control" });
+                    break;
+                case "dateFrom":
+                    //should be replaced to numebr value
+                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker" });
+                break;
+            case "dateTo":
+                //should be replaced to numebr value
+                @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker" });
+            break;
+    }
+}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", null, new { @class = "btn btn-primary btn-small" });
+            </div>
         </div>
-            @Html.Partial("_CategoryResultsPartial", Model.Prducts)
+        <div class="col-md-8">
+            <div class="row">
+                @Html.ActionLink("Add product", "AddProduct", "Manage", null, new { @class = "btn btn-primary btn-small" })
+            </div>
+            <div class="row">
+                @Html.Partial("_CategoryResultsPartial", Model.Prducts)
+            </div>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col-md-1">
+            <footer>
+                <hr />
+                
+                <p>stopka</p>
+            </footer>
+        </div>
     </div>
-</div>
+    </div>
 
-@helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
-{
-    <ul>
-        @foreach (var element in elements.Where(x => x.ParentId == null))
+    @helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
         {
-            <li>
-                @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
-                @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
-                @DisplayChild(element)
-            </li>
-        }
-    </ul>
+            <ul>
+                @foreach (var element in elements.Where(x => x.ParentId == null))
+                {
+                    <li>
+                        @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
+                        @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
+                        @DisplayChild(element)
+                    </li>
+                }
+            </ul>
 }
 
-@helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
-{
-    <ul>
-        @foreach (var elem in element.Categories)
+    @helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
         {
-            <li>
-                @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
-                @{
-                    if (elem.Categories.Count() > 0)
-                    {
-                        @DisplayChild(elem)
-                    }
+            <ul>
+                @foreach (var elem in element.Categories)
+                {
+                    <li>
+                        @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = elem.CategoryId }, null)
+                        @{
+                            if (elem.Categories.Count() > 0)
+                            {
+                                @DisplayChild(elem)
+                            }
+                        }
+                    </li>
                 }
-            </li>
-        }
-    </ul>
+            </ul>
 }

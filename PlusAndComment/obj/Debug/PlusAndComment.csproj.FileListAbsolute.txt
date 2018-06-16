@@ -182,8 +182,7 @@ D:\Repositories\EShopWithAuthentication\PlusAndComment\bin\Microsoft.Owin.Securi
 D:\Repositories\EShopWithAuthentication\PlusAndComment\bin\Microsoft.Owin.Security.Google.xml
 D:\Repositories\EShopWithAuthentication\PlusAndComment\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Repositories\EShopWithAuthentication\PlusAndComment\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.Migrations.AAA.resources
-D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.csproj.GenerateResource.Cache
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.csproj.CoreCompileInputs.cache
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.dll
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.pdb
+D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.csprojResolveAssemblyReference.cache

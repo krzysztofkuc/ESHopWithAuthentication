@@ -1,5 +1,4 @@
-﻿using PlusAndComment.Models.ViewModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -7,5 +6,6 @@ namespace PlusAndComment.Models.ViewModel
     {
         public ICollection<ProductVM> Prducts { get; set; }
         public ICollection<CategoryVM> Categories { get; set; }
+        public Stack<ProductAttributeVM> CurrentAttributes { get; set; }
     }
 }

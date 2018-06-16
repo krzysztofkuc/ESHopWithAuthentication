@@ -1,0 +1,80 @@
+﻿@model PlusAndComment.Models.ViewModel.AddCategoryVM
+
+@{
+    ViewBag.Title = "AddCategory";
+}
+
+<h2>AddCategory</h2>
+
+
+@using (Html.BeginForm("AddCategory", "Manage", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>AddCategoryVM</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                @DisplayRoots(Model.AllCategories)
+
+                @Html.LabelFor(m => m.Category.Name)
+
+                @Html.EditorFor(m => m.Category.Name)
+                @Html.ValidationMessageFor(model => model.Category.Name)
+
+                @Html.LabelFor(m => m.AllCategories)
+
+                @Html.DropDownListFor(m => m.Category.ParentId, new SelectList(Model.AllCategories, "CategoryId", "Name"), "- Please Select -")
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+    {
+        <ul>
+            @foreach (var element in elements.Where(x => x.ParentId == null))
+            {
+                <li>
+                    @element.Name
+                    @DisplayChild(element)
+                </li>
+            }
+        </ul>
+}
+
+@helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+    {
+        <ul>
+            @foreach (var elem in element.Categories)
+            {
+                <li>
+                    @elem.Name
+                    @{
+                        if (elem.Categories.Count() > 0)
+                        {
+                            @DisplayChild(elem)
+                        }
+                    }
+                </li>
+            }
+        </ul>
+}
+

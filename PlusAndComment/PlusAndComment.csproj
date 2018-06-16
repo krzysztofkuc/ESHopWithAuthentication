@@ -237,10 +237,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IServiceCollection.cs" />
-    <Compile Include="Migrations\201708011249488_AAA.cs" />
-    <Compile Include="Migrations\201708011249488_AAA.Designer.cs">
-      <DependentUpon>201708011249488_AAA.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ArticlesVM.cs" />
@@ -576,9 +572,9 @@
     <Content Include="Views\Home\Articles.cshtml" />
     <Content Include="Views\Shared\_ArticleRowPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Home\AddCategory.cshtml" />
-    <Content Include="Views\Home\AddProduct.cshtml" />
-    <Content Include="Views\Home\EditProduct.cshtml" />
+    <Content Include="Views\Manage\AddCategory.cshtml" />
+    <Content Include="Views\Manage\AddProduct.cshtml" />
+    <Content Include="Views\Manage\EditProduct.cshtml" />
     <Content Include="Views\Home\_CategoryResultsPartial.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Product.cshtml" />
@@ -586,7 +582,9 @@
     <Content Include="Views\Checkout\CheckoutComplete.cshtml" />
     <Content Include="Views\Manage\EditCompanyInformation.cshtml" />
     <Content Include="Views\Home\ProductsAttributes.cshtml" />
-    <Content Include="Views\Home\CreateProductAttribute.cshtml" />
+    <Content Include="Views\Manage\CreateProductAttribute.cshtml" />
+    <Content Include="Views\Manage\EditProductAttribute.cshtml" />
+    <Content Include="Views\Home\CategoryFilters.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -595,11 +593,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201708011249488_AAA.resx">
-      <DependentUpon>201708011249488_AAA.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
