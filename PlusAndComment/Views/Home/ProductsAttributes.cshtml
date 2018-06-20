@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.AttributeType)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditProductAttribute", new { id=item.ProductAttributeId }) |
-                @Html.ActionLink("Details", "DetailsProductAttribute", new {  id=item.ProductAttributeId }) |
-                @Html.ActionLink("Delete", "DeleteProductAttribute", new {  id=item.ProductAttributeId })
+                @Html.ActionLink("Edit", "EditProductAttribute", "Manage", new { id=item.ProductAttributeId },null) |
+                @Html.ActionLink("Details", "DetailsProductAttribute", "Manage", new {  id=item.ProductAttributeId }, null) |
+                @Html.ActionLink("Delete", "DeleteProductAttribute", "Manage", new {  id=item.ProductAttributeId }, null)
             </td>
         </tr>
     }

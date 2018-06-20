@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
+using PlusAndComment.Models.ViewModel.Entities;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,6 +51,10 @@ namespace PlusAndComment.App_Start
                 //ProductAttributeVM
                 cfg.CreateMap<ProductAttributeVM, ProductAttributesEntity>();
                 cfg.CreateMap<ProductAttributesEntity, ProductAttributeVM>();
+
+                //PictureVM
+                cfg.CreateMap<PictureVM, PictureEntity>();
+                cfg.CreateMap<PictureEntity, PictureVM>();
 
             });
 

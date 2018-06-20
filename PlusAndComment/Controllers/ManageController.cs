@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PlusAndComment.Common;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
@@ -591,7 +593,7 @@ namespace PlusAndComment.Controllers
                 return View(attr);
             }
 
-            return RedirectToAction("ProductsAttributes");
+            return RedirectToAction("ProductsAttributes", "Home", null);
         }
 
         [HttpGet]
@@ -602,7 +604,7 @@ namespace PlusAndComment.Controllers
             db.Entry(entity).State = EntityState.Deleted;
             db.SaveChanges();
 
-            return RedirectToAction("ProductsAttributes");
+            return RedirectToAction("ProductsAttributes", "Home");
         }
 
         [HttpGet]
@@ -658,7 +660,15 @@ namespace PlusAndComment.Controllers
             acVM.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
             acVM.AllProducts = Mapper.Map<ICollection<ProductVM>>(db.Products);
 
+
             acVM.CurrentProduct = new ProductVM();
+            acVM.CurrentProduct.Pictures = new List<PictureVM>();
+
+            //fill blank pictures
+            for(int i = 0; i< 4; i++)
+            {
+                acVM.CurrentProduct.Pictures.Add(new PictureVM());
+            }
 
             return View(acVM);
         }
@@ -666,6 +676,16 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult AddProduct(AddProductVM product)
         {
+            for(int i=0; i< product.CurrentProduct.Pictures.Count; i++)
+            {
+                var item = product.CurrentProduct.Pictures[i];
+                if (string.IsNullOrEmpty(item.Path))
+                { 
+                    product.CurrentProduct.Pictures.Remove(item);
+                    i--;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 var entity = Mapper.Map<ProductEntity>(product.CurrentProduct);
@@ -710,6 +730,57 @@ namespace PlusAndComment.Controllers
             //var allProducts = Mapper.Map<ICollection<ProductVM>>(db.Products); 
 
             return RedirectToAction("AddProduct");
+        }
+
+        [HttpPost]
+        public JsonResult Upload()
+        {
+            string pathUrl = string.Empty;
+
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                var file = Request.Files[i];
+
+                var ext =  Path.GetExtension(file.FileName).ToLower();
+                if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    //pathUrl = Path.Combine("..\\Storage", fileName);
+                    //var savefileName = Path.GetFileName(file.FileName);
+
+                    var savePath = Path.Combine(Server.MapPath("~/Storage"), file.FileName);
+                    var savefileName = CheckIffILExist(savePath);
+                    file.SaveAs(savefileName);
+                    //post.FilePath = savefileName;
+                    //post.ReferenceUrl = string.Empty;
+                    
+                    Picture pic = new Picture();
+                    pic.FileName = Path.GetFileName(savefileName);
+                    pic.PathRelative = Url.Content("~/Storage/" + pic.FileName);
+
+                    return Json(pic, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return null;
+        }
+
+        private string CheckIffILExist(string fullPath)
+        {
+            int count = 1;
+
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
+            string extension = Path.GetExtension(fullPath);
+            string path = Path.GetDirectoryName(fullPath);
+            string newFullPath = fullPath;
+
+            while (System.IO.File.Exists(newFullPath))
+            {
+                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
+                newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+
+            return newFullPath;
         }
         #endregion ManageProducts
     }

@@ -4,6 +4,17 @@ namespace PlusAndComment.Models.ViewModel
 {
     public class ProductVM
     {
+        public ProductVM()
+        {
+            Pictures = new List<PictureVM>();
+
+            for(int i = 0; i< 4; i++)
+            {
+                Pictures.Add(new PictureVM());
+            }
+            
+        }
+
         public int ProductId { get; set; }
 
         public string Title { get; set; }
@@ -20,6 +31,6 @@ namespace PlusAndComment.Models.ViewModel
 
         public CategoryVM Category { get; set; }
 
-        public ICollection<PictureVM> Pictures { get; set; }
+        public List<PictureVM> Pictures { get; set; }
     }
 }

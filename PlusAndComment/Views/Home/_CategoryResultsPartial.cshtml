@@ -4,6 +4,7 @@
 <table border="1">
     <thead>
         <tr>
+            <th>Image</th>
             <th>Category</th>
             <th>Product</th>
         </tr>
@@ -12,6 +13,12 @@
         @foreach (var product in Model)
         {
             <tr>
+                <td>
+                @if(product.Pictures.Count != 0)
+                {
+                    <img src="@product.Pictures.FirstOrDefault().Path" style="max-width: 100px; padding: 10px"/>
+                }
+                </td>
                 <td>@product.Category.Name</td>
                 <td>@product.Name</td>
                 <td id="cellAddToCart1">

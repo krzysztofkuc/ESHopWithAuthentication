@@ -132,3 +132,65 @@ function UpdateTrolleyItemsCount(count) {
         }
     }
 
+    $(document).ready(function () {
+        $(".imageThumb_upload").change(function (e) {
+            var formData = new FormData();
+            //var totalFiles = e.target.files.length;
+            for (var i = 0; i < e.target.files.length; i++) {
+                var file = e.target.files[i];
+                formData.append("imageUploadForm", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: "Upload",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                //enctype: 'multipart/form-data',
+                processData: false,
+                beforeSend: function (request, xhr) {
+                    $('#progressBar').text('');
+                    $('#progressBar').css('width', '0%');
+                },
+                success: function (post) {
+                    //var type = post.Type;
+                    //var gifUrl = post.postUrl;
+                    //var imgUrl = post.ImageUrl;
+                    //var referenceUrl = post.ReferenceUrl;
+
+                    var photoNumber = GetNumberOfCurrentPhoto(e.target.id);
+
+                    $("#Path_" + photoNumber).val(post.PathRelative);
+                    
+
+                    $("#" + e.target.id + "_Preview").attr("src", post.PathRelative);
+
+                    //$("#referenceUrl").val(referenceUrl);
+                    //$("#AddNewPostContent").show();
+                    //$('#addPostButton').attr("disabled", false);
+                },
+                xhr: function () {
+                    //Get XmlHttpRequest object
+                    var xhr = $.ajaxSettings.xhr();
+                    //Set onprogress event handler
+                    xhr.upload.onprogress = function (data) {
+                        var perc = Math.round((data.loaded / data.total) * 100);
+                        $('#progressBar').text(perc + '%');
+                        $('#progressBar').css('width', perc + '%');
+                    };
+                    return xhr;
+                },
+                error: function (error) {
+                    alert("errror");
+                }
+            });
+        });
+    });
+
+    function GetNumberOfCurrentPhoto(id) {
+
+        var lastslashindex = id.lastIndexOf('_');
+        var result = id.substring(lastslashindex + 1);
+
+        return result;
+    }

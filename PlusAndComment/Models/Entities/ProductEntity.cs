@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PlusAndComment.Models.ViewModel.Entities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,8 +24,8 @@ namespace PlusAndComment.Models.Entities
         [ForeignKey("Category")]
         public int CatId { get; set; }
 
-        //[ForeignKey("ProdId")]
-        //public virtual ICollection<PictureEntity> Pictures { get; set; }
+        [ForeignKey("ProdId")]
+        public virtual ICollection<PictureEntity> Pictures { get; set; }
 
         public virtual CategoryEntity Category { get; set; }
 

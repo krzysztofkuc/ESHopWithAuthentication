@@ -521,6 +521,7 @@
     <Content Include="Storage\logo.png" />
     <Content Include="Storage\logoFB.png" />
     <Content Include="Storage\logoIcon.ico" />
+    <Content Include="Storage\no-image-icon.png" />
     <Content Include="Storage\osiemnascie.png" />
     <Content Include="Storage\person-icon-8.png" />
     <Content Include="Storage\textBckg.bmp" />

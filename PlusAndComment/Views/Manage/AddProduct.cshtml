@@ -1,9 +1,22 @@
 ﻿@model PlusAndComment.Models.ViewModel.AddProductVM
 
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    var listEnumerator = Model.CurrentProduct.Pictures.GetEnumerator();
+
+    for (var i = 0; listEnumerator.MoveNext() == true; i++)
+    {
+        var item = listEnumerator.Current;
+
+        @*@Html.HiddenFor(m => item.PictureId, new { @id = "PictureId_" + i });*@
+        @Html.HiddenFor(m => m.CurrentProduct.Pictures[i].Path, new { @id = "Path_" + i });
+        @*@Html.Hidden(item.PictureId.ToString(), null, new { @id = "PictureId_" + i });
+        @Html.Hidden(item.Path, null, new { @id = "Path_" + i });*@
+    }
 
     <div class="form-horizontal">
         <h4>Add product</h4>
@@ -56,7 +69,53 @@
             </div>
         </div>
     </div>
+}
+    </div>
+    <div class="col-md-6">
+        <div class="row">
 
+            <div class="col-md-6" style="text-align: center; border: 10px">
+                <label class="imageThumb_uploadLabel" for="imageThumb_upload_0">
+                    <img class="imageThumb_upload" id="imageThumb_upload_0_Preview" src="~/Storage/no-image-icon.png"/>
+                    <span class="middle">
+                        <span class="textMiddle">Upload</span>
+                    </span>
+                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_0" />
+                </label>
+            </div>
+
+            <div class="col-md-6" style="text-align: center;">
+                <label class="imageThumb_uploadLabel" for="imageThumb_upload_1">
+                    <img class="imageThumb_upload" id="imageThumb_upload_1_Preview" src="~/Storage/no-image-icon.png" />
+                    <span class="middle">
+                        <span class="textMiddle">Upload</span>
+                    </span>
+                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_1" />
+                </label>
+            </div>
+
+            <div class="col-md-6" style="text-align: center;">
+                <label class="imageThumb_uploadLabel" for="imageThumb_upload_2">
+                    <img class="imageThumb_upload" id="imageThumb_upload_2_Preview" src="~/Storage/no-image-icon.png" />
+                    <span class="middle">
+                        <span class="textMiddle">Upload</span>
+                    </span>
+                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_2" />
+                </label>
+            </div>
+
+            <div class="col-md-6" style="text-align: center;">
+                <label class="imageThumb_uploadLabel" for="imageThumb_upload_3">
+                    <img class="imageThumb_upload" id="imageThumb_upload_3_Preview" src="~/Storage/no-image-icon.png" />
+                    <span class="middle">
+                        <span class="textMiddle">Upload</span>
+                    </span>
+                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_3" />
+                </label>
+            </div>
+        </div>
+    </div>
+<div class="row">
     <table class="table">
         <tr>
             <th>Product Name</th>
@@ -78,13 +137,10 @@
         }
 
     </table>
-}
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+</div>
 
