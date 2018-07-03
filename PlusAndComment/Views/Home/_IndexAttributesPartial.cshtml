@@ -1,0 +1,50 @@
+﻿@model List<PlusAndComment.Models.ViewModel.ProductAttributeVM>
+
+@using (Html.BeginForm("FilterProducts", "Home", FormMethod.Post))
+{
+    //@Html.AntiForgeryToken()
+    <div class="row">
+        <div style="position: relative">
+            <label>Filters</label>
+            <ul>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model[i].ProductAttributeId)
+                    @Html.HiddenFor(m => Model[i].CategoryAttributeId)
+                    @Html.HiddenFor(m => Model[i].AttributeType)
+                    @Html.HiddenFor(m => Model[i].Name)
+
+                    @*@Html.Hidden("[" + i + "].ProductAttributeId");
+                    @Html.Hidden("[" + i + "].CategoryAttributeId");
+                    @Html.Hidden("[" + i + "].AttributeType");
+                    @Html.Hidden("[" + i + "].Name");*@
+
+                    <li>@Model[i].Name</li>
+                    switch (Model[i].AttributeType)
+                    {
+                        case "text":
+                            @Html.TextBox("[" + i + "].Value")
+                            break;
+                            @*case "number":
+                                    //should be replaced to numebr value
+                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control filter" });
+                                    break;
+                                case "dateFrom":
+                                    //should be replaced to numebr value
+                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+                                    break;
+                                case "dateTo":
+                                    //should be replaced to numebr value
+                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+                                    break;*@
+                    }
+                }
+            </ul>
+            <input type="submit" value="submit" />
+        </div>
+    </div>
+}
+<div class="row">
+    @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", null, new { @class = "btn btn-primary btn-small" })
+</div>
+

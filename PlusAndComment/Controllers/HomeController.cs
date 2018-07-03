@@ -16,7 +16,7 @@ namespace PlusAndComment.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private Stack<ProductAttributeVM> _currentAllCategoryFilters = new Stack<ProductAttributeVM>();
+        private List<ProductAttributeVM> _currentAllCategoryFilters = new List<ProductAttributeVM>();
 
         [HttpGet]
         [AllowAnonymous]
@@ -46,6 +46,15 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
+        [HttpPost]
+        public ActionResult FilterProducts(List<ProductAttributeVM> attrs)
+        {
+            db.Products.Where(m => m. );
+            // All model properties are null here????
+
+            return Json("Success");
+        }
+
         private void FillCurrentAllCategoryChildsFilters(int? id)
         {
             if (id == null) return;
@@ -53,7 +62,7 @@ namespace PlusAndComment.Controllers
 
             foreach (var attribute in category.Attributes)
             {
-                _currentAllCategoryFilters.Push(Mapper.Map<ProductAttributeVM>(attribute));
+                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributeVM>(attribute));
             }
 
             FillCurrentAllCategoryChildsFilters(category);
@@ -72,7 +81,7 @@ namespace PlusAndComment.Controllers
         {
             foreach (var attr in cat.Attributes)
             {
-                _currentAllCategoryFilters.Push(Mapper.Map<ProductAttributeVM>(attr));
+                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributeVM>(attr));
             }
 
             var parent = db.Categories.Find(cat.ParentId);

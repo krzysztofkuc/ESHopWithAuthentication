@@ -18,39 +18,8 @@
             <div class="row">
                 @Html.ActionLink("Add category", "AddCategory", "Manage", null, new { @class = "btn btn-primary btn-small" })
             </div>
-            <div class="row">
-                <div style="position: relative">
-                    <label>Filters</label>
-                    <ul>
-                    @foreach (var attr in Model.CurrentAttributes)
-                    {
-                        <li>@attr.Name</li>
-                        switch (attr.AttributeType)
-                        {
-                            case "text":
-                                //add onclick event to search
-                                @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control" });
-                            break;
-                            case "number":
-                                //should be replaced to numebr value
-                                @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control" });
-                            break;
-                            case "dateFrom":
-                                //should be replaced to numebr value
-                                @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker" });
-                            break;
-                            case "dateTo":
-                                //should be replaced to numebr value
-                                @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker" });
-                            break;
-                        }
-                    }
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", null, new { @class = "btn btn-primary btn-small" })
-            </div>
+
+            @Html.Partial("_IndexAttributesPartial",Model.CurrentAttributes)
         </div>
         <div class="col-md-8">
             <div class="row">

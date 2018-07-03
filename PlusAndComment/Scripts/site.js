@@ -185,7 +185,28 @@ function UpdateTrolleyItemsCount(count) {
                 }
             });
         });
-    });
+
+    }
+
+        
+
+
+    );
+
+    //function FilterChange() {
+    //    var dataToPost = $("#FilterProducts").serialize()
+
+    //    $('form#FilterProducts').submit();
+    //    return false; 
+
+    //    $.ajax(
+    //        {
+    //            type: "POST",
+    //            data: JSON.stringify(dataToPost),
+    //            url: "Home/FilterProducts",
+    //            contentType: 'application/json; charset=utf-8'
+    //        });
+    //};
 
     function GetNumberOfCurrentPhoto(id) {
 
@@ -194,3 +215,5 @@ function UpdateTrolleyItemsCount(count) {
 
         return result;
     }
+
+
