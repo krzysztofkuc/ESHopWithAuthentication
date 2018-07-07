@@ -32,5 +32,7 @@ namespace PlusAndComment.Models.ViewModel
         public CategoryVM Category { get; set; }
 
         public List<PictureVM> Pictures { get; set; }
+
+        public List<ProductAttributesVM> Attributes { get; set; }
     }
 }

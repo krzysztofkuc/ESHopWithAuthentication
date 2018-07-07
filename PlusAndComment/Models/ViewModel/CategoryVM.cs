@@ -16,5 +16,7 @@ namespace PlusAndComment.Models.ViewModel
 
         public ICollection<ProductVM> Products { get; set; }
 
+        public ICollection<ProductAttributesVM> Attributes { get; set; }
+
     }
 }

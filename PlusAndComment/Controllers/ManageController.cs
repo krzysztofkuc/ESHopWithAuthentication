@@ -536,7 +536,7 @@ namespace PlusAndComment.Controllers
         public ActionResult EditProductAttribute(int id)
         {
             var entity = db.ProductsAttributes.Find(id);
-            var attrVm = Mapper.Map<ProductAttributeVM>(entity);
+            var attrVm = Mapper.Map<ProductAttributesVM>(entity);
             var vm = Mapper.Map<AddProductAttributeVM>(attrVm);
             vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
 
@@ -546,7 +546,7 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult EditProductAttribute(AddProductAttributeVM attr)
         {
-            var attrVM = Mapper.Map<ProductAttributeVM>(attr);
+            var attrVM = Mapper.Map<ProductAttributesVM>(attr);
             var entity = Mapper.Map<ProductAttributesEntity>(attrVM);
 
             if (ModelState.IsValid)
@@ -565,10 +565,15 @@ namespace PlusAndComment.Controllers
 
 
         [HttpGet]
-        public ActionResult CreateProductAttribute()
+        public ActionResult CreateProductAttribute(int? productId = null)
         {
 
             var vm = new AddProductAttributeVM();
+            vm.ProductOfAttributeId = productId;
+
+            vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
+            
+
             vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
 
             return View(vm);
@@ -581,7 +586,7 @@ namespace PlusAndComment.Controllers
             {
 
                 var vm = new AddProductAttributeVM();
-                var attrVM = Mapper.Map<ProductAttributeVM>(attr);
+                var attrVM = Mapper.Map<ProductAttributesVM>(attr);
                 var entity = Mapper.Map<ProductAttributesEntity>(attrVM);
                 db.ProductsAttributes.Add(entity);
                 db.Entry(entity).State = EntityState.Added;

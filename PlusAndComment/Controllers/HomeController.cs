@@ -16,7 +16,7 @@ namespace PlusAndComment.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private List<ProductAttributeVM> _currentAllCategoryFilters = new List<ProductAttributeVM>();
+        private List<ProductAttributesVM> _currentAllCategoryFilters = new List<ProductAttributesVM>();
 
         [HttpGet]
         [AllowAnonymous]
@@ -47,7 +47,7 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpPost]
-        public ActionResult FilterProducts(List<ProductAttributeVM> attrs)
+        public ActionResult FilterProducts(List<ProductAttributesVM> attrs)
         {
             //db.Products.Where(m => m. );
             // All model properties are null here????
@@ -62,7 +62,7 @@ namespace PlusAndComment.Controllers
 
             foreach (var attribute in category.Attributes)
             {
-                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributeVM>(attribute));
+                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attribute));
             }
 
             FillCurrentAllCategoryChildsFilters(category);
@@ -81,7 +81,7 @@ namespace PlusAndComment.Controllers
         {
             foreach (var attr in cat.Attributes)
             {
-                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributeVM>(attr));
+                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attr));
             }
 
             var parent = db.Categories.Find(cat.ParentId);
@@ -141,7 +141,7 @@ namespace PlusAndComment.Controllers
 
             ICollection<ProductAttributesEntity> attrs = db.ProductsAttributes.ToList();
 
-            var vm = Mapper.Map<ICollection<ProductAttributeVM>>(db.ProductsAttributes);
+            var vm = Mapper.Map<ICollection<ProductAttributesVM>>(db.ProductsAttributes);
 
             return View(vm);
         }

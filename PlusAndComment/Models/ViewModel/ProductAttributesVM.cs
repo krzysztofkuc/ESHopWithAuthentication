@@ -5,13 +5,15 @@ using System.Web;
 
 namespace PlusAndComment.Models.ViewModel
 {
-    public class ProductAttributeVM
+    public class ProductAttributesVM
     {
         public int ProductAttributeId { get; set; }
 
         public string Name { get; set; }
 
         public int CategoryAttributeId { get; set; }
+
+        public int? ProductOfAttributeId { get; set; }
 
         public string Value { get; set; }
 
