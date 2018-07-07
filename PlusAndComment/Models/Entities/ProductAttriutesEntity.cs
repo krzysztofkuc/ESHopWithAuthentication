@@ -18,6 +18,7 @@ namespace PlusAndComment.Models.Entities
 
         public string AttributeType { get; set; }
 
+        public int? ProductOfAttributeId { get; set; }
 
         public virtual CategoryEntity CategoryAttribute { get; set; }
     }

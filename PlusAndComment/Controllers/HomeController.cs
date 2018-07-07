@@ -49,7 +49,7 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult FilterProducts(List<ProductAttributeVM> attrs)
         {
-            db.Products.Where(m => m. );
+            //db.Products.Where(m => m. );
             // All model properties are null here????
 
             return Json("Success");
