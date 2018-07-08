@@ -1,6 +1,7 @@
 ﻿
 
 using AutoMapper;
+using Newtonsoft.Json;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
@@ -10,6 +11,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace PlusAndComment.Controllers
 {
@@ -20,9 +22,20 @@ namespace PlusAndComment.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Index(int? categoryId)
+        public ActionResult Index(int? categoryId, string attrs = null)
         {
-            var products = GetProductsByCategory(db.Categories.Find(categoryId))?? new List<ProductEntity>();
+            var products = new List<ProductEntity>();
+
+            if (!string.IsNullOrEmpty(attrs))
+            {
+                var attributes = JsonConvert.DeserializeObject<List<ProductAttributesVM>>(attrs);
+
+                products = FilterProducts(attributes);
+            }
+            else
+            {
+                products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
+            }
 
             var categories = db.Categories.ToList();
 
@@ -46,13 +59,24 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
-        [HttpPost]
-        public ActionResult FilterProducts(List<ProductAttributesVM> attrs)
+        public List<ProductEntity> FilterProducts(List<ProductAttributesVM> attrs)
         {
-            //db.Products.Where(m => m. );
-            // All model properties are null here????
+            List<ProductEntity> productsEnt = new List<ProductEntity>();
 
-            return Json("Success");
+            foreach (var attr in attrs)
+            {
+                var attrEnt = db.ProductsAttributes.Find(attr.ProductAttributeId);
+                var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Name == attr.Name && x.Value == attr.Value));
+
+                if(products.Count() > 0)
+                {
+                    productsEnt.AddRange(products.ToList());
+                }
+            }
+
+            return productsEnt;
+
+            //return RedirectToAction("Index", new { categoryId = -1, attrs = JsonConvert.SerializeObject(attrs.ToList()) });
         }
 
         private void FillCurrentAllCategoryChildsFilters(int? id)

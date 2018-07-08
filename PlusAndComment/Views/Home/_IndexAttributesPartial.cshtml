@@ -1,6 +1,6 @@
 ﻿@model List<PlusAndComment.Models.ViewModel.ProductAttributesVM>
 
-@using (Html.BeginForm("FilterProducts", "Home", FormMethod.Post))
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
 {
     //@Html.AntiForgeryToken()
     <div class="row">
@@ -8,39 +8,37 @@
             <label>Filters</label>
             <ul>
                 @for (int i = 0; i < Model.Count; i++)
-                {
-                    @Html.HiddenFor(m => Model[i].ProductAttributeId)
-                    @Html.HiddenFor(m => Model[i].CategoryAttributeId)
-                    @Html.HiddenFor(m => Model[i].AttributeType)
-                    @Html.HiddenFor(m => Model[i].Name)
+        {
+            @Html.HiddenFor(m => Model[i].ProductAttributeId)
+            @Html.HiddenFor(m => Model[i].CategoryAttributeId)
+            @Html.HiddenFor(m => Model[i].AttributeType)
+            @Html.HiddenFor(m => Model[i].Name)
+            @Html.HiddenFor(m => Model[i].CategoryAttribute)
 
-                    @*@Html.Hidden("[" + i + "].ProductAttributeId");
-                    @Html.Hidden("[" + i + "].CategoryAttributeId");
-                    @Html.Hidden("[" + i + "].AttributeType");
-                    @Html.Hidden("[" + i + "].Name");*@
-
-                    <li>@Model[i].Name</li>
-                    switch (Model[i].AttributeType)
-                    {
-                        case "text":
-                            @Html.TextBox("[" + i + "].Value")
-                            break;
-                            @*case "number":
-                                    //should be replaced to numebr value
-                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control filter" });
-                                    break;
-                                case "dateFrom":
-                                    //should be replaced to numebr value
-                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-                                    break;
-                                case "dateTo":
-                                    //should be replaced to numebr value
-                                    @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-                                    break;*@
-                    }
-                }
+            <li>@Model[i].Name</li>
+    switch (Model[i].AttributeType)
+    {
+        case "text":
+            @Html.TextBox("[" + i + "].Value", null, new { @class = "form-control" })
+    break;
+        @*case "number":
+        //should be replaced to numebr value
+        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control filter" });
+        break;
+    case "dateFrom":
+        //should be replaced to numebr value
+        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+        break;
+    case "dateTo":
+        //should be replaced to numebr value
+        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+        break;*@
+}
+}
             </ul>
-            <input type="submit" value="submit" />
+            <ul>
+                @Html.ActionLink("Search", "Index", "Home", new { categoryId = Request.QueryString["categoryId"], attrs = Json.Encode(Model) }, new { @class = "btn btn-primary btn-small" })
+            </ul>
         </div>
     </div>
 }
