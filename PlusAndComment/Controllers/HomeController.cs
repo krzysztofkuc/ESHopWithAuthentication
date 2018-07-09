@@ -5,13 +5,9 @@ using Newtonsoft.Json;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace PlusAndComment.Controllers
 {
@@ -38,8 +34,14 @@ namespace PlusAndComment.Controllers
             }
 
             var categories = db.Categories.ToList();
+            var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
 
-            FillCurrentAllCategoryChildsFilters(categoryId);
+            var listCategories = new List<CategoryEntity>();
+
+            if (currentCategory != null)
+                listCategories.Add(currentCategory);
+
+            FillCurrentAllCategoryChildsFilters(listCategories);
 
             HomeVM homeVm = new HomeVM()
             {
@@ -75,21 +77,22 @@ namespace PlusAndComment.Controllers
             }
 
             return productsEnt;
-
-            //return RedirectToAction("Index", new { categoryId = -1, attrs = JsonConvert.SerializeObject(attrs.ToList()) });
         }
 
-        private void FillCurrentAllCategoryChildsFilters(int? id)
+        private void FillCurrentAllCategoryChildsFilters(List<CategoryEntity> categories)
         {
-            if (id == null) return;
-            var category = db.Categories.Find(id);
-
-            foreach (var attribute in category.Attributes)
+            foreach (var cat in categories)
             {
-                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attribute));
-            }
+                foreach (var attribute in cat.Attributes)
+                {
+                    _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attribute));
+                }
 
-            FillCurrentAllCategoryChildsFilters(category);
+                if(cat.Categories.Count > 0)
+                {
+                    FillCurrentAllCategoryChildsFilters(cat.Categories.ToList());
+                }
+            }
         }
 
         private void FillCurrentAllCategoryChildsFilters(CategoryEntity category)
@@ -114,50 +117,6 @@ namespace PlusAndComment.Controllers
 
             HelperFillRecurencyFilters(parent);
         }
-
-        //private void HelperFillRecurencyFilters(CategoryEntity parent)
-        //{
-        //    List<ProductAttributeVM> currentCategoryAttrs = Mapper.Map<List<ProductAttributeVM>>(category.Attributes);
-
-        //    //Add to _currentAllCategoryFilters
-        //    currentCategoryAttrs.ForEach(x => _currentAllCategoryFilters.Push(x));
-
-
-        //    FillRecurencyFilters(category.Categories);
-        //}
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ICollection<ProductEntity> GetCategoryProducts(int? categoryId)
-        //{
-        //    var products = db.Products.Where(product => product.CatId == categoryId ).OrderByDescending(m => m.ProductId).ToList();
-
-        //    HomeVM homeVm = new HomeVM();
-        //    if (categoryId != null)
-        //    {
-        //        ICollection<ProductEntity> prducts = GetProductsByCategory(db.Categories.Find(categoryId));
-
-        //        homeVm.Prducts = Mapper.Map<ICollection<ProductVM>>(prducts);
-        //    }
-
-            
-
-        //    //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-        //    //if (User.Identity.IsAuthenticated)
-        //    //{
-        //    //    var currentUser = db.Users.Find(User.Identity.GetUserId());
-
-        //    //    if (currentUser != null)
-        //    //    {
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        RedirectToAction("LogOff", "Account");
-        //    //    }
-        //    //}
-
-        //    return PartialView("_CategoryResultsPartial", homeVm.Prducts);
-        //}
 
         [HttpGet]
         public ActionResult ProductsAttributes()
@@ -186,19 +145,5 @@ namespace PlusAndComment.Controllers
 
             return result;
         }
-
-        //private void HelperFillRecurencyFilters(CategoryEntity cat)
-        //{
-        //    foreach (var attr in cat.Attributes)
-        //    {
-        //        _currentAllCategoryFilters.Push(Mapper.Map<ProductAttributeVM>(attr));
-        //    }
-
-        //    var parent = db.Categories.Find(cat.ParentId);
-
-        //    if (parent == null) return;
-
-        //    HelperFillRecurencyFilters(parent);
-        //}
     }
 }
