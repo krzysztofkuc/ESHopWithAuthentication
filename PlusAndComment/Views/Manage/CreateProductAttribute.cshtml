@@ -49,10 +49,10 @@
             }
             else
             {
-                    <div class="col-md-10">
-                        @Html.HiddenFor(m => m.CategoryAttributeId)
-                        @Html.TextBoxFor(m => m.AllCategories.FirstOrDefault(x => x.CategoryId == m.CategoryAttributeId).Name, new { @class = "form-control", disabled = "disabled" })
-                    </div>
+                <div class="col-md-10">
+                    @Html.HiddenFor(m => m.CategoryAttributeId)
+                    @Html.TextBoxFor(m => m.AllCategories.FirstOrDefault(x => x.CategoryId == m.CategoryAttributeId).Name, new { @class = "form-control", disabled = "disabled" })
+                </div>
             }
         </div>
 

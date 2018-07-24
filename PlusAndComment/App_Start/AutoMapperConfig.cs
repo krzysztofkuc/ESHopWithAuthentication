@@ -42,15 +42,15 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<CompanyInformationEntity, CompanyInformationVM>();
 
                 //ProductAttributes
-                cfg.CreateMap<ProductAttributesVM, AddProductAttributeVM>()
+                cfg.CreateMap<CategoryAttributesVM, AddProductAttributeVM>()
                 .ForMember(x => x.AllAttributeTypes, opts => opts.Ignore())
                 .ForMember(x => x.AllCategories, opts => opts.Ignore());
 
-                cfg.CreateMap<AddProductAttributeVM, ProductAttributesVM>();
+                cfg.CreateMap<AddProductAttributeVM, CategoryAttributesVM>();
 
                 //ProductAttributeVM
-                cfg.CreateMap<ProductAttributesVM, ProductAttributesEntity>();
-                cfg.CreateMap<ProductAttributesEntity, ProductAttributesVM>();
+                cfg.CreateMap<CategoryAttributesVM, CategoryAttributesEntity>();
+                cfg.CreateMap<CategoryAttributesEntity, CategoryAttributesVM>();
 
                 //PictureVM
                 cfg.CreateMap<PictureVM, PictureEntity>();

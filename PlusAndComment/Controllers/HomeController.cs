@@ -14,7 +14,7 @@ namespace PlusAndComment.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private List<ProductAttributesVM> _currentAllCategoryFilters = new List<ProductAttributesVM>();
+        private List<CategoryAttributesVM> _currentAllCategoryFilters = new List<CategoryAttributesVM>();
 
         [HttpGet]
         [AllowAnonymous]
@@ -24,7 +24,7 @@ namespace PlusAndComment.Controllers
 
             if (!string.IsNullOrEmpty(attrs))
             {
-                var attributes = JsonConvert.DeserializeObject<List<ProductAttributesVM>>(attrs);
+                var attributes = JsonConvert.DeserializeObject<List<CategoryAttributesVM>>(attrs);
 
                 products = FilterProducts(attributes);
             }
@@ -61,14 +61,14 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
-        public List<ProductEntity> FilterProducts(List<ProductAttributesVM> attrs)
+        public List<ProductEntity> FilterProducts(List<CategoryAttributesVM> attrs)
         {
             List<ProductEntity> productsEnt = new List<ProductEntity>();
 
             foreach (var attr in attrs)
             {
                 var attrEnt = db.ProductsAttributes.Find(attr.ProductAttributeId);
-                var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Name == attr.Name && x.Value == attr.Value));
+                var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Value == attr.Value && x.CategoryOfProductAttributeId == attr.CategoryAttributeId));
 
                 if(products.Count() > 0)
                 {
@@ -83,9 +83,10 @@ namespace PlusAndComment.Controllers
         {
             foreach (var cat in categories)
             {
+                if(cat.Attributes != null)
                 foreach (var attribute in cat.Attributes)
                 {
-                    _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attribute));
+                    _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributesVM>(attribute));
                 }
 
                 if(cat.Categories.Count > 0)
@@ -108,7 +109,7 @@ namespace PlusAndComment.Controllers
         {
             foreach (var attr in cat.Attributes)
             {
-                _currentAllCategoryFilters.Add(Mapper.Map<ProductAttributesVM>(attr));
+                _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributesVM>(attr));
             }
 
             var parent = db.Categories.Find(cat.ParentId);
@@ -122,9 +123,9 @@ namespace PlusAndComment.Controllers
         public ActionResult ProductsAttributes()
         {
 
-            ICollection<ProductAttributesEntity> attrs = db.ProductsAttributes.ToList();
+            ICollection<CategoryAttributesEntity> attrs = db.ProductsAttributes.ToList();
 
-            var vm = Mapper.Map<ICollection<ProductAttributesVM>>(db.ProductsAttributes);
+            var vm = Mapper.Map<ICollection<CategoryAttributesVM>>(attrs);
 
             return View(vm);
         }

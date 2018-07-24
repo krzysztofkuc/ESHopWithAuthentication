@@ -52,7 +52,7 @@ namespace PlusAndComment.Models
         public virtual DbSet<CartEntity> Carts { get; set; }
         public virtual DbSet<OrderEntity> Orders { get; set; }
         public virtual DbSet<OrderDetailEntity> OrderDetails { get; set; }
-        public virtual DbSet<ProductAttributesEntity> ProductsAttributes { get; set; }
+        public virtual DbSet<CategoryAttributesEntity> ProductsAttributes { get; set; }
         
 
 

@@ -33,6 +33,6 @@ namespace PlusAndComment.Models.ViewModel
 
         public List<PictureVM> Pictures { get; set; }
 
-        public List<ProductAttributesVM> Attributes { get; set; }
+        public List<CategoryAttributesVM> Attributes { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace PlusAndComment.Models.ViewModel
     {
         public ICollection<ProductVM> Prducts { get; set; }
         public ICollection<CategoryVM> Categories { get; set; }
-        public List<ProductAttributesVM> CurrentAttributes { get; set; }
+        public List<CategoryAttributesVM> CurrentAttributes { get; set; }
     }
 }
