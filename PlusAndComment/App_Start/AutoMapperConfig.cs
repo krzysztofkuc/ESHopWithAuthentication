@@ -56,6 +56,10 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<PictureVM, PictureEntity>();
                 cfg.CreateMap<PictureEntity, PictureVM>();
 
+                //AttributeValueList
+                cfg.CreateMap<AttributeValueListVM, AttributeValueListEntity>();
+                cfg.CreateMap<AttributeValueListEntity, AttributeValueListVM>();
+
             });
 
             //config.AssertConfigurationIsValid();

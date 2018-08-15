@@ -1,44 +1,59 @@
 ﻿@model List<PlusAndComment.Models.ViewModel.CategoryAttributesVM>
 
-@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
-    //@Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
     <div class="row">
         <div style="position: relative">
             <label>Filters</label>
-            <ul>
+            <div>
                 @for (int i = 0; i < Model.Count; i++)
-        {
-            @Html.HiddenFor(m => Model[i].ProductAttributeId)
-            @Html.HiddenFor(m => Model[i].CategoryAttributeId)
-            @Html.HiddenFor(m => Model[i].AttributeType)
-            @Html.HiddenFor(m => Model[i].Name)
-            @Html.HiddenFor(m => Model[i].CategoryAttribute)
+                {
+                <div>
+                    @Html.HiddenFor(m => Model[i].ProductAttributeId)
+                    @Html.HiddenFor(m => Model[i].Name)
 
-            <li>@Model[i].Name</li>
-    switch (Model[i].AttributeType)
-    {
-        case "text":
-            @Html.TextBox("[" + i + "].Value", null, new { @class = "form-control" })
-    break;
-        @*case "number":
-        //should be replaced to numebr value
-        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control filter" });
-        break;
-    case "dateFrom":
-        //should be replaced to numebr value
-        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-        break;
-    case "dateTo":
-        //should be replaced to numebr value
-        @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-        break;*@
-}
-}
-            </ul>
-            <ul>
-                @Html.ActionLink("Search", "Index", "Home", new { categoryId = Request.QueryString["categoryId"], attrs = Json.Encode(Model) }, new { @class = "btn btn-primary btn-small" })
-            </ul>
+                    @Model[i].Name
+
+                    @switch (Model[i].AttributeType)
+                    {
+                        case "text":
+                                @Html.TextBox("[" + i + "].Value", null, new { @class = "form-control" })
+                        break;
+
+                        case "list":
+                                        @Html.DropDownListFor(m => Model[i].ComboboxValues,
+                        new SelectList(Model[i].ComboboxValues, "Id", "Value"))
+                        break;
+
+                        case "multiSelectList":
+                        for (int x = 0; x < Model[i].ComboboxValues.Count; x++)
+                        {
+                            @Html.HiddenFor(m => m[i].ComboboxValues[x].ListId)
+                            @Html.HiddenFor(m => m[i].ComboboxValues[x].Id)
+                            <label for="[@i].ComboboxValues[@x].Value">@Model[i].ComboboxValues[x].Value</label>
+                            <input type="checkbox" name="[@i].ComboboxValues[@x].Value" id="[@i].ComboboxValues_@(x + "__Value")">
+                        }
+                        break;
+                    }
+
+                    @*case "dateFrom":
+            //should be replaced to numebr value
+            @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+            break;
+        case "dateTo":
+            //should be replaced to numebr value
+            @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
+            break;*@
+                </div>
+                }
+                </div>
+                <div>
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Search" class="btn btn-default" />
+                    </div>
+                    @*@Html.ActionLink("Search", "Index", "Home", new { @class = "btn btn-primary btn-small" })*@
+                </div>
         </div>
     </div>
 }
@@ -46,3 +61,8 @@
     @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", null, new { @class = "btn btn-primary btn-small" })
 </div>
 
+<script language="javascript" type="text/javascript">
+    $(function () {
+        $(".multiselect").multiselect();
+    });
+</script>

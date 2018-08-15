@@ -15,7 +15,9 @@ namespace PlusAndComment
                         "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery-ui.js",
+                        "~/Scripts/jquery-ui.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
@@ -35,6 +37,7 @@ namespace PlusAndComment
                         "~/Scripts/bootstrap-datetimepicker.min.js",
                         "~/Scripts/respond.js"));
 
+            //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/buttons.css",
@@ -42,6 +45,13 @@ namespace PlusAndComment
                       "~/Content/font-awesome.min.css",
                       "~/Content/animate.css"
                       ));
+
+        //    //jQueryUi
+        //    bundles.Add(new StyleBundle("~/Content/css").Include(
+        //              //"~/Content/jquery-ui.theme.min.css",
+        //              //"~/Content/jquery-ui.theme.css",
+        //              "~/Content/jquery-ui.css",
+        //              "~/Content/jquery-ui.min.css"));
         }
     }
 }

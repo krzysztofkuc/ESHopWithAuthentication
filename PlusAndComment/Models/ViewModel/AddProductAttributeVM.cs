@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PlusAndComment.Models.Entities;
+using System.Collections.Generic;
 using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Models.ViewModel
@@ -20,5 +21,7 @@ namespace PlusAndComment.Models.ViewModel
         public ICollection<CategoryVM> AllCategories { get; set; }
 
         public AllAttributeTypes AllAttributeTypes { get; set; }
+
+        public ICollection<AttributeValueListVM> ComboboxValues { get; set; }
     }
 }

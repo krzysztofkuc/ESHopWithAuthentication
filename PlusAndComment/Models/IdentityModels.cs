@@ -52,21 +52,23 @@ namespace PlusAndComment.Models
         public virtual DbSet<CartEntity> Carts { get; set; }
         public virtual DbSet<OrderEntity> Orders { get; set; }
         public virtual DbSet<OrderDetailEntity> OrderDetails { get; set; }
-        public virtual DbSet<CategoryAttributesEntity> ProductsAttributes { get; set; }
-        
+        public virtual DbSet<CategoryAttributesEntity> CategoryAttributes { get; set; }
+        public virtual DbSet<ProductAttributesEntity> ProductAttributes { get; set; }
+        public virtual DbSet<AttributeValueListEntity> ComboboxValues { get; set; }
 
 
-    //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-    //{
 
-    //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
 
-    //    modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(r => r.UserId);
-    //    modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-    //    modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
-    //}
+        //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-    public static ApplicationDbContext Create()
+        //    modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(r => r.UserId);
+        //    modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+        //    modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+        //}
+
+        public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }

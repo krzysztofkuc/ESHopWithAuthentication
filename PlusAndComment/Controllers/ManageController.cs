@@ -535,7 +535,7 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult EditProductAttribute(int id)
         {
-            var entity = db.ProductsAttributes.Find(id);
+            var entity = db.CategoryAttributes.Find(id);
             var attrVm = Mapper.Map<CategoryAttributesVM>(entity);
             var vm = Mapper.Map<AddProductAttributeVM>(attrVm);
             vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
@@ -551,7 +551,7 @@ namespace PlusAndComment.Controllers
 
             if (ModelState.IsValid)
             {
-                db.ProductsAttributes.Attach(entity);
+                db.CategoryAttributes.Attach(entity);
                 db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -567,6 +567,10 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult CreateProductAttribute(int? productId = null)
         {
+            //if(productId != null)
+            //{
+            //    var product = db.Products.Find(productId);
+            //}
 
             var vm = new AddProductAttributeVM();
             vm.ProductOfAttributeId = productId;
@@ -584,11 +588,26 @@ namespace PlusAndComment.Controllers
         {
             if (ModelState.IsValid)
             {
+                //add new ListId
+                int listId = 0;
+                if(attr.ComboboxValues?.Count > 0)
+               {
+                    listId = db.ComboboxValues.OrderByDescending(x => x.ListId).Count();
+                    listId++;
 
+                    foreach (var item in attr.ComboboxValues)
+                    {
+                        item.ListId = listId;
+                        item.FK_CategoryAttrId = attr.CategoryAttributeId;
+                        item.FK_ProductAttrId = null;
+                    }
+                }
+
+                //TO DO: add attributes and bind it with caetegories etc
                 var vm = new AddProductAttributeVM();
                 var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
                 var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
-                db.ProductsAttributes.Add(entity);
+                db.CategoryAttributes.Add(entity);
                 db.Entry(entity).State = EntityState.Added;
 
                 db.SaveChanges();
@@ -604,8 +623,8 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult DeleteProductAttribute(int id)
         {
-            var entity = db.ProductsAttributes.Find(id);
-            db.ProductsAttributes.Remove(entity);
+            var entity = db.CategoryAttributes.Find(id);
+            db.CategoryAttributes.Remove(entity);
             db.Entry(entity).State = EntityState.Deleted;
             db.SaveChanges();
 
@@ -615,8 +634,8 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult EditAllProductsAttributes(int id)
         {
-            var entity = db.ProductsAttributes.Find(id);
-            db.ProductsAttributes.Remove(entity);
+            var entity = db.CategoryAttributes.Find(id);
+            db.CategoryAttributes.Remove(entity);
             db.Entry(entity).State = EntityState.Deleted;
             db.SaveChanges();
 

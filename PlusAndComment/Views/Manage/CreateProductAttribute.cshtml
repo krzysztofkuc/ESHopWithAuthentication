@@ -14,58 +14,71 @@
 
         @Html.HiddenFor(m => m.ProductOfAttributeId)
 
-    <div class="form-horizontal">
-        <h4>AddProductAttributeVM</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AttributeType, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("AttributeType",
-                                       new SelectList(Enum.GetValues(typeof(PlusAndComment.Common.Enums.AllAttributeTypes))),
-                                       "Select type",
-                                       new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.AttributeType, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CategoryAttributeId, htmlAttributes: new { @class = "control-label col-md-2" })
-            @if (Model.CategoryAttributeId == null)
-            {
-                <div class="col-md-10">
-                    @Html.DropDownListFor(m => m.CategoryAttributeId, new SelectList(Model.AllCategories, "CategoryId", "Name"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.CategoryAttributeId, "", new { @class = "text-danger" })
-                </div>
-
-            }
-            else
-            {
-                <div class="col-md-10">
-                    @Html.HiddenFor(m => m.CategoryAttributeId)
-                    @Html.TextBoxFor(m => m.AllCategories.FirstOrDefault(x => x.CategoryId == m.CategoryAttributeId).Name, new { @class = "form-control", disabled = "disabled" })
-                </div>
-            }
-        </div>
-
-        @if (Model.CategoryAttributeId != null)
-        {
+        <div class="form-horizontal">
+            <h4>AddProductAttributeVM</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
             </div>
-        }
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AttributeType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("AttributeType",
+                                                     new SelectList(Enum.GetValues(typeof(PlusAndComment.Common.Enums.AllAttributeTypes))),
+                                                     "Select type",
+                                                     new { @class = "form-control", @onchange = "OnAttributeChanged(this.value)" })
+                    @Html.ValidationMessageFor(model => model.AttributeType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryAttributeId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @if (Model.CategoryAttributeId == null)
+                {
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.CategoryAttributeId, new SelectList(Model.AllCategories, "CategoryId", "Name"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CategoryAttributeId, "", new { @class = "text-danger" })
+                    </div>
+
+                }
+                else
+                {
+                    <div class="col-md-10">
+                        @Html.HiddenFor(m => m.CategoryAttributeId)
+                        @Html.TextBoxFor(m => m.AllCategories.FirstOrDefault(x => x.CategoryId == m.CategoryAttributeId).Name, new { @class = "form-control", disabled = "disabled" })
+                    </div>
+                }
+            </div>
+
+            @if (Model.CategoryAttributeId != null)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+
+        
+            <div id="tableAttributeList" style="display:none">
+                <h4>Attribute list</h4>
+                <table id="container">
+                    <tr>
+                        <th>Values</th>
+                    </tr>
+                    @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
+                </table>
+
+                <input type="button" id="btnAdd" value="Add New Item" />
+            </div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -78,5 +91,33 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
+
 </body>
 </html>
+
+
+<script>
+    function OnAttributeChanged(val)
+    {
+        if (val == "list" || val == "multiSelectList") {
+            //$("#tableAttributeList").prop("display", "block")
+            //$("#listAtrributeValue").prop("display", "block")
+            $("#tableAttributeList").show();
+            $("#listAtrributeValue").show();
+        }
+        else {
+            $("#tableAttributeList").hide();
+            $("#listAtrributeValue").hide();
+        }
+    }
+
+    $(function () {
+        $("#btnAdd").click(function (e) {
+            var itemIndex = $("#container input.ItemValue").length;
+            e.preventDefault();
+
+            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue'/></td></tr>");
+            $("#container").append(newItem);
+        });
+    });
+</script>

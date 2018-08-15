@@ -5,8 +5,11 @@ using Newtonsoft.Json;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace PlusAndComment.Controllers
@@ -20,18 +23,22 @@ namespace PlusAndComment.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? categoryId, string attrs = null)
         {
-            var products = new List<ProductEntity>();
+            List<CategoryAttributesVM> searchedFilters = GetSearchedFilters();
 
-            if (!string.IsNullOrEmpty(attrs))
-            {
-                var attributes = JsonConvert.DeserializeObject<List<CategoryAttributesVM>>(attrs);
+            List<ProductVM> productsX = GetFilteredProducts(searchedFilters);
 
-                products = FilterProducts(attributes);
-            }
-            else
-            {
-                products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
-            }
+            //if (!string.IsNullOrEmpty(attrs))
+            //{
+            //    var attributes = JsonConvert.DeserializeObject<List<CategoryAttributesVM>>(attrs);
+
+            //    products = FilterProducts(attributes);
+            //}
+            //else
+            //{
+            //    products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
+            //}
+
+            var products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
 
             var categories = db.Categories.ToList();
             var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
@@ -61,13 +68,120 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
+        private List<ProductVM> GetFilteredProducts(List<CategoryAttributesVM> filters)
+        {
+            foreach (var filter in filters)
+            {
+
+            }
+
+            return null;
+        }
+
+        private List<CategoryAttributesVM> GetSearchedFilters()
+        {
+            List<CategoryAttributesVM> resultAttrs = new List<CategoryAttributesVM>();
+
+            var queryString = Request.QueryString;
+
+            //Select filers from querstring
+            if (queryString.AllKeys.Contains("filters") && queryString["filters"] == true.ToString())
+            {
+                foreach (var key in queryString.AllKeys)
+                {
+                    string filterName = string.Empty;
+
+                    if (key.StartsWith("MultiSelect"))
+                    {
+                        filterName = key.Split('_').Skip(1).FirstOrDefault();
+                        var comboboxId = key.Split('_').Skip(2).FirstOrDefault();
+
+                        var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == filterName);
+                        var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+                        attrVM.ComboboxValues.FirstOrDefault(g => g.Id == Convert.ToInt32(comboboxId)).Checked = true;
+                        resultAttrs.Add(attrVM);
+                    }
+                    else
+                    {
+                        if (key == "filters")
+                            continue;
+
+                        var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == key);
+                        attr.Value = queryString[key];
+                        var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+                        resultAttrs.Add(attrVM);
+                    }
+                }
+            }
+
+            return resultAttrs;
+        }
+
+        [HttpPost]
+        public  ActionResult Index (List<CategoryAttributesVM> filters)
+        {
+            List<CategoryAttributesVM> filledFilters = GetOnlyFilledFilters(filters);
+
+            var uriBuilder = new UriBuilder("http://localhost:44393/");
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+
+            BuildParametersFromFilters(ref parameters, filledFilters);
+
+            uriBuilder.Query = parameters.ToString();
+
+            return Redirect(uriBuilder.Uri.ToString());
+        }
+
+        private void BuildParametersFromFilters(ref NameValueCollection parameters, List<CategoryAttributesVM> filledFilters)
+        {
+            foreach (var item in filledFilters)
+            {
+                if (item.Value != null)
+                {
+                    parameters[item.Name] = item.Value;
+                }
+                else if (item.ComboboxValues.Count > 0)
+                {
+                    foreach (var combo2 in item.ComboboxValues)
+                    {
+                        if (combo2.Value == "on")
+                            parameters["MultiSelect_" + item.Name + "_" + combo2.Id.ToString()] = true.ToString();
+                    }
+                }
+            }
+
+            if (parameters.Count > 0)
+                parameters["filters"] = true.ToString();
+        }
+
+        private List<CategoryAttributesVM> GetOnlyFilledFilters(List<CategoryAttributesVM> filters)
+        {
+            List<CategoryAttributesVM> filledFilters = new List<CategoryAttributesVM>();
+
+            foreach (var item in filters)
+            {
+                if (item.Value != null)
+                {
+                    filledFilters.Add(item);
+                    continue;
+                }
+
+                if (item.ComboboxValues?.Count > 0)
+                {
+                    filledFilters.Add(item);
+                }
+            }
+
+            return filledFilters;
+        }
+
         public List<ProductEntity> FilterProducts(List<CategoryAttributesVM> attrs)
         {
             List<ProductEntity> productsEnt = new List<ProductEntity>();
 
             foreach (var attr in attrs)
             {
-                var attrEnt = db.ProductsAttributes.Find(attr.ProductAttributeId);
+                var attrEnt = db.CategoryAttributes.Find(attr.ProductAttributeId);
                 var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Value == attr.Value && x.CategoryOfProductAttributeId == attr.CategoryAttributeId));
 
                 if(products.Count() > 0)
@@ -123,7 +237,7 @@ namespace PlusAndComment.Controllers
         public ActionResult ProductsAttributes()
         {
 
-            ICollection<CategoryAttributesEntity> attrs = db.ProductsAttributes.ToList();
+            ICollection<CategoryAttributesEntity> attrs = db.CategoryAttributes.ToList();
 
             var vm = Mapper.Map<ICollection<CategoryAttributesVM>>(attrs);
 
