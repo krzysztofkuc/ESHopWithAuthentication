@@ -563,24 +563,72 @@ namespace PlusAndComment.Controllers
             return RedirectToAction("ProductsAttributes");
         }
 
-
         [HttpGet]
         public ActionResult CreateProductAttribute(int? productId = null)
         {
-            //if(productId != null)
-            //{
-            //    var product = db.Products.Find(productId);
-            //}
-
             var vm = new AddProductAttributeVM();
-            vm.ProductOfAttributeId = productId;
+
+            if (productId != null)
+            {
+                var product = Mapper.Map<ProductVM>(db.Products.Find(productId));
+                vm.CurrentProduct = product;
+                vm.ProductOfAttributeId = productId;
+            }
 
             vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
             
+            vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public ActionResult AddProductAttribute(int? productId = null)
+        {
+            var vm = new AddProductAttributeVM();
+
+            if (productId != null)
+            {
+                var product = Mapper.Map<ProductVM>(db.Products.Find(productId));
+                vm.CurrentProduct = product;
+                vm.ProductOfAttributeId = productId;
+            }
+
+            vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
 
             vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
 
             return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult AddProductAttribute(AddProductAttributeVM attr)
+        {
+            //var cateoryAttrEntity = db.CategoryAttributes.Find(attr.PKAttributeId);
+            //var cateoryAttrVM = Mapper.Map<CategoryAttributesVM>(cateoryAttrEntity);
+            //cateoryAttrVM.Value = 
+
+            var productEntity = db.Products.Find(attr.CurrentProduct.ProductId);
+
+            ProductAttributeVM pa = new ProductAttributeVM();
+            pa.Value = attr.Value;
+            pa.ProductOfAttributeId = attr.ProductOfAttributeId;
+
+            var attrEntity = Mapper.Map<ProductAttributeEntity>(pa);
+
+            productEntity.Attributes.Add(attrEntity);
+
+            //db.ProductAttributes.Add(attrEntity);
+            //product.Attributes.Add(pa);
+
+            //var productEntity = Mapper.Map<ProductEntity>(product);
+            //db.Products.Add(productEntity);
+            db.Entry(productEntity).State = System.Data.Entity.EntityState.Modified;
+            db.Entry(attrEntity).State = System.Data.Entity.EntityState.Added;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

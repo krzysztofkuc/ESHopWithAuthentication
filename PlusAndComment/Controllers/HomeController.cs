@@ -55,7 +55,6 @@ namespace PlusAndComment.Controllers
                 Prducts = Mapper.Map<ICollection<ProductVM>>(products),
                 Categories = Mapper.Map<ICollection<CategoryVM>>(categories),
                 CurrentAttributes = _currentAllCategoryFilters
-
             };
 
             //shopping cart
@@ -181,8 +180,8 @@ namespace PlusAndComment.Controllers
 
             foreach (var attr in attrs)
             {
-                var attrEnt = db.CategoryAttributes.Find(attr.ProductAttributeId);
-                var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Value == attr.Value && x.CategoryOfProductAttributeId == attr.CategoryAttributeId));
+                var attrEnt = db.CategoryAttributes.Find(attr.PKAttributeId);
+                var products = attrEnt.CategoryAttribute.Products.Where(m => m.Attributes.Any(x => x.Value == attr.Value));
 
                 if(products.Count() > 0)
                 {

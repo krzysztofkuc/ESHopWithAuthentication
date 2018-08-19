@@ -10,7 +10,7 @@
                 @for (int i = 0; i < Model.Count; i++)
                 {
                 <div>
-                    @Html.HiddenFor(m => Model[i].ProductAttributeId)
+                    @Html.HiddenFor(m => Model[i].PKAttributeId)
                     @Html.HiddenFor(m => Model[i].Name)
 
                     @Model[i].Name

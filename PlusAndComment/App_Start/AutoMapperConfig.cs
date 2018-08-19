@@ -60,6 +60,10 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AttributeValueListVM, AttributeValueListEntity>();
                 cfg.CreateMap<AttributeValueListEntity, AttributeValueListVM>();
 
+                //ProductAttribute
+                cfg.CreateMap<ProductAttributeVM, ProductAttributeEntity>();
+                cfg.CreateMap<ProductAttributeEntity, ProductAttributeVM>();
+
             });
 
             //config.AssertConfigurationIsValid();

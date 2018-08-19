@@ -12,12 +12,14 @@
     {
         @Html.AntiForgeryToken()
 
-        @Html.HiddenFor(m => m.ProductOfAttributeId)
+        @*@Html.HiddenFor(m => m.ProductOfAttributeId)*@
+        @*@Html.HiddenFor(m => m.CurrentProduct)*@
 
         <div class="form-horizontal">
             <h4>AddProductAttributeVM</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -30,9 +32,9 @@
                 @Html.LabelFor(model => model.AttributeType, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.DropDownList("AttributeType",
-                                                     new SelectList(Enum.GetValues(typeof(PlusAndComment.Common.Enums.AllAttributeTypes))),
-                                                     "Select type",
-                                                     new { @class = "form-control", @onchange = "OnAttributeChanged(this.value)" })
+                                                          new SelectList(Enum.GetValues(typeof(PlusAndComment.Common.Enums.AllAttributeTypes))),
+                                                          "Select type",
+                                                          new { @class = "form-control", @onchange = "OnAttributeChanged(this.value)" })
                     @Html.ValidationMessageFor(model => model.AttributeType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -67,7 +69,7 @@
                 </div>
             }
 
-        
+
             <div id="tableAttributeList" style="display:none">
                 <h4>Attribute list</h4>
                 <table id="container">

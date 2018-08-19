@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PlusAndComment.Models.Entities;
+using System.Collections.Generic;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -29,10 +30,10 @@ namespace PlusAndComment.Models.ViewModel
 
         public int CatId { get; set; }
 
-        public CategoryVM Category { get; set; }
-
         public List<PictureVM> Pictures { get; set; }
 
-        public List<CategoryAttributesVM> Attributes { get; set; }
+        public CategoryVM Category { get; set; }
+
+        public List<ProductAttributeVM> Attributes { get; set; }
     }
 }

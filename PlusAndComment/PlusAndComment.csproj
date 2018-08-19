@@ -597,6 +597,7 @@
     <Content Include="Views\Manage\EditProductAttribute.cshtml" />
     <Content Include="Views\Home\CategoryFilters.cshtml" />
     <Content Include="Views\Home\_IndexAttributesPartial.cshtml" />
+    <Content Include="Views\Manage\AddProductAttribute.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
