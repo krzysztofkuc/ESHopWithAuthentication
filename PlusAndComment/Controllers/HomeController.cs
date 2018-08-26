@@ -17,13 +17,36 @@ namespace PlusAndComment.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private List<CategoryAttributesVM> _currentAllCategoryFilters = new List<CategoryAttributesVM>();
+        private List<CategoryAttributeVM> _currentAllCategoryFilters = new List<CategoryAttributeVM>();
 
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Index(int? categoryId, string attrs = null)
         {
-            List<CategoryAttributesVM> searchedFilters = GetSearchedFilters();
+            ICollection<ProductEntity> products = new List<ProductEntity>();
+
+            List<CategoryAttributeVM> searchedFilters = GetSearchedFilters();
+
+            if (searchedFilters.Count > 0)
+            {
+                foreach (var filter in searchedFilters)
+                {
+                    foreach (var product in filter.CategoryAttribute.Products)
+                    {
+                        foreach (var attribute in product.Attributes)
+                        {
+                            if(attribute.Value == filter.Value)
+                            {
+                                products.Add(Mapper.Map<ProductEntity>(product));
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
+            }
 
             List<ProductVM> productsX = GetFilteredProducts(searchedFilters);
 
@@ -38,7 +61,7 @@ namespace PlusAndComment.Controllers
             //    products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
             //}
 
-            var products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
+            
 
             var categories = db.Categories.ToList();
             var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
@@ -67,7 +90,7 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
-        private List<ProductVM> GetFilteredProducts(List<CategoryAttributesVM> filters)
+        private List<ProductVM> GetFilteredProducts(List<CategoryAttributeVM> filters)
         {
             foreach (var filter in filters)
             {
@@ -77,9 +100,9 @@ namespace PlusAndComment.Controllers
             return null;
         }
 
-        private List<CategoryAttributesVM> GetSearchedFilters()
+        private List<CategoryAttributeVM> GetSearchedFilters()
         {
-            List<CategoryAttributesVM> resultAttrs = new List<CategoryAttributesVM>();
+            List<CategoryAttributeVM> resultAttrs = new List<CategoryAttributeVM>();
 
             var queryString = Request.QueryString;
 
@@ -96,7 +119,7 @@ namespace PlusAndComment.Controllers
                         var comboboxId = key.Split('_').Skip(2).FirstOrDefault();
 
                         var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == filterName);
-                        var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+                        var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
                         attrVM.ComboboxValues.FirstOrDefault(g => g.Id == Convert.ToInt32(comboboxId)).Checked = true;
                         resultAttrs.Add(attrVM);
                     }
@@ -107,7 +130,7 @@ namespace PlusAndComment.Controllers
 
                         var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == key);
                         attr.Value = queryString[key];
-                        var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+                        var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
                         resultAttrs.Add(attrVM);
                     }
                 }
@@ -117,9 +140,9 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpPost]
-        public  ActionResult Index (List<CategoryAttributesVM> filters)
+        public  ActionResult Index (List<CategoryAttributeVM> filters)
         {
-            List<CategoryAttributesVM> filledFilters = GetOnlyFilledFilters(filters);
+            List<CategoryAttributeVM> filledFilters = GetOnlyFilledFilters(filters);
 
             var uriBuilder = new UriBuilder("http://localhost:44393/");
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -131,7 +154,7 @@ namespace PlusAndComment.Controllers
             return Redirect(uriBuilder.Uri.ToString());
         }
 
-        private void BuildParametersFromFilters(ref NameValueCollection parameters, List<CategoryAttributesVM> filledFilters)
+        private void BuildParametersFromFilters(ref NameValueCollection parameters, List<CategoryAttributeVM> filledFilters)
         {
             foreach (var item in filledFilters)
             {
@@ -153,9 +176,9 @@ namespace PlusAndComment.Controllers
                 parameters["filters"] = true.ToString();
         }
 
-        private List<CategoryAttributesVM> GetOnlyFilledFilters(List<CategoryAttributesVM> filters)
+        private List<CategoryAttributeVM> GetOnlyFilledFilters(List<CategoryAttributeVM> filters)
         {
-            List<CategoryAttributesVM> filledFilters = new List<CategoryAttributesVM>();
+            List<CategoryAttributeVM> filledFilters = new List<CategoryAttributeVM>();
 
             foreach (var item in filters)
             {
@@ -174,7 +197,7 @@ namespace PlusAndComment.Controllers
             return filledFilters;
         }
 
-        public List<ProductEntity> FilterProducts(List<CategoryAttributesVM> attrs)
+        public List<ProductEntity> FilterProducts(List<CategoryAttributeVM> attrs)
         {
             List<ProductEntity> productsEnt = new List<ProductEntity>();
 
@@ -199,7 +222,7 @@ namespace PlusAndComment.Controllers
                 if(cat.Attributes != null)
                 foreach (var attribute in cat.Attributes)
                 {
-                    _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributesVM>(attribute));
+                    _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributeVM>(attribute));
                 }
 
                 if(cat.Categories.Count > 0)
@@ -222,7 +245,7 @@ namespace PlusAndComment.Controllers
         {
             foreach (var attr in cat.Attributes)
             {
-                _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributesVM>(attr));
+                _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributeVM>(attr));
             }
 
             var parent = db.Categories.Find(cat.ParentId);
@@ -236,9 +259,9 @@ namespace PlusAndComment.Controllers
         public ActionResult ProductsAttributes()
         {
 
-            ICollection<CategoryAttributesEntity> attrs = db.CategoryAttributes.ToList();
+            ICollection<ProductAttributeEntity> attrs = db.ProductAttributes.ToList();
 
-            var vm = Mapper.Map<ICollection<CategoryAttributesVM>>(attrs);
+            var vm = Mapper.Map<ICollection<ProductAttributeVM>>(attrs);
 
             return View(vm);
         }

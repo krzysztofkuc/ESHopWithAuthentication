@@ -535,9 +535,12 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult EditProductAttribute(int id)
         {
-            var entity = db.CategoryAttributes.Find(id);
-            var attrVm = Mapper.Map<CategoryAttributesVM>(entity);
+            var entity = db.ProductAttributes.Find(id);
+            var attrVm = Mapper.Map<ProductAttributeVM>(entity);
             var vm = Mapper.Map<AddProductAttributeVM>(attrVm);
+            vm.CurrentProduct = Mapper.Map<ProductVM>(attrVm.Product);
+            vm.AttributeType = attrVm.CategoryAttribute.AttributeType;
+
             vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
 
             return View(vm);
@@ -546,7 +549,7 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult EditProductAttribute(AddProductAttributeVM attr)
         {
-            var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+            var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
             var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
 
             if (ModelState.IsValid)
@@ -561,25 +564,6 @@ namespace PlusAndComment.Controllers
             }
 
             return RedirectToAction("ProductsAttributes");
-        }
-
-        [HttpGet]
-        public ActionResult CreateProductAttribute(int? productId = null)
-        {
-            var vm = new AddProductAttributeVM();
-
-            if (productId != null)
-            {
-                var product = Mapper.Map<ProductVM>(db.Products.Find(productId));
-                vm.CurrentProduct = product;
-                vm.ProductOfAttributeId = productId;
-            }
-
-            vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
-            
-            vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
-
-            return View(vm);
         }
 
         [HttpGet]
@@ -638,8 +622,8 @@ namespace PlusAndComment.Controllers
             {
                 //add new ListId
                 int listId = 0;
-                if(attr.ComboboxValues?.Count > 0)
-               {
+                if (attr.ComboboxValues?.Count > 0)
+                {
                     listId = db.ComboboxValues.OrderByDescending(x => x.ListId).Count();
                     listId++;
 
@@ -653,7 +637,7 @@ namespace PlusAndComment.Controllers
 
                 //TO DO: add attributes and bind it with caetegories etc
                 var vm = new AddProductAttributeVM();
-                var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+                var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
                 var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
                 db.CategoryAttributes.Add(entity);
                 db.Entry(entity).State = EntityState.Added;
@@ -664,6 +648,64 @@ namespace PlusAndComment.Controllers
             {
                 return View(attr);
             }
+
+            return RedirectToAction("ProductsAttributes", "Home", null);
+        }
+
+        [HttpGet]
+        public ActionResult CreateCategoryAttribute(int? productId = null)
+        {
+            //var vm = new AddProductAttributeVM();
+
+            //if (productId != null)
+            //{
+            //    var product = Mapper.Map<ProductVM>(db.Products.Find(productId));
+            //    vm.CurrentProduct = product;
+            //    vm.ProductOfAttributeId = productId;
+            //}
+
+            //vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
+
+            //vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
+
+            //return View(vm);
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult CreateCategoryAttribute(AddCategorytAttributeVM attr)
+        {
+            //if (ModelState.IsValid)
+            //{
+            //    //add new ListId
+            //    int listId = 0;
+            //    if(attr.ComboboxValues?.Count > 0)
+            //   {
+            //        listId = db.ComboboxValues.OrderByDescending(x => x.ListId).Count();
+            //        listId++;
+
+            //        foreach (var item in attr.ComboboxValues)
+            //        {
+            //            item.ListId = listId;
+            //            item.FK_CategoryAttrId = attr.CategoryAttributeId;
+            //            item.FK_ProductAttrId = null;
+            //        }
+            //    }
+
+            //    //TO DO: add attributes and bind it with caetegories etc
+            //    var vm = new AddProductAttributeVM();
+            //    var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
+            //    var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
+            //    db.CategoryAttributes.Add(entity);
+            //    db.Entry(entity).State = EntityState.Added;
+
+            //    db.SaveChanges();
+            //}
+            //else
+            //{
+            //    return View(attr);
+            //}
 
             return RedirectToAction("ProductsAttributes", "Home", null);
         }

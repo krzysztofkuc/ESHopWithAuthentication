@@ -12,8 +12,8 @@
     {
         @Html.AntiForgeryToken()
 
-        @*@Html.HiddenFor(m => m.ProductOfAttributeId)*@
-        @*@Html.HiddenFor(m => m.CurrentProduct)*@
+        @Html.HiddenFor(m => m.ProductOfAttributeId)
+        @Html.HiddenFor(m => m.CurrentProduct.Name)
 
         <div class="form-horizontal">
             <h4>AddProductAttributeVM</h4>

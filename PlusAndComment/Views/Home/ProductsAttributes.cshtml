@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PlusAndComment.Models.ViewModel.ProductAttributesVM>
+﻿@model IEnumerable<PlusAndComment.Models.ViewModel.ProductAttributeVM>
 
 <!DOCTYPE html>
 
@@ -17,16 +17,16 @@
                 @Html.DisplayNameFor(model => model.ProductAttributeId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Product.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryAttributeId)
+                @Html.DisplayNameFor(model => model.CategoryAttribute.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Value)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AttributeType)
+                @Html.DisplayNameFor(model => model.CategoryAttribute.AttributeType)
             </th>
             <th></th>
         </tr>
@@ -37,16 +37,16 @@
                 @Html.DisplayFor(modelItem => item.ProductAttributeId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryAttributeId)
+                @Html.DisplayFor(modelItem => item.CategoryAttribute.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Value)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AttributeType)
+                @Html.DisplayFor(modelItem => item.CategoryAttribute.AttributeType)
             </td>
             <td>
                 @Html.ActionLink("Edit", "EditProductAttribute", "Manage", new { id=item.ProductAttributeId },null) |

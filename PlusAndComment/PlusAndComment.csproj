@@ -255,6 +255,7 @@
     <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\ViewModel\AddCategorytAttributeVM.cs" />
     <Compile Include="Models\ViewModel\AddressAndPaymentVM.cs" />
     <Compile Include="Models\ViewModel\AttributeValueListVM.cs" />
     <Compile Include="Models\ViewModel\CartVM.cs" />
@@ -274,7 +275,7 @@
     <Compile Include="Models\ViewModel\OrderDetailVM.cs" />
     <Compile Include="Models\ViewModel\OrderVM.cs" />
     <Compile Include="Models\ViewModel\PictureVM.cs" />
-    <Compile Include="Models\ViewModel\CategoryAttributesVM.cs" />
+    <Compile Include="Models\ViewModel\CategoryAttributeVM.cs" />
     <Compile Include="Models\ViewModel\ProductAttributeVM.cs" />
     <Compile Include="Models\ViewModel\ProductVM.cs" />
     <Compile Include="Models\ViewModel\ShoppingCartRemoveVM.cs" />

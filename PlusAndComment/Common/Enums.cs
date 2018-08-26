@@ -13,7 +13,7 @@ namespace PlusAndComment.Common
 
         public enum PictureType { img, gif };
 
-        public enum AllAttributeTypes { number, text, list, multiSelectList, dateFrom, dateTo };
+        public enum AllAttributeTypes { number, numberFrom, numberTo, text, list, multiSelectList, date, dateFrom, dateTo };
         
     }
 

@@ -26,8 +26,8 @@ namespace PlusAndComment.App_Start
                 .MaxDepth(3);
 
                 //Product
-                cfg.CreateMap<ProductVM, ProductEntity>();
-                cfg.CreateMap<ProductEntity, ProductVM>();
+                cfg.CreateMap<ProductVM, ProductEntity>().MaxDepth(3);
+                cfg.CreateMap<ProductEntity, ProductVM>().MaxDepth(3);
 
                 //Cart
                 cfg.CreateMap<CartVM, CartEntity>();
@@ -42,15 +42,15 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<CompanyInformationEntity, CompanyInformationVM>();
 
                 //ProductAttributes
-                cfg.CreateMap<CategoryAttributesVM, AddProductAttributeVM>()
+                cfg.CreateMap<CategoryAttributeVM, AddProductAttributeVM>()
                 .ForMember(x => x.AllAttributeTypes, opts => opts.Ignore())
                 .ForMember(x => x.AllCategories, opts => opts.Ignore());
 
-                cfg.CreateMap<AddProductAttributeVM, CategoryAttributesVM>();
+                cfg.CreateMap<AddProductAttributeVM, CategoryAttributeVM>();
 
                 //ProductAttributeVM
-                cfg.CreateMap<CategoryAttributesVM, CategoryAttributesEntity>();
-                cfg.CreateMap<CategoryAttributesEntity, CategoryAttributesVM>();
+                cfg.CreateMap<CategoryAttributeVM, CategoryAttributesEntity>();
+                cfg.CreateMap<CategoryAttributesEntity, CategoryAttributeVM>();
 
                 //PictureVM
                 cfg.CreateMap<PictureVM, PictureEntity>();
@@ -61,8 +61,12 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AttributeValueListEntity, AttributeValueListVM>();
 
                 //ProductAttribute
-                cfg.CreateMap<ProductAttributeVM, ProductAttributeEntity>();
-                cfg.CreateMap<ProductAttributeEntity, ProductAttributeVM>();
+                cfg.CreateMap<ProductAttributeVM, ProductAttributeEntity>().MaxDepth(3); ;
+                cfg.CreateMap<ProductAttributeEntity, ProductAttributeVM>().MaxDepth(3); ;
+
+                //ProductAttribute to AddProducTAttribute
+                cfg.CreateMap<ProductAttributeVM, AddProductAttributeVM>().MaxDepth(3); ;
+                cfg.CreateMap<AddProductAttributeVM, ProductAttributeVM>().MaxDepth(3); ;
 
             });
 
