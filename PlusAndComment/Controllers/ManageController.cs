@@ -653,28 +653,18 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateCategoryAttribute(int? productId = null)
+        public ActionResult CreateCategoryAttribute(int? categoryId = null)
         {
-            //var vm = new AddProductAttributeVM();
+            var categoryEntity = db.Categories.Find(categoryId);
 
-            //if (productId != null)
-            //{
-            //    var product = Mapper.Map<ProductVM>(db.Products.Find(productId));
-            //    vm.CurrentProduct = product;
-            //    vm.ProductOfAttributeId = productId;
-            //}
+            var vm = new AddCategoryAttributeVM();
+            vm.Category = Mapper.Map<CategoryVM>(categoryEntity);
 
-            //vm.CategoryAttributeId = db.Products.Find(productId)?.CatId;
-
-            //vm.AllCategories = Mapper.Map<ICollection<CategoryVM>>(db.Categories.ToList());
-
-            //return View(vm);
-
-            return null;
+            return View(vm);
         }
 
         [HttpPost]
-        public ActionResult CreateCategoryAttribute(AddCategorytAttributeVM attr)
+        public ActionResult CreateCategoryAttribute(AddCategoryAttributeVM attr)
         {
             //if (ModelState.IsValid)
             //{

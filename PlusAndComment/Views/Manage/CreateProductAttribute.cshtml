@@ -101,15 +101,20 @@
 <script>
     function OnAttributeChanged(val)
     {
-        if (val == "list" || val == "multiSelectList") {
-            //$("#tableAttributeList").prop("display", "block")
-            //$("#listAtrributeValue").prop("display", "block")
-            $("#tableAttributeList").show();
-            $("#listAtrributeValue").show();
-        }
-        else {
-            $("#tableAttributeList").hide();
-            $("#listAtrributeValue").hide();
+        $("#tableAttributeList").hide();
+        $("#listAtrributeValue").hide();
+        $("#valueInput").hide();
+
+        switch (val) {
+            case "list":
+            case "multiSelectList":
+                $("#tableAttributeList").show();
+                $("#listAtrributeValue").show();
+                break;
+            case "text":
+            case "number":
+                $("#valueInput").show();
+                break;
         }
     }
 
@@ -118,7 +123,7 @@
             var itemIndex = $("#container input.ItemValue").length;
             e.preventDefault();
 
-            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue'/></td></tr>");
+            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue form-control'/></td></tr>");
             $("#container").append(newItem);
         });
     });

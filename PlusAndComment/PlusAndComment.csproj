@@ -255,7 +255,7 @@
     <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
-    <Compile Include="Models\ViewModel\AddCategorytAttributeVM.cs" />
+    <Compile Include="Models\ViewModel\AddCategoryAttributeVM.cs" />
     <Compile Include="Models\ViewModel\AddressAndPaymentVM.cs" />
     <Compile Include="Models\ViewModel\AttributeValueListVM.cs" />
     <Compile Include="Models\ViewModel\CartVM.cs" />
@@ -599,6 +599,7 @@
     <Content Include="Views\Home\CategoryFilters.cshtml" />
     <Content Include="Views\Home\_IndexAttributesPartial.cshtml" />
     <Content Include="Views\Manage\AddProductAttribute.cshtml" />
+    <Content Include="Views\Manage\CreateCategoryAttribute.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
