@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Script.Serialization;
 
 namespace PlusAndComment.Models.ViewModel
@@ -7,6 +8,7 @@ namespace PlusAndComment.Models.ViewModel
     {
         public int CategoryId { get; set; }
 
+        [Display(Name = "Category name")]
         public string Name { get; set; }
 
         [ScriptIgnore]

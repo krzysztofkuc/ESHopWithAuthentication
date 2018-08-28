@@ -250,7 +250,7 @@
     <Compile Include="Models\Entities\OrderEntity.cs" />
     <Compile Include="Models\Entities\OrderDetailEntity.cs" />
     <Compile Include="Models\Entities\PictureEntity.cs" />
-    <Compile Include="Models\Entities\CategoryAttributesEntity.cs" />
+    <Compile Include="Models\Entities\CategoryAttributeEntity.cs" />
     <Compile Include="Models\Entities\ProductAttributesEntity.cs" />
     <Compile Include="Models\Entities\ProductEntity.cs" />
     <Compile Include="Models\Entities\UserProfileSettings.cs" />

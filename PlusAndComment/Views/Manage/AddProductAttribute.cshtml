@@ -12,72 +12,63 @@
     {
         @Html.AntiForgeryToken()
 
-        @*@Html.HiddenFor(m => m.ProductOfAttributeId)*@
-        @Html.HiddenFor(m => Model.CurrentProduct.Attributes)
-        @Html.HiddenFor(m => Model.CurrentProduct.Category)
         @Html.HiddenFor(m => Model.CurrentProduct.Description)
         @Html.HiddenFor(m => Model.CurrentProduct.Name)
         @Html.HiddenFor(m => Model.CurrentProduct.ProductId)
-
-        <div class="form-horizontal">
-            <h4>AddProductAttributeVM</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), new { id = "SelectAttributeDropDown" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
         @Html.HiddenFor(m => m.ProductAttributeId, new { @id = "PKAttributeId" });
+        @Html.HiddenFor(model => model.AttributeType, new { @id = "attributeType" })
+        @Html.HiddenFor(m => Model.FK_CategoryAttributes, new { @id = "FK_CategoryAttrId" })
 
-        <div class="form-group">
-            @*is set in js*@
-            @Html.HiddenFor(model => model.AttributeType, new { @id = "attributeType" })
+    <div class="form-horizontal">
+        <h4>AddProductAttributeVM</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), new { @id = "SelectAttributeDropDown", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            <label>Category Name</label>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CurrentProduct.Category.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <label id="attributeCategory"></label>
+        </div>
+    </div>
+
+    if (Model.CategoryAttributeId != null)
+    {
+        <div class="form-group" id="valueInput" style="display: none">
+            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <label id="attributeCategory"></label>
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        if (Model.CategoryAttributeId != null)
-        {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-                </div>
-            </div>
+        <div id="tableAttributeList" style="display:none">
+            <h4>Attribute list</h4>
+            <table id="container">
+                <tr>
+                    <th>Values</th>
+                </tr>
+                @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
+            </table>
 
-
-
-            <div id="tableAttributeList" style="display:none">
-                <h4>Attribute list</h4>
-                <table id="container">
-                    <tr>
-                        <th>Values</th>
-                    </tr>
-                    @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
-                </table>
-
-                <input type="button" id="btnAdd" value="Add New Item" />
-            </div>
-        }
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+            <input type="button" id="btnAdd" value="Add New Item" class="btn btn-default" />
         </div>
     }
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}
 
     <div>
         @Html.ActionLink("Back to List", "Index")
@@ -88,17 +79,21 @@
 
 
 <script>
-    function OnAttributeChanged(val)
-    {
-        if (val == "list" || val == "multiSelectList") {
-            //$("#tableAttributeList").prop("display", "block")
-            //$("#listAtrributeValue").prop("display", "block")
-            $("#tableAttributeList").show();
-            $("#listAtrributeValue").show();
-        }
-        else {
-            $("#tableAttributeList").hide();
-            $("#listAtrributeValue").hide();
+    function ShowPropriateControl(attrType) {
+        $("#tableAttributeList").hide();
+        $("#listAtrributeValue").hide();
+        $("#valueInput").hide();
+
+        switch (attrType) {
+            case "list":
+            case "multiSelectList":
+                $("#tableAttributeList").show();
+                $("#listAtrributeValue").show();
+                break;
+            case "text":
+            case "number":
+                $("#valueInput").show();
+                break;
         }
     }
 
@@ -107,11 +102,12 @@
             var itemIndex = $("#container input.ItemValue").length;
             e.preventDefault();
 
-            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue'/></td></tr>");
+            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue form-control'/></td></tr>");
             $("#container").append(newItem);
         });
     });
 
+          //Onchange dropdown
           $("#SelectAttributeDropDown").change(function() {
 
             var t = $(this).val();
@@ -123,8 +119,9 @@
                     if (t == item.Name) {
                         $("#attributeType").text(item.AttributeType);
                         $("#attributeCategory").text(item.CategoryAttribute.Name);
-                        $("#PKAttributeId").val(item.PKAttributeId);
-                        
+                        $("#FK_CategoryAttrId").val(item.PKAttributeId);
+
+                        ShowPropriateControl($("#attributeType").text());
                     }
                     // access the properties of each user
                     var id = item.Id;

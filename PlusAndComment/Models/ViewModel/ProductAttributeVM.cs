@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -12,10 +13,13 @@ namespace PlusAndComment.Models.ViewModel
 
         public string Value { get; set; }
 
+        [ScriptIgnore]
         public ProductVM Product { get; set; }
 
+        [ScriptIgnore]
         public CategoryAttributeVM CategoryAttribute { get; set; }
 
+        [ScriptIgnore]
         public ICollection<AttributeValueListVM> ComboboxValues { get; set; }
     }
 }

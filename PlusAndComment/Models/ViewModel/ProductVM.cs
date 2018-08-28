@@ -1,5 +1,6 @@
 ﻿using PlusAndComment.Models.Entities;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -31,7 +32,8 @@ namespace PlusAndComment.Models.ViewModel
         public int CatId { get; set; }
 
         public List<PictureVM> Pictures { get; set; }
-
+        
+        [ScriptIgnore]
         public CategoryVM Category { get; set; }
 
         public List<ProductAttributeVM> Attributes { get; set; }

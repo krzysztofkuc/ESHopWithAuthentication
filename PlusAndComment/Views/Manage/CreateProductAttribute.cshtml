@@ -97,10 +97,8 @@
 </body>
 </html>
 
-
 <script>
-    function OnAttributeChanged(val)
-    {
+    $(function OnAttributeChanged(val) {
         $("#tableAttributeList").hide();
         $("#listAtrributeValue").hide();
         $("#valueInput").hide();
@@ -116,7 +114,7 @@
                 $("#valueInput").show();
                 break;
         }
-    }
+    });
 
     $(function () {
         $("#btnAdd").click(function (e) {

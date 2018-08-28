@@ -26,6 +26,6 @@ namespace PlusAndComment.Models.Entities
         public virtual ICollection<ProductEntity> Products { get; set; }
 
         [ForeignKey("CategoryAttributeId")]
-        public virtual ICollection<CategoryAttributesEntity> Attributes { get; set; }
+        public virtual ICollection<CategoryAttributeEntity> Attributes { get; set; }
     }
 }

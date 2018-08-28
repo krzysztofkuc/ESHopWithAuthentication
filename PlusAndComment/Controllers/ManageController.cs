@@ -550,7 +550,7 @@ namespace PlusAndComment.Controllers
         public ActionResult EditProductAttribute(AddProductAttributeVM attr)
         {
             var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
-            var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
+            var entity = Mapper.Map<CategoryAttributeEntity>(attrVM);
 
             if (ModelState.IsValid)
             {
@@ -595,8 +595,31 @@ namespace PlusAndComment.Controllers
             var productEntity = db.Products.Find(attr.CurrentProduct.ProductId);
 
             ProductAttributeVM pa = new ProductAttributeVM();
-            pa.Value = attr.Value;
-            pa.ProductOfAttributeId = attr.ProductOfAttributeId;
+
+
+            //add new ListId
+            int listId = 0;
+            if (attr.ComboboxValues?.Count > 0)
+            {
+                listId = db.ComboboxValues.OrderByDescending(x => x.ListId).Count();
+                listId++;
+
+                foreach (var item in attr.ComboboxValues)
+                {
+                    item.ListId = listId;
+                }
+            }
+
+            pa.FK_CategoryAttributes = attr.FK_CategoryAttributes;
+
+            if (!string.IsNullOrEmpty(attr.Value))
+            {
+                pa.Value = attr.Value;
+            }
+            else if(attr.ComboboxValues.Count > 0)
+            {
+                pa.ComboboxValues = attr.ComboboxValues;
+            }
 
             var attrEntity = Mapper.Map<ProductAttributeEntity>(pa);
 
@@ -638,7 +661,7 @@ namespace PlusAndComment.Controllers
                 //TO DO: add attributes and bind it with caetegories etc
                 var vm = new AddProductAttributeVM();
                 var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
-                var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
+                var entity = Mapper.Map<CategoryAttributeEntity>(attrVM);
                 db.CategoryAttributes.Add(entity);
                 db.Entry(entity).State = EntityState.Added;
 
@@ -666,36 +689,16 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult CreateCategoryAttribute(AddCategoryAttributeVM attr)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    //add new ListId
-            //    int listId = 0;
-            //    if(attr.ComboboxValues?.Count > 0)
-            //   {
-            //        listId = db.ComboboxValues.OrderByDescending(x => x.ListId).Count();
-            //        listId++;
+            if(ModelState.IsValid)
+            {
+                var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
 
-            //        foreach (var item in attr.ComboboxValues)
-            //        {
-            //            item.ListId = listId;
-            //            item.FK_CategoryAttrId = attr.CategoryAttributeId;
-            //            item.FK_ProductAttrId = null;
-            //        }
-            //    }
+                var entity = Mapper.Map<CategoryAttributeEntity>(attrVM);
+                db.CategoryAttributes.Add(entity);
+                db.Entry(entity).State = EntityState.Added;
 
-            //    //TO DO: add attributes and bind it with caetegories etc
-            //    var vm = new AddProductAttributeVM();
-            //    var attrVM = Mapper.Map<CategoryAttributesVM>(attr);
-            //    var entity = Mapper.Map<CategoryAttributesEntity>(attrVM);
-            //    db.CategoryAttributes.Add(entity);
-            //    db.Entry(entity).State = EntityState.Added;
-
-            //    db.SaveChanges();
-            //}
-            //else
-            //{
-            //    return View(attr);
-            //}
+                db.SaveChanges();
+            }
 
             return RedirectToAction("ProductsAttributes", "Home", null);
         }

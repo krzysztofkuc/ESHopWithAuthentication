@@ -19,11 +19,9 @@ namespace PlusAndComment.App_Start
             Mapper.Initialize(cfg =>
             {
                 //Category
-                cfg.CreateMap<CategoryVM, CategoryEntity>()
-                .MaxDepth(3);
+                cfg.CreateMap<CategoryVM, CategoryEntity>().MaxDepth(3);
 
-                cfg.CreateMap<CategoryEntity, CategoryVM>()
-                .MaxDepth(3);
+                cfg.CreateMap<CategoryEntity, CategoryVM>().MaxDepth(3);
 
                 //Product
                 cfg.CreateMap<ProductVM, ProductEntity>().MaxDepth(3);
@@ -49,8 +47,8 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AddProductAttributeVM, CategoryAttributeVM>();
 
                 //ProductAttributeVM
-                cfg.CreateMap<CategoryAttributeVM, CategoryAttributesEntity>();
-                cfg.CreateMap<CategoryAttributesEntity, CategoryAttributeVM>();
+                cfg.CreateMap<CategoryAttributeVM, CategoryAttributeEntity>();
+                cfg.CreateMap<CategoryAttributeEntity, CategoryAttributeVM>();
 
                 //PictureVM
                 cfg.CreateMap<PictureVM, PictureEntity>();
@@ -61,13 +59,22 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AttributeValueListEntity, AttributeValueListVM>();
 
                 //ProductAttribute
-                cfg.CreateMap<ProductAttributeVM, ProductAttributeEntity>().MaxDepth(3); ;
-                cfg.CreateMap<ProductAttributeEntity, ProductAttributeVM>().MaxDepth(3); ;
+                cfg.CreateMap<ProductAttributeVM, ProductAttributeEntity>().MaxDepth(3);
+                cfg.CreateMap<ProductAttributeEntity, ProductAttributeVM>().MaxDepth(3);
 
                 //ProductAttribute to AddProducTAttribute
-                cfg.CreateMap<ProductAttributeVM, AddProductAttributeVM>().MaxDepth(3); ;
-                cfg.CreateMap<AddProductAttributeVM, ProductAttributeVM>().MaxDepth(3); ;
+                cfg.CreateMap<ProductAttributeVM, AddProductAttributeVM>().MaxDepth(3);
+                cfg.CreateMap<AddProductAttributeVM, ProductAttributeVM>().MaxDepth(3);
 
+                //Create categoryAttribute - AddCategoryAttrribute to CategoryAttribute
+                cfg.CreateMap<CategoryAttributeVM, AddCategoryAttributeVM>()
+                .ForMember(x => x.PKAttributeId, opt => opt.Ignore())
+                .ForMember(x => x.ProductAttributes, opt => opt.Ignore());
+
+                cfg.CreateMap<AddCategoryAttributeVM, CategoryAttributeVM>()
+                .ForMember(x => x.CategoryAttributeId, opt => opt.MapFrom(src => src.Category.CategoryId))
+                .ForMember(x => x.PKAttributeId, opt => opt.Ignore())
+                .ForMember(x => x.ProductAttributes, opt => opt.Ignore());
             });
 
             //config.AssertConfigurationIsValid();

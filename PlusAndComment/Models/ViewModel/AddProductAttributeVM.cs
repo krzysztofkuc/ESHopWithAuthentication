@@ -16,6 +16,8 @@ namespace PlusAndComment.Models.ViewModel
 
         public int? CategoryAttributeId { get; set; }
 
+        public int? FK_CategoryAttributes { get; set; }
+
         public int? ProductOfAttributeId { get; set; }
 
         public ICollection<CategoryVM> AllCategories { get; set; }

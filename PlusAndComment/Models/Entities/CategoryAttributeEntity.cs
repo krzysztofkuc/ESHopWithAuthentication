@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PlusAndComment.Models.Entities
 {
     [Table("CategoryAttributes")]
-    public class CategoryAttributesEntity
+    public class CategoryAttributeEntity
     {
         [Key]
         public int PKAttributeId { get; set; }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -10,8 +7,8 @@ namespace PlusAndComment.Models.ViewModel
     {
         public int PKAttributeId { get; set; }
 
-        [Display(Name = "Category name")]
-        public string CategoryName { get; set; }
+        [Display(Name = "Attribute Name")]
+        public string Name { get; set; }
 
         public string Value { get; set; }
 

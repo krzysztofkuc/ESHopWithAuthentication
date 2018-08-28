@@ -20,11 +20,9 @@ namespace PlusAndComment.Models.Entities
 
         public virtual ProductEntity Product { get; set; }
 
-        public virtual CategoryAttributesEntity CategoryAttribute { get; set; }
+        public virtual CategoryAttributeEntity CategoryAttribute { get; set; }
 
         [ForeignKey("FK_ProductAttrId")]
         public virtual ICollection<AttributeValueListEntity> ComboboxValues { get; set; }
-
-
     }
 }
