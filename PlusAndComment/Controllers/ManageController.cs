@@ -533,10 +533,16 @@ namespace PlusAndComment.Controllers
 
         #region Manage Products
         [HttpGet]
-        public ActionResult EditProductAttribute(int id)
+        public ActionResult EditProductAttribute(int productAttributeId)
         {
-            var entity = db.ProductAttributes.Find(id);
+            var entity = db.ProductAttributes.Find(productAttributeId);
             var attrVm = Mapper.Map<ProductAttributeVM>(entity);
+
+            if(attrVm == null)
+            {
+                return RedirectToAction("AddProductAttribute",new { productAttributeId });
+            }
+
             var vm = Mapper.Map<AddProductAttributeVM>(attrVm);
             vm.CurrentProduct = Mapper.Map<ProductVM>(attrVm.Product);
             vm.AttributeType = attrVm.CategoryAttribute.AttributeType;
@@ -550,12 +556,15 @@ namespace PlusAndComment.Controllers
         public ActionResult EditProductAttribute(AddProductAttributeVM attr)
         {
             var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
-            var entity = Mapper.Map<CategoryAttributeEntity>(attrVM);
+
+            var productAttribute = db.ProductAttributes.Find(attr.ProductAttributeId);
+            productAttribute.Value = attr.Value;
+            productAttribute.ComboboxValues = Mapper.Map<ICollection<AttributeValueListEntity>>(attr.ComboboxValues);
 
             if (ModelState.IsValid)
             {
-                db.CategoryAttributes.Attach(entity);
-                db.Entry(entity).State = EntityState.Modified;
+                db.ProductAttributes.Attach(productAttribute);
+                db.Entry(productAttribute).State = EntityState.Modified;
                 db.SaveChanges();
             }
             else
@@ -616,7 +625,7 @@ namespace PlusAndComment.Controllers
             {
                 pa.Value = attr.Value;
             }
-            else if(attr.ComboboxValues.Count > 0)
+            else if(attr.ComboboxValues?.Count > 0)
             {
                 pa.ComboboxValues = attr.ComboboxValues;
             }
@@ -636,6 +645,15 @@ namespace PlusAndComment.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult CreateCategoryAttribute(int categoryId)
+        {
+            var vm = new AddCategoryAttributeVM();
+            vm.Category = Mapper.Map<CategoryVM>(db.Categories.Find(categoryId));
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -675,17 +693,6 @@ namespace PlusAndComment.Controllers
             return RedirectToAction("ProductsAttributes", "Home", null);
         }
 
-        [HttpGet]
-        public ActionResult CreateCategoryAttribute(int? categoryId = null)
-        {
-            var categoryEntity = db.Categories.Find(categoryId);
-
-            var vm = new AddCategoryAttributeVM();
-            vm.Category = Mapper.Map<CategoryVM>(categoryEntity);
-
-            return View(vm);
-        }
-
         [HttpPost]
         public ActionResult CreateCategoryAttribute(AddCategoryAttributeVM attr)
         {
@@ -706,8 +713,8 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult DeleteProductAttribute(int id)
         {
-            var entity = db.CategoryAttributes.Find(id);
-            db.CategoryAttributes.Remove(entity);
+            var entity = db.ProductAttributes.Find(id);
+            db.ProductAttributes.Remove(entity);
             db.Entry(entity).State = EntityState.Deleted;
             db.SaveChanges();
 

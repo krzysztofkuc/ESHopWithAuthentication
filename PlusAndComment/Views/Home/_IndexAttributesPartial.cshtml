@@ -4,6 +4,23 @@
 {
     @Html.AntiForgeryToken()
     <div class="row">
+
+        
+                    @*<h2>Checkbox</h2>
+                        <div id="radioset">
+                          <fieldset>
+                            <legend>Hotel Ratings: </legend>
+                            <label for="checkbox-1">2 Star</label>
+                            <input type="checkbox" name="checkbox-1" id="checkbox-1">
+                            <label for="checkbox-2">3 Star</label>
+                            <input type="checkbox" name="checkbox-2" id="checkbox-2">
+                            <label for="checkbox-3">4 Star</label>
+                            <input type="checkbox" name="checkbox-3" id="checkbox-3">
+                            <label for="checkbox-4">5 Star</label>
+                            <input type="checkbox" name="checkbox-4" id="checkbox-4">
+                          </fieldset>
+                        </div>*@
+
         <div style="position: relative">
             <label>Filters</label>
             <div>
@@ -23,28 +40,21 @@
 
                         case "list":
                                         @Html.DropDownListFor(m => Model[i].ComboboxValues,
-                        new SelectList(Model[i].ComboboxValues, "Id", "Value"))
+                        new SelectList(Model[i].ComboboxValues, "Id", "Value"),new { @class="form-control" })
                         break;
 
                         case "multiSelectList":
-                        for (int x = 0; x < Model[i].ComboboxValues.Count; x++)
-                        {
-                            @Html.HiddenFor(m => m[i].ComboboxValues[x].ListId)
-                            @Html.HiddenFor(m => m[i].ComboboxValues[x].Id)
-                            <label for="[@i].ComboboxValues[@x].Value">@Model[i].ComboboxValues[x].Value</label>
-                            <input type="checkbox" name="[@i].ComboboxValues[@x].Value" id="[@i].ComboboxValues_@(x + "__Value")">
-                        }
+                            <div id="radioset">
+                                @for (int x = 0; x < Model[i].ComboboxValues.Count; x++)
+                                {
+                                    @Html.HiddenFor(m => m[i].ComboboxValues[x].ListId)
+                                    @Html.HiddenFor(m => m[i].ComboboxValues[x].Id)
+                                    <label for="[@i].ComboboxValues[@x].Value">@Model[i].ComboboxValues[x].Value</label>
+                                    <input type="checkbox" name="[@i].ComboboxValues[@x].Value" id="[@i].ComboboxValues_@(x + "__Value")">
+                                }
+                            </div>
                         break;
                     }
-
-                    @*case "dateFrom":
-            //should be replaced to numebr value
-            @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-            break;
-        case "dateTo":
-            //should be replaced to numebr value
-            @Html.TextBox(attr.Name, attr.Value, new { @class = "form-control datepicker filter" });
-            break;*@
                 </div>
                 }
                 </div>
@@ -52,7 +62,6 @@
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Search" class="btn btn-default" />
                     </div>
-                    @*@Html.ActionLink("Search", "Index", "Home", new { @class = "btn btn-primary btn-small" })*@
                 </div>
         </div>
     </div>
@@ -61,8 +70,6 @@
     @Html.ActionLink("Create attribute for current category", "CreateCategoryAttribute", "Manage", new { categoryId = Request.Params["categoryId"] }, new { @class = "btn btn-primary btn-small" })
 </div>
 
-<script language="javascript" type="text/javascript">
-    $(function () {
-        $(".multiselect").multiselect();
-    });
+<script>
+    $("#radioset").buttonset();
 </script>

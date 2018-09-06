@@ -24,7 +24,7 @@ namespace PlusAndComment.Models.ViewModel
 
         public AllAttributeTypes AllAttributeTypes { get; set; }
 
-        public ICollection<AttributeValueListVM> ComboboxValues { get; set; }
+        public List<AttributeValueListVM> ComboboxValues { get; set; }
 
         public ProductVM CurrentProduct { get; set; }
     }

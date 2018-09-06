@@ -1,5 +1,6 @@
 ﻿using PlusAndComment.Models.Entities;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Script.Serialization;
 
 namespace PlusAndComment.Models.ViewModel
@@ -21,8 +22,10 @@ namespace PlusAndComment.Models.ViewModel
 
         public string Title { get; set; }
 
+        [Display(Name = "Product name")]
         public string Name { get; set; }
 
+        [Display(Name = "Product description")]
         public string Description { get; set; }
 
         public double Price { get; set; }

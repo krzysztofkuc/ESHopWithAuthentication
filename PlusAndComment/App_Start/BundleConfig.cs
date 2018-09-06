@@ -43,7 +43,8 @@ namespace PlusAndComment
                       "~/Content/buttons.css",
                       "~/Content/Site.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/animate.css"
+                      "~/Content/animate.css",
+                      "~/Content/jquery-ui.css"
                       ));
 
         //    //jQueryUi

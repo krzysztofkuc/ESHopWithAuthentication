@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.CategoryAttribute.AttributeType)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditProductAttribute", "Manage", new { id=item.ProductAttributeId },null) |
+                @Html.ActionLink("Edit", "EditProductAttribute", "Manage", new { productAttributeId = item.ProductAttributeId },null) |
                 @Html.ActionLink("Details", "DetailsProductAttribute", "Manage", new {  id=item.ProductAttributeId }, null) |
                 @Html.ActionLink("Delete", "DeleteProductAttribute", "Manage", new {  id=item.ProductAttributeId }, null)
             </td>

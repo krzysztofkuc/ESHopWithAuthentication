@@ -311,6 +311,12 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\gifplayer.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.structure.min.css" />
@@ -595,11 +601,11 @@
     <Content Include="Views\Manage\EditCompanyInformation.cshtml" />
     <Content Include="Views\Home\ProductsAttributes.cshtml" />
     <Content Include="Views\Manage\CreateProductAttribute.cshtml" />
-    <Content Include="Views\Manage\EditProductAttribute.cshtml" />
-    <Content Include="Views\Home\CategoryFilters.cshtml" />
     <Content Include="Views\Home\_IndexAttributesPartial.cshtml" />
     <Content Include="Views\Manage\AddProductAttribute.cshtml" />
     <Content Include="Views\Manage\CreateCategoryAttribute.cshtml" />
+    <Content Include="Views\Manage\EditProductAttribute.cshtml" />
+    <Content Include="Views\Shared\_ProductAttributes_Partial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

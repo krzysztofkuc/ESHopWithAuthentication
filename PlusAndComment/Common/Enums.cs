@@ -35,22 +35,5 @@ namespace PlusAndComment.Common
                     return "damn";
             }
         }
-
-        public static string ToFriendlyString(this UIPostType me)
-        {
-            switch (me)
-            {
-                case UIPostType.Humour:
-                    return "Humour";
-                case UIPostType.MainMeme:
-                    return "MainMeme";
-                case UIPostType.Suchar:
-                    return "Suchar";
-                case UIPostType.Article:
-                    return "Article";
-                default:
-                    return "damn";
-            }
-        }
     }
 }

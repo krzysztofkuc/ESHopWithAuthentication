@@ -185,3 +185,4 @@ D:\Repositories\EShopWithAuthentication\PlusAndComment\bin\Microsoft.Owin.Securi
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.csproj.CoreCompileInputs.cache
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.dll
 D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.pdb
+D:\Repositories\EShopWithAuthentication\PlusAndComment\obj\Debug\PlusAndComment.csprojResolveAssemblyReference.cache

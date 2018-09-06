@@ -19,56 +19,66 @@
         @Html.HiddenFor(model => model.AttributeType, new { @id = "attributeType" })
         @Html.HiddenFor(m => Model.FK_CategoryAttributes, new { @id = "FK_CategoryAttrId" })
 
-    <div class="form-horizontal">
-        <h4>AddProductAttributeVM</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), new { @id = "SelectAttributeDropDown", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <h4>AddProductAttributeVM</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CurrentProduct.Category.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <label id="attributeCategory"></label>
-        </div>
-    </div>
-
-    if (Model.CategoryAttributeId != null)
-    {
-        <div class="form-group" id="valueInput" style="display: none">
-            @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), htmlAttributes: new { @id = "SelectAttributeDropDown", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div id="tableAttributeList" style="display:none">
-            <h4>Attribute list</h4>
-            <table id="container">
-                <tr>
-                    <th>Values</th>
-                </tr>
-                @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
-            </table>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CurrentProduct.Category.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <label id="attributeCategory"></label>
+            </div>
+        </div>
 
-            <input type="button" id="btnAdd" value="Add New Item" class="btn btn-default" />
+        if (Model.CategoryAttributeId != null)
+        {
+            //value
+            <div class="form-group" id="valueInput" style="display: none">
+                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            //Date
+            <div class="form-group" id="valueDate" style="display: none">
+                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" id="datepicker" class="form-control">
+                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div id="tableAttributeList" style="display:none">
+                <h4>Attribute list</h4>
+                <table id="container">
+                    <tr>
+                        <th>Values</th>
+                    </tr>
+                    @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
+                </table>
+
+                <input type="button" id="btnAdd" value="Add New Item" class="btn btn-default" />
+            </div>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
         </div>
     }
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-}
 
     <div>
         @Html.ActionLink("Back to List", "Index")
@@ -77,12 +87,12 @@
 </body>
 </html>
 
-
 <script>
     function ShowPropriateControl(attrType) {
         $("#tableAttributeList").hide();
         $("#listAtrributeValue").hide();
         $("#valueInput").hide();
+        $("#valueDate").hide();
 
         switch (attrType) {
             case "list":
@@ -91,6 +101,10 @@
                 $("#listAtrributeValue").show();
                 break;
             case "text":
+                break;
+            case "date":
+                $("#valueDate").show();
+                break;
             case "number":
                 $("#valueInput").show();
                 break;

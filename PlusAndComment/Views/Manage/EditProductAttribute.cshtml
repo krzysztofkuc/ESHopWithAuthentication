@@ -1,161 +1,120 @@
 ﻿@model PlusAndComment.Models.ViewModel.AddProductAttributeVM
-@using PlusAndComment.Common
 
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>CreateProductAttribute</title>
+    <title>EditProductAttribute</title>
 </head>
 <body>
-    @using (Html.BeginForm("AddProductAttribute", "Manage", FormMethod.Post))
+    @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
-        @*@Html.HiddenFor(m => m.ProductOfAttributeId)*@
-        @Html.HiddenFor(m => Model.CurrentProduct.Attributes)
-        @Html.HiddenFor(m => Model.CurrentProduct.Category)
-        @Html.HiddenFor(m => Model.CurrentProduct.Description)
-        @Html.HiddenFor(m => Model.CurrentProduct.Name)
-        @Html.HiddenFor(m => Model.CurrentProduct.ProductId)
-
+        
         <div class="form-horizontal">
             <h4>AddProductAttributeVM</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        </div>
-
-        //converting string to enum
-        switch ((Enums.AllAttributeTypes)Enum.Parse(typeof(Enums.AllAttributeTypes), Model.AttributeType, true))
-        {
-            case Enums.AllAttributeTypes.text:
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                break;
-            case Enums.AllAttributeTypes.number:
-                break;
-            case Enums.AllAttributeTypes.date:
-                break;
-            case Enums.AllAttributeTypes.list:
-                break;
-            case Enums.AllAttributeTypes.multiSelectList:
-                break;
-        }
-
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), new { id = "SelectAttributeDropDown" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @Html.HiddenFor(m => m.ProductAttributeId, new { @id = "PKAttributeId" });
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AttributeType, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <label id="attributeType"></label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Category Name</label>
-            <div class="col-md-10">
-                <label id="attributeCategory"></label>
-            </div>
-        </div>
-
-        if (Model.CategoryAttributeId != null)
-        {
             <div class="form-group">
-                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.ProductAttributeId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.ProductAttributeId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ProductAttributeId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.AttributeType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("AttributeType",
+                           new SelectList(Enum.GetValues(typeof(PlusAndComment.Common.Enums.AllAttributeTypes))),
+                           "Select type",
+                           new { @class = "form-control", @disabled = "disabled", @onchange = "OnAttributeChanged(this.value)" })
+                    @Html.ValidationMessageFor(model => model.AttributeType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryAttributeId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CategoryAttributeId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CategoryAttributeId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.FK_CategoryAttributes, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FK_CategoryAttributes, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FK_CategoryAttributes, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    
+            <div class="form-group">
+                @Html.LabelFor(model => model.ProductOfAttributeId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ProductOfAttributeId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ProductOfAttributeId, "", new { @class = "text-danger" })
                 </div>
             </div>
 
+            @switch(Model.AttributeType)
+            {
+                case "list":
+                case "multiselectList":
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ComboboxValues, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @for (int i = 0; i < Model.ComboboxValues.Count; i++)
+                            {       
+                        
+                                    @Html.TextBoxFor(x => x.ComboboxValues[i].Value, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ComboboxValues[i].Value, "", new { @class = "text-danger" })
+                            }
+                        </div>
+                    </div>
+                    break;
+                case "number":
+                    break;
+                case "date":
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control", @id = "datepicker" } })
+                            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    break;
+                case "text":
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    break;
+            }
 
-
-            <div id="tableAttributeList" style="display:none">
-                <h4>Attribute list</h4>
-                <table id="container">
-                    <tr>
-                        <th>Values</th>
-                    </tr>
-                    @Html.EditorFor(x => x.ComboboxValues, new { htmlAttributes = new { @class = "form-control" } })
-                </table>
-
-                <input type="button" id="btnAdd" value="Add New Item" />
-            </div>
-        }
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
             </div>
         </div>
     }
-
+    
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
-
 </body>
 </html>
-
-
-<script>
-    function OnAttributeChanged(val)
-    {
-        if (val == "list" || val == "multiSelectList") {
-            //$("#tableAttributeList").prop("display", "block")
-            //$("#listAtrributeValue").prop("display", "block")
-            $("#tableAttributeList").show();
-            $("#listAtrributeValue").show();
-        }
-        else {
-            $("#tableAttributeList").hide();
-            $("#listAtrributeValue").hide();
-        }
-    }
-
-    $(function () {
-        $("#btnAdd").click(function (e) {
-            var itemIndex = $("#container input.ItemValue").length;
-            e.preventDefault();
-
-            var newItem = $("<tr><td><input id='ComboboxValues_" + itemIndex + "__Id' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].Id' /><input id='ComboboxValues_" + itemIndex + "__ListId' type='hidden' value='' class='iHidden'  name='ComboboxValues[" + itemIndex + "].ListId'/><input type='text' id='ComboboxValues_" + itemIndex + "__Value' value='' name='ComboboxValues[" + itemIndex + "].Value' class='ItemValue'/></td></tr>");
-            $("#container").append(newItem);
-        });
-    });
-
-          $("#SelectAttributeDropDown").change(function() {
-
-            var t = $(this).val();
-
-            var attributes = @Html.Raw(Json.Encode(Model.CurrentProduct.Category.Attributes))
-
-                $.each(attributes, function (index, item) {
-
-                    if (t == item.Name) {
-                        $("#attributeType").text(item.AttributeType);
-                        $("#attributeCategory").text(item.CategoryAttribute.Name);
-                        $("#PKAttributeId").val(item.PKAttributeId);
-
-                    }
-                    // access the properties of each user
-                    var id = item.Id;
-                    var name = item.Name;
-                });
-        });
-</script>

@@ -18,7 +18,6 @@
             <div class="row">
                 @Html.ActionLink("Add category", "AddCategory", "Manage", null, new { @class = "btn btn-primary btn-small" })
             </div>
-
             @Html.Partial("_IndexAttributesPartial", Model.CurrentAttributes)
         </div>
         <div class="col-md-8">
@@ -38,36 +37,36 @@
             </footer>
         </div>
     </div>
-    </div>
+</div>
 
-    @helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+@helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+{
+    <ul>
+        @foreach (var element in elements.Where(x => x.ParentId == null))
         {
-            <ul>
-                @foreach (var element in elements.Where(x => x.ParentId == null))
-                {
-                    <li>
-                        @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
-                        @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
-                        @DisplayChild(element)
-                    </li>
-                }
-            </ul>
+            <li>
+                @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
+                @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
+                @DisplayChild(element)
+            </li>
+        }
+    </ul>
 }
 
-    @helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+@helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+{
+    <ul>
+        @foreach (var elem in element.Categories)
         {
-            <ul>
-                @foreach (var elem in element.Categories)
-                {
-                    <li>
-                        @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = elem.CategoryId }, null)
-                        @{
-                            if (elem.Categories.Count() > 0)
-                            {
-                                @DisplayChild(elem)
-                            }
-                        }
-                    </li>
+            <li>
+                @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = elem.CategoryId }, null)
+                @{
+                    if (elem.Categories.Count() > 0)
+                    {
+                        @DisplayChild(elem)
+                    }
                 }
-            </ul>
+            </li>
+        }
+    </ul>
 }

@@ -1,7 +1,4 @@
-﻿
-
-using AutoMapper;
-using Newtonsoft.Json;
+﻿using AutoMapper;
 using PlusAndComment.Models;
 using PlusAndComment.Models.Entities;
 using PlusAndComment.Models.ViewModel;
@@ -49,19 +46,6 @@ namespace PlusAndComment.Controllers
             }
 
             List<ProductVM> productsX = GetFilteredProducts(searchedFilters);
-
-            //if (!string.IsNullOrEmpty(attrs))
-            //{
-            //    var attributes = JsonConvert.DeserializeObject<List<CategoryAttributesVM>>(attrs);
-
-            //    products = FilterProducts(attributes);
-            //}
-            //else
-            //{
-            //    products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
-            //}
-
-            
 
             var categories = db.Categories.ToList();
             var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
@@ -217,13 +201,33 @@ namespace PlusAndComment.Controllers
 
         private void FillCurrentAllCategoryChildsFilters(List<CategoryEntity> categories)
         {
+            var attributes = db.ProductAttributes;
+             
             foreach (var cat in categories)
             {
                 if(cat.Attributes != null)
-                foreach (var attribute in cat.Attributes)
-                {
-                    _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributeVM>(attribute));
-                }
+                    foreach (var attribute in cat.Attributes)
+                    {
+                            //Get all ProductAtrtributes with same Name
+                            var productAttributes = attributes.Where(p => p.CategoryAttribute.Name == attribute.Name).ToList();
+
+                            foreach (var productAttribute in productAttributes)
+                            {
+                                //Fill category multiSelect by all proprietary productAttributes values
+                                if(productAttribute.ComboboxValues.Count > 0 )
+                                {
+                                    foreach (var comboValue in productAttribute.ComboboxValues)
+                                    {
+                                        var exist = attribute.ComboboxValues.Any(x => x.Value == comboValue.Value);
+
+                                        if(!exist)
+                                            attribute.ComboboxValues.Add(comboValue);
+                                    }
+                                }
+                            }
+
+                            _currentAllCategoryFilters.Add(Mapper.Map<CategoryAttributeVM>(attribute));
+                    }
 
                 if(cat.Categories.Count > 0)
                 {

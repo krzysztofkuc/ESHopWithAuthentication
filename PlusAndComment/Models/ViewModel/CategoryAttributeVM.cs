@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlusAndComment.Models.ViewModel
 {
@@ -6,6 +7,7 @@ namespace PlusAndComment.Models.ViewModel
     {
         public int PKAttributeId { get; set; }
 
+        [Display(Name = "Attribute name")]
         public string Name { get; set; }
 
         public string Value { get; set; }

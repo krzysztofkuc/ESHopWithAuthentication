@@ -12,29 +12,32 @@
     <tbody>
         @foreach (var product in Model)
         {
-            <tr>
-                <td>
-                @if(product.Pictures.Count != 0)
-                {
-                    <img src="@product.Pictures.FirstOrDefault().Path" style="max-width: 100px; padding: 10px"/>
-                }
-                </td>
-                <td>@product.Category.Name</td>
-                <td>@product.Name</td>
-                <td id="cellAddToCart1">
-                    @Ajax.RawActionLink("<div id='xxx_OnClick' class='xxx_OnClick btn btn-sm btn-primary addToCartLink'style='position: relative; z-index: 100000;'><span class='glyphicon glyphicon-ok'></span> Add to cart</div>",
-                         "AddToCart",
-                         "ShoppingCart",
-                         new { @id = product.ProductId },
-                         new AjaxOptions
-                         {
-                             HttpMethod = "GET",
-                             OnSuccess = "animateAddToCartButton"
-                         },
-                         new { @id = "addToCartLink1" })
+        <tr>
+            <td>
+                @if (product.Pictures.Count != 0)
+        {
+            <img src="@product.Pictures.FirstOrDefault().Path" style="max-width: 100px; padding: 10px" />
+}
+            </td>
+            <td>@product.Category.Name</td>
+            <td>@product.Name</td>
+            <td id="cellAddToCart1">
+                @Ajax.RawActionLink("<div id='xxx_OnClick' class='xxx_OnClick btn btn-sm btn-primary addToCartLink'style='position: relative; z-index: 100000;'><span class='glyphicon glyphicon-ok'></span> Add to cart</div>",
+                  "AddToCart",
+                  "ShoppingCart",
+                  new { @id = product.ProductId },
+                  new AjaxOptions
+                  {
+                      HttpMethod = "GET",
+                      OnSuccess = "animateAddToCartButton"
+                  },
+                  new { @id = "addToCartLink1" })
 
-                </td>
-            </tr>
+            </td>
+            <td id="cellAddToCart1">
+                @Html.ActionLink("Edit","EditProduct","Manage", new { id = product.ProductId }, null)
+            </td>
+        </tr>
         }
     </tbody>
 </table>

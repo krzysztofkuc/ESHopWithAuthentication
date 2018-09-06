@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PlusAndComment.Models.ViewModel.ProductAttributeVM>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ProductsAttributes</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New Attribute", "CreateProductAttribute")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryAttribute.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryAttribute.AttributeType)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryAttribute.Name)
+                </td>
+                <td>
+                    @if (item.ComboboxValues.Count == 0)
+                    {
+                        @Html.DisplayFor(model => item.Value)
+                    }
+                    else
+                    {
+                        foreach (var combo in item.ComboboxValues)
+                        {
+                            <div>
+                                @Html.DisplayFor(model => combo.Value)
+                            </div>
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryAttribute.AttributeType)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditProductAttribute", "Manage", new { productAttributeId = item.ProductAttributeId }, null) |
+                    @Html.ActionLink("Details", "DetailsProductAttribute", "Manage", new { id = item.ProductAttributeId }, null) |
+                    @Html.ActionLink("Delete", "DeleteProductAttribute", "Manage", new { id = item.ProductAttributeId }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryAttribute.AttributeType)
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>
+
