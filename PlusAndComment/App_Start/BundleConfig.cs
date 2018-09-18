@@ -11,13 +11,14 @@ namespace PlusAndComment
             //bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
             //"~/Scripts/angular.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                        "~/Scripts/site.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/site").Include(
+            //            "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui.js",
-                        "~/Scripts/jquery-ui.min.js"));
+                        "~/Scripts/jquery-ui.min.js",
+                        "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",

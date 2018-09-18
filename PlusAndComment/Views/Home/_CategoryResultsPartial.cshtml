@@ -10,8 +10,12 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in Model)
+        @{ 
+        int i=0;
+
+        foreach (var product in Model)
         {
+            
         <tr>
             <td>
                 @if (product.Pictures.Count != 0)
@@ -21,23 +25,28 @@
             </td>
             <td>@product.Category.Name</td>
             <td>@product.Name</td>
-            <td id="cellAddToCart1">
-                @Ajax.RawActionLink("<div id='xxx_OnClick' class='xxx_OnClick btn btn-sm btn-primary addToCartLink'style='position: relative; z-index: 100000;'><span class='glyphicon glyphicon-ok'></span> Add to cart</div>",
+            <td id="@String.Concat("cellAddToCart", i)">
+                @Ajax.RawActionLink("<div id='xxx_OnClick" + i + "'class='xxx_OnClick btn btn-sm btn-primary addToCartLink'style='position: relative; z-index: 100000;'><span class='glyphicon glyphicon-ok'></span> Add to cart</div>",
                   "AddToCart",
                   "ShoppingCart",
                   new { @id = product.ProductId },
                   new AjaxOptions
                   {
                       HttpMethod = "GET",
+                      OnBegin = "$(this).attr('disabled', true).addClass('ui-state-disabled');",
                       OnSuccess = "animateAddToCartButton"
+
                   },
-                  new { @id = "addToCartLink1" })
+                  new { @id = String.Concat("addToCartLink", i) })
 
             </td>
-            <td id="cellAddToCart1">
+            <td>
                 @Html.ActionLink("Edit","EditProduct","Manage", new { id = product.ProductId }, null)
             </td>
         </tr>
+
+            i++;
         }
+            }
     </tbody>
 </table>

@@ -3,45 +3,9 @@ $(function () {
     $('.datepicker').datetimepicker();
 });
 
-function showleaveComment(id, isAuth) {
-    if (!isAuth) {
-        alert("Nie jesteś zalogowany")
-        return false;
-    }
-
-    var obj = $("#leaveCommentPartial_" + id);
-
-    var display = obj.css("display");
-    if (display != "none")
-    {
-        obj.attr("style", "display:none");
-    }
-    else
-    {
-        obj.attr("style", "display:block");
-    }
-
-    return false;
-}
-
-function showleaveMainComment(id, isAuth) {
-    if (!isAuth) {
-        alert("Nie jesteś zalogowany")
-        return false;
-    }
-
-    var obj = $("#leaveMainCommentPartial_" + id);
-
-    var display = obj.css("display");
-    if (display != "none") {
-        obj.attr("style", "display:none");
-    }
-    else {
-        obj.attr("style", "display:block");
-    }
-
-    return false;
-}
+$(function () {
+    $("#datepicker").datepicker();
+});
 
 function UpdateTrolleyItemsCount(count) {
     $("#trolleyItemsCount").attr("data-count", count);
@@ -53,13 +17,13 @@ function UpdateTrolleyItemsCount(count) {
     $(".RemoveLink").click(function () {
         // Get the id from the link
         var recordToDelete = $(this).attr("data-id");
-        if (recordToDelete != '') {
+        if (recordToDelete !== '') {
             // Perform the ajax post
             $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
                 function (data) {
                     // Successful requests get here
                     // Update the page elements
-                    if (data.ItemCount == 0) {
+                    if (data.ItemCount === 0) {
                         $('#row-' + data.DeleteId).fadeOut('slow');
                     } else {
                         $('#item-count-' + data.DeleteId).text(data.ItemCount);
@@ -74,8 +38,7 @@ function UpdateTrolleyItemsCount(count) {
     });
 
     function animateAddToCartButton(count) {
-        //$(this).preventDefault();
-
+        $(this).removeAttr('disabled').removeClass('ui-state-disabled');
         newButton = $(this).clone(true);
         moveButtonToTrolley(newButton, count);
     }
@@ -83,25 +46,27 @@ function UpdateTrolleyItemsCount(count) {
 
     function moveButtonToTrolley(element, count) {
 
-        var addToCartButton = document.getElementById("addToCartLink1");
+        var clickedButtonIndex = element[0].id.match(/\d+/g).map(Number)[0];
+
+        var addToCartButton = document.getElementById("addToCartLink" + clickedButtonIndex);
         var trolleyJSobj = document.getElementById("trolleyItemsCountId");
         var trolleyJQobj = $("#trolleyItemsCountId");
         var buttonAbsolutePos = getOffset(addToCartButton);
         var trolleyAbsolutePos = getOffset(trolleyJSobj);
-
-        element.css({ position: 'absolute' });
-        element.attr("z-index", "100000");
-        element.removeAttr("id");
+        element.css({ position: 'fixed' });
         element.css({ top: buttonAbsolutePos.top, left: buttonAbsolutePos.left });
-        element.appendTo('#cellAddToCart1');
+        element.appendTo('#cellAddToCart' + clickedButtonIndex);
+        element.removeAttr("id");
+       
+        element.css('z-index', 30000000000000000000);
 
-        element.animate({ left: trolleyAbsolutePos.left + 'px', top: trolleyAbsolutePos.top + 30 + 'px' },
+        element.animate({ left: trolleyAbsolutePos.left + 'px', top: trolleyAbsolutePos.top + 'px' },
             {
-                duration: 500,
+                duration: 700,
                 complete: function () {
-                    $(this).children(":first").toggle(
+                    $(this).toggle(
                         {
-                            duration: 500,
+                            duration: 200,
                             effect: "scale",
                             direction: "horizontal",
                             complete: function () {
@@ -124,71 +89,108 @@ function UpdateTrolleyItemsCount(count) {
 
     //get absoluite position from relative
     function getOffset(el) {
-        el = el.getBoundingClientRect();
+        //el = el.getBoundingClientRect();
 
-        return {
-            left: el.left + window.scrollX,
-            top: el.top + window.scrollY
+        //return {
+        //    left: el.left + window.scrollX,
+        //    top: el.top + window.scrollY
+        //};
+
+        var curleft = curtop = 0;
+
+        if (el.offsetParent) {
+            do {
+                curleft += el.offsetLeft;
+                curtop += el.offsetTop;
+            } while (el = el.offsetParent);
+
+            return {
+                left: curleft,
+                top: curtop
+            };
         }
     }
 
-    $(document).ready(function () {
-        $(".imageThumb_upload").change(function (e) {
-            var formData = new FormData();
-            //var totalFiles = e.target.files.length;
-            for (var i = 0; i < e.target.files.length; i++) {
-                var file = e.target.files[i];
-                formData.append("imageUploadForm", file);
+$(document).ready(function () {
+    $(".imageThumb_upload").change(function (e) {
+        var formData = new FormData();
+        //var totalFiles = e.target.files.length;
+        for (var i = 0; i < e.target.files.length; i++) {
+            var file = e.target.files[i];
+            formData.append("imageUploadForm", file);
+        }
+        $.ajax({
+            type: "POST",
+            url: "Upload",
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            //enctype: 'multipart/form-data',
+            processData: false,
+            beforeSend: function (request, xhr) {
+                $('#progressBar').text('');
+                $('#progressBar').css('width', '0%');
+            },
+            success: function (post) {
+                //var type = post.Type;
+                //var gifUrl = post.postUrl;
+                //var imgUrl = post.ImageUrl;
+                //var referenceUrl = post.ReferenceUrl;
+
+                var photoNumber = GetNumberOfCurrentPhoto(e.target.id);
+
+                $("#Path_" + photoNumber).val(post.PathRelative);
+
+
+                $("#" + e.target.id + "_Preview").attr("src", post.PathRelative);
+
+                //$("#referenceUrl").val(referenceUrl);
+                //$("#AddNewPostContent").show();
+                //$('#addPostButton').attr("disabled", false);
+            },
+            xhr: function () {
+                //Get XmlHttpRequest object
+                var xhr = $.ajaxSettings.xhr();
+                //Set onprogress event handler
+                xhr.upload.onprogress = function (data) {
+                    var perc = Math.round((data.loaded / data.total) * 100);
+                    $('#progressBar').text(perc + '%');
+                    $('#progressBar').css('width', perc + '%');
+                };
+                return xhr;
+            },
+            error: function (error) {
+                alert("errror");
             }
-            $.ajax({
-                type: "POST",
-                url: "Upload",
-                data: formData,
-                dataType: 'json',
-                contentType: false,
-                //enctype: 'multipart/form-data',
-                processData: false,
-                beforeSend: function (request, xhr) {
-                    $('#progressBar').text('');
-                    $('#progressBar').css('width', '0%');
-                },
-                success: function (post) {
-                    //var type = post.Type;
-                    //var gifUrl = post.postUrl;
-                    //var imgUrl = post.ImageUrl;
-                    //var referenceUrl = post.ReferenceUrl;
-
-                    var photoNumber = GetNumberOfCurrentPhoto(e.target.id);
-
-                    $("#Path_" + photoNumber).val(post.PathRelative);
-                    
-
-                    $("#" + e.target.id + "_Preview").attr("src", post.PathRelative);
-
-                    //$("#referenceUrl").val(referenceUrl);
-                    //$("#AddNewPostContent").show();
-                    //$('#addPostButton').attr("disabled", false);
-                },
-                xhr: function () {
-                    //Get XmlHttpRequest object
-                    var xhr = $.ajaxSettings.xhr();
-                    //Set onprogress event handler
-                    xhr.upload.onprogress = function (data) {
-                        var perc = Math.round((data.loaded / data.total) * 100);
-                        $('#progressBar').text(perc + '%');
-                        $('#progressBar').css('width', perc + '%');
-                    };
-                    return xhr;
-                },
-                error: function (error) {
-                    alert("errror");
-                }
-            });
         });
+    });
 
-    }
 
-    );
+    $('#trolleyItemsCountId').hover(function () {
+
+        //do something
+
+        $.ajax({
+            url: '/ShoppingCart/BasketThumb',
+            data: {
+                format: 'json'
+            },
+            error: function () {
+                $('#info').html('<p>An error has occurred</p>');
+            },
+            dataType: 'json',
+            success: function (data) {
+                var $title = $('<h1>').text(data.talks[0].talk_title);
+                var $description = $('<p>').text(data.talks[0].talk_description);
+                $('#info')
+                    .append($title)
+                    .append($description);
+            },
+            type: 'GET'
+        });
+    });
+
+});
 
     function GetNumberOfCurrentPhoto(id) {
 
@@ -209,10 +211,5 @@ const getCircularReplacer = () => {
     }
     return value;
   };
-    };
-
-$(function () {
-    $("#datepicker").datepicker();
-});
-
+};
 

@@ -31,6 +31,23 @@ namespace PlusAndComment.Controllers
             return View(viewModel);
         }
 
+        public ActionResult BasketThumb()
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            // Set up our ViewModel
+            var viewModel = new ShoppingCartVM()
+            {
+                CartItems = Mapper.Map<ICollection<CartVM>>(cart.GetCartItems()),
+                CartTotal = cart.GetTotal()
+            };
+
+            // Return the view
+
+            //here have to return partial view and show it byu ajax
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
         //
         // GET: /Store/AddToCart/5
         public async Task<int> AddToCart(int id)
