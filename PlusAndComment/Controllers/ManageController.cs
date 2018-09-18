@@ -753,6 +753,18 @@ namespace PlusAndComment.Controllers
             {
                 var category = Mapper.Map<CategoryEntity>(cat.Category);
 
+                var parentCategory = db.Categories.Find(category.ParentId);
+
+                var exist = parentCategory.Categories.Any(c => c.Name == cat.Category.Name);
+
+                if(exist)
+                {
+                    ModelState.AddModelError("error_msg", "Current category exist in the parent category");
+                    var cats = db.Categories.ToList();
+                    cat.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
+                    return View(cat);
+                }
+
                 db.Categories.Add(category);
                 db.SaveChanges();
 
@@ -772,7 +784,7 @@ namespace PlusAndComment.Controllers
             AddProductVM acVM = new AddProductVM();
             var cats = db.Categories.ToList();
             acVM.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
-            acVM.AllProducts = Mapper.Map<ICollection<ProductVM>>(db.Products);
+            acVM.AllProducts = Mapper.Map<ICollection<ProductVM>>(db.Products.ToList());
 
 
             acVM.CurrentProduct = new ProductVM();

@@ -35,7 +35,8 @@ namespace PlusAndComment.Models.ViewModel
         public int CatId { get; set; }
 
         public List<PictureVM> Pictures { get; set; }
-        
+
+        //here is a problem with srialization on view Add new Product
         [ScriptIgnore]
         public CategoryVM Category { get; set; }
 

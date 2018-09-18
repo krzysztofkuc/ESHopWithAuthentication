@@ -11,13 +11,12 @@ namespace PlusAndComment
             //bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
             //"~/Scripts/angular.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                        "~/Scripts/site.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui.js",
                         "~/Scripts/jquery-ui.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/site").Include(
+                        "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
@@ -40,19 +39,19 @@ namespace PlusAndComment
             //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/buttons.css",
+
                       "~/Content/Site.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/animate.css",
                       "~/Content/jquery-ui.css"
                       ));
 
-        //    //jQueryUi
-        //    bundles.Add(new StyleBundle("~/Content/css").Include(
-        //              //"~/Content/jquery-ui.theme.min.css",
-        //              //"~/Content/jquery-ui.theme.css",
-        //              "~/Content/jquery-ui.css",
-        //              "~/Content/jquery-ui.min.css"));
+            //jQueryUi
+            //bundles.Add(new StyleBundle("~/Content/css").Include(
+            //          "~/Content/jquery-ui.theme.min.css",
+            //          "~/Content/jquery-ui.theme.css",
+            //          "~/Content/jquery-ui.css",
+            //          "~/Content/jquery-ui.min.css"));
         }
     }
 }

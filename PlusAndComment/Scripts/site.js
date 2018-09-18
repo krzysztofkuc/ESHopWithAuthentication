@@ -1,47 +1,4 @@
 ﻿
-$(function () {
-    $('.datepicker').datetimepicker();
-});
-
-function showleaveComment(id, isAuth) {
-    if (!isAuth) {
-        alert("Nie jesteś zalogowany")
-        return false;
-    }
-
-    var obj = $("#leaveCommentPartial_" + id);
-
-    var display = obj.css("display");
-    if (display != "none")
-    {
-        obj.attr("style", "display:none");
-    }
-    else
-    {
-        obj.attr("style", "display:block");
-    }
-
-    return false;
-}
-
-function showleaveMainComment(id, isAuth) {
-    if (!isAuth) {
-        alert("Nie jesteś zalogowany")
-        return false;
-    }
-
-    var obj = $("#leaveMainCommentPartial_" + id);
-
-    var display = obj.css("display");
-    if (display != "none") {
-        obj.attr("style", "display:none");
-    }
-    else {
-        obj.attr("style", "display:block");
-    }
-
-    return false;
-}
 
 function UpdateTrolleyItemsCount(count) {
     $("#trolleyItemsCount").attr("data-count", count);
@@ -212,7 +169,15 @@ const getCircularReplacer = () => {
     };
 
 $(function () {
-    $("#datepicker").datepicker();
+    $(".datepicker").datepicker();
+
+    //$("input[type='checkbox']").checkboxradio();
+
+    $("#radioset").buttonset();
+
+    //$("#radioset").buttonset();
 });
+
+//$(".radioset").buttonset();
 
 
