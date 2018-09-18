@@ -12,6 +12,14 @@ namespace PlusAndComment.Models.ViewModel
 
         public string Value { get; set; }
 
+        public double? numberFrom { get; set; }
+
+        public double? numberTo { get; set; }
+
+        public string dateFrom { get; set; }
+
+        public string dateTo { get; set; }
+
         public int CategoryAttributeId { get; set; }
 
         public string AttributeType { get; set; }

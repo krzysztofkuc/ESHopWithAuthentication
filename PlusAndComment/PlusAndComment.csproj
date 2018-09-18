@@ -239,8 +239,6 @@
     <Compile Include="IServiceCollection.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ArticlesVM.cs" />
-    <Compile Include="Models\ArticleVM.cs" />
     <Compile Include="Models\ConfrimEmailVM.cs" />
     <Compile Include="Models\Entities\ArticleEntity.cs" />
     <Compile Include="Models\Entities\AttributeValueListEntity.cs" />

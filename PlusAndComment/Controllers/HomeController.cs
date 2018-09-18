@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,9 +33,48 @@ namespace PlusAndComment.Controllers
                     {
                         foreach (var attribute in product.Attributes)
                         {
-                            if(attribute.Value == filter.Value)
+                            bool shouldAdd = false;
+
+                            switch(attribute.CategoryAttribute.AttributeType)
+                            {
+                                case "date":
+                                    var value = DateTime.Parse(attribute.Value);
+
+                                    if (!string.IsNullOrEmpty(filter.dateFrom) && value > DateTime.Parse(filter.dateFrom))
+                                    {
+                                        shouldAdd = true;
+                                        break;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(filter.dateTo) &&  value < DateTime.Parse(filter.dateTo))
+                                    {
+                                        shouldAdd = true;
+                                        break;
+                                    }
+                                    break;
+                                case "number":
+
+                                    if (filter.numberFrom != null && Convert.ToDouble(attribute.Value) > filter.numberFrom)
+                                    {
+                                        shouldAdd = true;
+                                        break;
+                                    }
+
+                                    if (filter.numberTo != null && Convert.ToDouble(attribute.Value) < filter.numberTo)
+                                    {
+                                        shouldAdd = true;
+                                        break;
+                                    }
+                                    break;
+                                case "text":
+                                    break;
+                            }
+
+
+                            if(shouldAdd)
                             {
                                 products.Add(Mapper.Map<ProductEntity>(product));
+
                             }
                         }
                     }
@@ -45,7 +85,7 @@ namespace PlusAndComment.Controllers
                 products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
             }
 
-            List<ProductVM> productsX = GetFilteredProducts(searchedFilters);
+            //List<ProductVM> filteredProducts = GetFilteredProducts(searchedFilters);
 
             var categories = db.Categories.ToList();
             var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
@@ -74,21 +114,22 @@ namespace PlusAndComment.Controllers
             return View(homeVm);
         }
 
-        private List<ProductVM> GetFilteredProducts(List<CategoryAttributeVM> filters)
-        {
-            foreach (var filter in filters)
-            {
+        //private List<ProductVM> GetFilteredProducts(List<CategoryAttributeVM> filters)
+        //{
+        //    foreach (var filter in filters)
+        //    {
 
-            }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         private List<CategoryAttributeVM> GetSearchedFilters()
         {
             List<CategoryAttributeVM> resultAttrs = new List<CategoryAttributeVM>();
 
             var queryString = Request.QueryString;
+            var previousAttribute = string.Empty;
 
             //Select filers from querstring
             if (queryString.AllKeys.Contains("filters") && queryString["filters"] == true.ToString())
@@ -96,7 +137,9 @@ namespace PlusAndComment.Controllers
                 foreach (var key in queryString.AllKeys)
                 {
                     string filterName = string.Empty;
+                    string categoryAttributeName = key;
 
+                    //add handle by type
                     if (key.StartsWith("MultiSelect"))
                     {
                         filterName = key.Split('_').Skip(1).FirstOrDefault();
@@ -112,9 +155,63 @@ namespace PlusAndComment.Controllers
                         if (key == "filters")
                             continue;
 
-                        var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == key);
-                        attr.Value = queryString[key];
+                        //Split to dateFrom dateTo numberFro numberTo by "-"
+                        if(key.Contains("-"))
+                        {
+                            filterName = key.Split('-').Skip(1).FirstOrDefault();
+                            categoryAttributeName = key.Split('-').FirstOrDefault();
+                            
+
+                            if(!string.IsNullOrEmpty(categoryAttributeName))
+                            {
+                                previousAttribute = categoryAttributeName;
+                            }
+                            else
+                            {
+                                categoryAttributeName = previousAttribute;
+                            }
+                        }
+
+                        var attr = db.CategoryAttributes.FirstOrDefault(x => x.Name == categoryAttributeName);
+
+                        //here is the robblem with encoding polish signs
+                        attr.Value = queryString[HttpUtility.UrlDecode(key)];
+
                         var attrVM = Mapper.Map<CategoryAttributeVM>(attr);
+                        CategoryAttributeVM existingAttribute = resultAttrs.Find(x => x.Name == categoryAttributeName);
+
+                        switch (filterName)
+                        {
+                            case "dateFrom":
+                                attrVM.dateFrom = attr.Value;
+                                break;
+                            case "dateTo":
+                                if (existingAttribute != null)
+                                {
+                                    existingAttribute.dateTo = attr.Value;
+                                    continue;
+                                }
+                                else
+                                {
+                                    attrVM.dateTo = attr.Value;
+                                }
+                                break;
+                            case "numberFrom":
+                                attrVM.numberFrom = Convert.ToDouble(attr.Value);
+                                break;
+                            case "numberTo":
+                                if (existingAttribute != null)
+                                {
+                                    existingAttribute.numberTo = Convert.ToDouble(attr.Value);
+                                    continue;
+                                }
+                                else
+                                {
+                                    attrVM.numberTo = Convert.ToDouble(attr.Value);
+                                }
+                                break;
+                        }
+
                         resultAttrs.Add(attrVM);
                     }
                 }
@@ -128,6 +225,7 @@ namespace PlusAndComment.Controllers
         {
             List<CategoryAttributeVM> filledFilters = GetOnlyFilledFilters(filters);
 
+            //TODO: should by dynamic
             var uriBuilder = new UriBuilder("http://localhost:44393/");
             var parameters = HttpUtility.ParseQueryString(string.Empty);
 
@@ -138,15 +236,49 @@ namespace PlusAndComment.Controllers
             return Redirect(uriBuilder.Uri.ToString());
         }
 
+        /// <summary>
+        ///     Build URL parameters from searched filters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="filledFilters"></param>
         private void BuildParametersFromFilters(ref NameValueCollection parameters, List<CategoryAttributeVM> filledFilters)
         {
             foreach (var item in filledFilters)
             {
+                //add handle by type
                 if (item.Value != null)
                 {
                     parameters[item.Name] = item.Value;
                 }
-                else if (item.ComboboxValues.Count > 0)
+                if (item.numberFrom != null && item.numberTo != null)
+                {
+                    parameters[item.Name + "-numberFrom"] = item.numberFrom.ToString();
+                    parameters["-numberTo"] = item.numberTo.ToString();
+                }
+                else if (item.numberTo != null)
+                {
+                    parameters[item.Name + "-numberTo"] = item.numberTo.ToString();
+                }
+                else if (item.numberFrom != null)
+                {
+                    parameters[item.Name + "-numberFrom"] = item.numberFrom.ToString();
+                }
+
+                if (item.dateFrom != null && item.dateTo != null)
+                {
+                    parameters[item.Name + "-dateFrom"] = item.dateFrom;
+                    parameters["-dateTo"] = item.dateTo;
+                }
+                else if (item.dateFrom != null)
+                {
+                    parameters[item.Name + "-dateFrom"] = item.dateFrom;
+                }
+                else if(item.dateTo != null)
+                {
+                    parameters[item.Name + "-dateTo"] = item.dateTo;
+                }
+
+                if (item.ComboboxValues?.Count > 0)
                 {
                     foreach (var combo2 in item.ComboboxValues)
                     {
@@ -166,7 +298,7 @@ namespace PlusAndComment.Controllers
 
             foreach (var item in filters)
             {
-                if (item.Value != null)
+                if (item.Value != null || item.numberFrom != null || item.numberTo != null || item.dateFrom != null || item.dateTo != null)
                 {
                     filledFilters.Add(item);
                     continue;

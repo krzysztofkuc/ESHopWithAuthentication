@@ -20,6 +20,7 @@
 
                 @DisplayRoots(Model.AllCategories)
 
+                @Html.ValidationMessage("error_msg")
                 @Html.LabelFor(m => m.Category.Name)
 
                 @Html.EditorFor(m => m.Category.Name)
