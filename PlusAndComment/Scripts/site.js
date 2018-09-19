@@ -171,22 +171,17 @@ $(document).ready(function () {
         //do something
 
         $.ajax({
+            type: 'GET',
             url: '/ShoppingCart/BasketThumb',
-            data: {
-                format: 'json'
+            dataType: 'html',
+            beforeSend: function () { $("loaderBasketPreview").show(); },
+            error: function (e) {
+                $("loaderBasketPreview").hide();
             },
-            error: function () {
-                $('#info').html('<p>An error has occurred</p>');
-            },
-            dataType: 'json',
-            success: function (data) {
-                var $title = $('<h1>').text(data.talks[0].talk_title);
-                var $description = $('<p>').text(data.talks[0].talk_description);
-                $('#info')
-                    .append($title)
-                    .append($description);
-            },
-            type: 'GET'
+            success: function (partialViewData) {
+                $("loaderBasketPreview").hide();
+                $('#basket').html(partialViewData);
+            }
         });
     });
 
