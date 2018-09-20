@@ -31,7 +31,7 @@ namespace PlusAndComment.Controllers
             return View(viewModel);
         }
 
-        public ActionResult BasketThumb()
+        public PartialViewResult BasketThumb()
         {
             var cart = ShoppingCart.GetCart(this.HttpContext);
 
@@ -41,11 +41,10 @@ namespace PlusAndComment.Controllers
                 CartItems = Mapper.Map<ICollection<CartVM>>(cart.GetCartItems()),
                 CartTotal = cart.GetTotal()
             };
-
             // Return the view
 
             //here have to return partial view and show it byu ajax
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
+            return PartialView("_BasketPopupPreview", viewModel);
         }
 
         //

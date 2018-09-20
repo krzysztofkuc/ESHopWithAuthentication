@@ -163,6 +163,22 @@ $(document).ready(function () {
                 alert("errror");
             }
         });
+
+
+        //Initialize searchable dropdown with hierarchy
+        $(document).ready(function () {
+
+            $('#your-expertise-hierarchy').hierarchySelect({
+
+                hierarchy: true,
+
+                search: true,
+
+                width: 250
+
+            });
+
+        });
     });
 
 
