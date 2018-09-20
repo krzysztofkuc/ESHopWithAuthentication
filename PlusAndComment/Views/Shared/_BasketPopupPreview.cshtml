@@ -1,0 +1,95 @@
+﻿@model PlusAndComment.Models.ViewModel.ShoppingCartVM
+
+@{
+    ViewBag.Title = "Twoje zamówienie";
+}
+
+<h2>Twoje zamówienie</h2>
+<hr/>
+<p class="button">
+    @*@Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout", new { @id = "CheckoutLink" })*@
+
+    @*<a href="#" style="z-index:100000; position: absolute" id="CheckoutLink">Checkout>>Link</a>*@
+
+    @*<div id="CheckoutLink" style="background-color: palegreen;  position: relative">aaaaaaaaaaaaaa  </div>*@
+    @*@Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout", new { @id = "CheckoutLink" })*@
+</p>
+<div id="update-message">
+</div>
+<table cellpadding="10">
+    <tr>
+        <th>
+            Picture
+        </th>
+        <th>
+            Product
+        </th>
+        <th>
+            Price (each)
+        </th>
+        <th>
+            Quantity
+        </th>
+    </tr>
+    @foreach (var item in Model.CartItems)
+    {
+        <tr id="row-@item.RecordId">
+            <td><img src="@item.Product.Pictures?.FirstOrDefault().Path"</td>
+            <td>
+                @Html.ActionLink(item.Product.Name ?? "title generated", "Details", "Store", new { id = item.ProductId }, null)
+            </td>
+            <td>
+                @item.Product.Price
+            </td>
+            <td id="item-count-@item.RecordId">
+                @item.Number
+            </td>
+            <td>
+                <a href="#" class="RemoveLink"
+                   data-id="@item.RecordId">
+                    Remove
+                </a>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
+            Total
+        </td>
+        <td></td>
+        <td></td>
+        <td id="cart-total">
+            @Model.CartTotal
+        </td>
+    </tr>
+</table>
+<div>
+    <hr/>
+    @Html.ActionLink("Zamów ", "AddressAndPayment", "Checkout",null, new { @class = "btn btn-primary btn-large", @style = "width: 100%" })
+</div>
+
+<script>
+    // Document.ready -> link up remove event handler
+    $(".RemoveLink").click(function () {
+        // Get the id from the link
+        var recordToDelete = $(this).attr("data-id");
+        if (recordToDelete !== '') {
+            // Perform the ajax post
+            $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                function (data) {
+                    // Successful requests get here
+                    // Update the page elements
+                    if (data.ItemCount === 0) {
+                        $('#row-' + data.DeleteId).fadeOut('slow');
+                    } else {
+                        $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                    }
+                    $('#cart-total').text(data.CartTotal);
+                    $('#update-message').text(data.Message);
+                    $('#cart-status').text('Cart (' + data.CartCount + ')');
+
+                    $('#trolleyItemsCount').attr("data-count", data.CartCount);
+                });
+        }
+    });
+</script>
