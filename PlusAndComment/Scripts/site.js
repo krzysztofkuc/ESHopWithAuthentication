@@ -1,7 +1,7 @@
 ﻿
-$(function () {
-    $('.datepicker').datetimepicker();
-});
+//$(function () {
+//    $('.datepicker').datetimepicker();
+//});
 
 $(function () {
     $("#datepicker").datepicker();
@@ -163,24 +163,32 @@ $(document).ready(function () {
                 alert("errror");
             }
         });
+    });
 
-
-        //Initialize searchable dropdown with hierarchy
-        $(document).ready(function () {
-
-            $('#your-expertise-hierarchy').hierarchySelect({
-
-                hierarchy: true,
-
-                search: true,
-
-                width: 250
-
-            });
-
+    //Initialize searchable dropdown with hierarchy
+    $(document).ready(function () {
+        $('#example-one').hierarchySelect({
+            width: 200
         });
     });
 
+    //here have to be more identifier because now every li a will trigger that
+    //$('li a').click(function (e) {
+    //    $("#parentId").val(e.target.parentElement.getAttribute("data-value"));
+    //});
+
+    $('#addCategoryDropDown').click(function (e) {
+
+        var value = $('ul#addCategoryDropDown').find('li.active').data('value');
+        $("#parentId").val(value);
+    });
+
+    $('#addProductCategroyDropDown').click(function (e) {
+
+        var value = $('ul#addProductCategroyDropDown').find('li.active').data('value');
+
+        $("#catIdAddProduct").val(value);
+    });
 
     $('#trolleyItemsCountId').hover(function () {
 

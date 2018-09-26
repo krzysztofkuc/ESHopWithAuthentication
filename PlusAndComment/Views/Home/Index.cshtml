@@ -44,11 +44,11 @@
     <ul>
         @foreach (var element in elements.Where(x => x.ParentId == null))
         {
-            <li>
-                @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
-                @*<a href="@element.CategoryId" class=""> @{Html.Name(element.Name);} </a>*@
-                @DisplayChild(element)
-            </li>
+        <li>
+            @Html.ActionLink(element.Name, "Index", "Home", new { @categoryId = element.CategoryId }, null)
+            @Html.ActionLink("usuń", "DeleteCategory", "Manage", new { @categoryId = element.CategoryId }, null)
+            @DisplayChild(element)
+        </li>
         }
     </ul>
 }
@@ -60,6 +60,7 @@
         {
             <li>
                 @Html.ActionLink(elem.Name, "Index", "Home", new { @categoryId = elem.CategoryId }, null)
+                @Html.ActionLink("usuń", "DeleteCategory", "Manage", new { @categoryId = element.CategoryId }, null)
                 @{
                     if (elem.Categories.Count() > 0)
                     {

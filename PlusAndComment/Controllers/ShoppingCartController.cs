@@ -102,6 +102,40 @@ namespace PlusAndComment.Controllers
 
             return Json(results);
         }
+
+        //
+        // AJAX: /ShoppingCart/RemoveFromCart/5
+        [HttpPost]
+        public async Task<ActionResult> AddNumberOfProductToCart(int id)
+        {
+            // Remove the item from the cart
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            // Get the name of the album to display confirmation
+            var product = storeDB.Carts
+                .Single(item => item.RecordId == id).Product;
+
+            //var product = storeDB.Products.Find(id);
+
+            // Remove from cart
+            var cartItem = await cart.AddToCart(product);
+
+            // Display the confirmation message
+            var results = new ShoppingCartRemoveVM
+            {
+                Message = Server.HtmlEncode(product.Name) +
+                    " has been removed from your shopping cart.",
+                CartTotal = cart.GetTotal(),
+                CartCount = cart.GetCount(),
+                ItemCount = cartItem.Number,
+                DeleteId = id
+            };
+
+            HttpContext.Session["NumberOfAllItems"] = cart.GetCount();
+
+            return Json(results);
+        }
+
         //
         // GET: /ShoppingCart/CartSummary
         [ChildActionOnly]

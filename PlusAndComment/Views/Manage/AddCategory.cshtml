@@ -10,6 +10,7 @@
 @using (Html.BeginForm("AddCategory", "Manage", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Category.ParentId, new { @id = "parentId" });
 
     <div class="form-horizontal">
         <h4>AddCategoryVM</h4>
@@ -24,202 +25,116 @@
                 @Html.ValidationMessage("error_msg")
                 @Html.LabelFor(m => m.Category.Name)
 
-                @Html.EditorFor(m => m.Category.Name)
+                @Html.TextBoxFor(m => m.Category.Name, new { @class = "form-control", @style="displany: inline" })
                 @Html.ValidationMessageFor(model => model.Category.Name)
 
                 @Html.LabelFor(m => m.AllCategories)
 
-                @*Example code
-        ======================*@
-                
+                @DropDownHierarchy(Model.AllCategories)
 
-                    <div class="form-group">
-
-                        <div class="btn-group hierarchy-select" data-resize="auto" id="your-expertise-hierarchy">
-
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-
-                                <span class="selected-label pull-left">&nbsp;</span>
-
-                                <span class="caret"></span>
-
-                                <span class="sr-only">Toggle Dropdown</span>
-
-                            </button>
-
-                            <div class="dropdown-menu open">
-
-                                <div class="hs-searchbox">
-
-                                    <input type="text" class="form-control" autocomplete="off">
-
-                                </div>
-
-                                <ul class="dropdown-menu inner" role="menu">
-
-                                    <li data-value="" data-level="1" class="level-1 active">
-
-                                        <a href="#">Your Expertise</a>
-
-                                    </li>
-
-                                    <li data-value="1" data-level="1" class="level-1">
-
-                                        <a href="#">Web</a>
-
-                                    </li>
-
-                                    <li data-value="2" data-level="2" class="level-2">
-
-                                        <a href="#">Scripting</a>
-
-                                    </li>
-
-                                    <li data-value="3" data-level="3" class="level-3">
-
-                                        <a href="#">PHP</a>
-
-                                    </li>
-
-                                    <li data-value="4" data-level="3" class="level-3">
-
-                                        <a href="#">JavaScript</a>
-
-                                    </li>
-
-                                    <li data-value="5" data-level="3" class="level-3">
-
-                                        <a href="#">.Net</a>
-
-                                    </li>
-
-                                    <li data-value="5" data-level="3" class="level-3">
-
-                                        <a href="#">JSP</a>
-
-                                    </li>
-
-                                    <li data-value="6" data-level="2" class="level-2">
-
-                                        <a href="#">Framework</a>
-
-                                    </li>
-
-                                    <li data-value="7" data-level="3" class="level-3">
-
-                                        <a href="#">Bootstrap</a>
-
-                                    </li>
-
-                                    <li data-value="9" data-level="1" class="level-1">
-
-                                        <a href="#">Database</a>
-
-                                    </li>
-
-                                    <li data-value="10" data-level="2" class="level-2">
-
-                                        <a href="#">MySQL</a>
-
-                                    </li>
-
-                                    <li data-value="11" data-level="2" class="level-2">
-
-                                        <a href="#">MS SQL Server</a>
-
-                                    </li>
-
-                                    <li data-value="12" data-level="2" class="level-2">
-
-                                        <a href="#">Oracle</a>
-
-                                    </li>
-
-                                    <li data-value="13" data-level="1" class="level-1">
-
-                                        <a href="#">Programming</a>
-
-                                    </li>
-
-                                    <li data-value="14" data-level="2" class="level-2">
-
-                                        <a href="#">Java</a>
-
-                                    </li>
-
-                                    <li data-value="15" data-level="2" class="level-2">
-
-                                        <a href="#">Python</a>
-
-                                    </li>
-
-                                    <li data-value="16" data-level="2" class="level-2">
-
-                                        <a href="#">C Sharp</a>
-
-                                    </li>
-
-                                </ul>
-
-                            </div>
-
-                            <input class="hidden hidden-field" name="search_form[category]" readonly aria-hidden="true" type="text" />
-
-                        </div>
-
-                    </div>
-
-                
-                @*======================*@
-
-                @Html.DropDownListFor(m => m.Category.ParentId, new SelectList(Model.AllCategories, "CategoryId", "Name"), "- Please Select -")
+                @*@Html.DropDownListFor(m => m.Category.ParentId, new SelectList(Model.AllCategories, "CategoryId", "Name"), "- Please Select -")*@
 
             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" value="Create" class="btn btn-default" />
-                            </div>
-                        </div>
-                    </div>
-                    }
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
 
-                    <div>
-                        @Html.ActionLink("Back to List", "Index")
-                    </div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
-                    @section Scripts {
-                        @Scripts.Render("~/bundles/jqueryval")
-                    }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
-                    @helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+@helper DropDownHierarchy(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+{
+    <div class="btn-group hierarchy-select" data-resize="auto" id="example-one">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="selected-label pull-left">&nbsp;</span>
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <div class="dropdown-menu open">
+            <div class="hs-searchbox">
+                <input type="text" class="form-control" autocomplete="off">
+            </div>
+            <ul class="dropdown-menu inner" role="menu" id="addCategoryDropDown">
+                <li data-value="" data-level="1" data-default-selected="">
+                    <a href="#">Please select</a>
+                </li>
+                @{
+                    Model.iteration = 0;
+                    foreach (var element in elements.Where(x => x.ParentId == null))
                     {
-                        <ul>
-                            @foreach (var element in elements.Where(x => x.ParentId == null))
-                            {
-                                <li>
-                                    @element.Name
-                                    @DisplayChild(element)
-                                </li>
-                            }
-                        </ul>
+                        Model.iteration++;
+                        <li data-value="@element.CategoryId" data-level="1" class="dropDown">
+                            <a href="#">@element.Name</a>
+                        </li>
+                        @DisplayChildForDropdown(element, 1)
                     }
+                }
+            </ul>
+        </div>
+        <input class="hidden hidden-field" name="example_one" readonly="readonly" aria-hidden="true" type="text" />
+    </div>
+}
 
-                    @helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+@helper DisplayChildForDropdown(PlusAndComment.Models.ViewModel.CategoryVM element, int level)
+{
+    level++;
+    foreach (var elem in element.Categories)
+    {
+        Model.iteration++;
+        <li data-value="@elem.CategoryId" data-level="@level">
+            <a href="#">@elem.Name</a>
+            @if (element.ParentId != null)
+            {
+                Html.Hidden(elem.ParentId.ToString());
+            }
+        </li>
+
+        if (elem.Categories.Count() > 0)
+        {
+            @DisplayChildForDropdown(elem, level)
+        }
+
+    }
+}
+
+@helper DisplayRoots(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+{
+    <ul>
+        @foreach (var element in elements.Where(x => x.ParentId == null))
+        {
+            <li>
+                @element.Name
+            </li>
+            @DisplayChild(element)
+        }
+    </ul>
+}
+
+@helper DisplayChild(PlusAndComment.Models.ViewModel.CategoryVM element)
+{
+    <ul>
+        @foreach (var elem in element.Categories)
+        {
+            <li>
+                @elem.Name
+                @{
+                    if (elem.Categories.Count() > 0)
                     {
-                        <ul>
-                            @foreach (var elem in element.Categories)
-                            {
-                                <li>
-                                    @elem.Name
-                                    @{
-                                        if (elem.Categories.Count() > 0)
-                                        {
-                                            @DisplayChild(elem)
-                                        }
-                                    }
-                                </li>
-                            }
-                        </ul>
+                        @DisplayChild(elem)
                     }
+                }
+            </li>
+        }
+    </ul>
+}
 

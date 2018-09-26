@@ -22,72 +22,73 @@ namespace PlusAndComment.Controllers
         public ActionResult Index(int? categoryId, string attrs = null)
         {
             ICollection<ProductEntity> products = new List<ProductEntity>();
+            var categories = db.Categories.ToList();
 
-            List<CategoryAttributeVM> searchedFilters = GetSearchedFilters();
+            #region SEARCH_PRODUCTS_BY_ATTRIBUTES
 
-            if (searchedFilters.Count > 0)
-            {
-                foreach (var filter in searchedFilters)
+                List<CategoryAttributeVM> searchedFilters = GetSearchedFilters();
+                if (searchedFilters.Count > 0)
                 {
-                    foreach (var product in filter.CategoryAttribute.Products)
+                    foreach (var filter in searchedFilters)
                     {
-                        foreach (var attribute in product.Attributes)
+                        foreach (var product in filter.CategoryAttribute.Products)
                         {
-                            bool shouldAdd = false;
-
-                            switch(attribute.CategoryAttribute.AttributeType)
+                            foreach (var attribute in product.Attributes)
                             {
-                                case "date":
-                                    var value = DateTime.Parse(attribute.Value);
+                                bool shouldAdd = false;
 
-                                    if (!string.IsNullOrEmpty(filter.dateFrom) && value > DateTime.Parse(filter.dateFrom))
-                                    {
-                                        shouldAdd = true;
+                                switch(attribute.CategoryAttribute.AttributeType)
+                                {
+                                    case "date":
+                                        var value = DateTime.Parse(attribute.Value);
+
+                                        if (!string.IsNullOrEmpty(filter.dateFrom) && value > DateTime.Parse(filter.dateFrom))
+                                        {
+                                            shouldAdd = true;
+                                            break;
+                                        }
+
+                                        if (!string.IsNullOrEmpty(filter.dateTo) &&  value < DateTime.Parse(filter.dateTo))
+                                        {
+                                            shouldAdd = true;
+                                            break;
+                                        }
                                         break;
-                                    }
+                                    case "number":
 
-                                    if (!string.IsNullOrEmpty(filter.dateTo) &&  value < DateTime.Parse(filter.dateTo))
-                                    {
-                                        shouldAdd = true;
+                                        if (filter.numberFrom != null && Convert.ToDouble(attribute.Value) > filter.numberFrom)
+                                        {
+                                            shouldAdd = true;
+                                            break;
+                                        }
+
+                                        if (filter.numberTo != null && Convert.ToDouble(attribute.Value) < filter.numberTo)
+                                        {
+                                            shouldAdd = true;
+                                            break;
+                                        }
                                         break;
-                                    }
-                                    break;
-                                case "number":
-
-                                    if (filter.numberFrom != null && Convert.ToDouble(attribute.Value) > filter.numberFrom)
-                                    {
-                                        shouldAdd = true;
+                                    case "text":
                                         break;
-                                    }
-
-                                    if (filter.numberTo != null && Convert.ToDouble(attribute.Value) < filter.numberTo)
-                                    {
-                                        shouldAdd = true;
-                                        break;
-                                    }
-                                    break;
-                                case "text":
-                                    break;
-                            }
+                                }
 
 
-                            if(shouldAdd)
-                            {
-                                products.Add(Mapper.Map<ProductEntity>(product));
+                                if(shouldAdd)
+                                {
+                                    products.Add(Mapper.Map<ProductEntity>(product));
 
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
-            }
+                else
+                {
+                    products = GetProductsByCategory(db.Categories.Find(categoryId))?.ToList() ?? new List<ProductEntity>();
+                }
 
-            //List<ProductVM> filteredProducts = GetFilteredProducts(searchedFilters);
+            #endregion SEARCH_PRODUCTS_BY_ATTRIBUTES
 
-            var categories = db.Categories.ToList();
             var currentCategory = categories.FirstOrDefault(x => x.CategoryId == categoryId);
 
             var listCategories = new List<CategoryEntity>();
@@ -113,16 +114,6 @@ namespace PlusAndComment.Controllers
 
             return View(homeVm);
         }
-
-        //private List<ProductVM> GetFilteredProducts(List<CategoryAttributeVM> filters)
-        //{
-        //    foreach (var filter in filters)
-        //    {
-
-        //    }
-
-        //    return null;
-        //}
 
         private List<CategoryAttributeVM> GetSearchedFilters()
         {

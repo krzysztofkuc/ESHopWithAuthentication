@@ -9,5 +9,7 @@ namespace PlusAndComment.Models.ViewModel
         public ICollection<CategoryVM> AllCategories { get; set; }
 
         public ProductVM CurrentProduct { get; set; }
+
+        public int iteration { get; set; }
     }
 }

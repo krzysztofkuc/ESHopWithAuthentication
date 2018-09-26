@@ -1,10 +1,17 @@
 ﻿@import url(http://weloveiconfonts.com/api/?family=entypo);
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
-h1 h2 h3 h4{
+/*h1 h2 h3 h4{
     color: #161616;
+}*/
+
+#basketTable td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 3px;
+    text-align: center;
 }
 
-a{
+a {
     color: #192023
 }
 

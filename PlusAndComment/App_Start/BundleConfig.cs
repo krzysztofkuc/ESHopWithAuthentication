@@ -18,6 +18,7 @@ namespace PlusAndComment
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui.js",
                         "~/Scripts/jquery-ui.min.js",
+                        "~/Scripts/hierarchy-select.min.js",
                         "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -33,7 +34,7 @@ namespace PlusAndComment
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/moment.js",
                         "~/Scripts/moment-with-locales.js",
-                        "~/Scripts/bootstrap.js",
+                        //"~/Scripts/bootstrap.js",
                         "~/Scripts/bootstrap.min.js",
                         "~/Scripts/bootstrap-datetimepicker.min.js",
                         "~/Scripts/respond.js"));
@@ -45,7 +46,8 @@ namespace PlusAndComment
                       "~/Content/Site.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/animate.css",
-                      "~/Content/jquery-ui.css"
+                      "~/Content/jquery-ui.css",
+                      "~/Content/hierarchy-select.min.css"
                       ));
 
         //    //jQueryUi

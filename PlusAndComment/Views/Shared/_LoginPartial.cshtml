@@ -28,14 +28,16 @@
     {
             <ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
                 <li class="dropdown">
-                    <a href="/ShoppingCart/Index" style="display: inline-block; width: 100%;" id="trolleyItemsCountId">
+                    <a href="/ShoppingCart/Index" max-width: 50px;" id="trolleyItemsCountId">
                         <span id="trolleyItemsCount" class="fa-stack fa-2x has-badge" data-count="@Context.Session["NumberOfAllItems"]">
                             <i class="fa fa-circle fa-stack-2x"></i>
                             <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
                         </span>
                     </a>
-                    <div id="basket" class="dropdown-menu clearfix" style="border-radius: 10px; padding: 10px 10px 10px 10px;">
-                        <img id="loaderBasketPreview" src="~/Storage/ajax-loader.gif" style="display:block; margin-left: auto; margin-right: auto;"/>
+                </li>
+                <li class="dropdown">
+                    <div id="basket" class="dropdown-menu clearfix" style="border-radius: 7px; padding: 1px 1px 1px 1px;">
+                        <img id="loaderBasketPreview" src="~/Storage/ajax-loader.gif" style="display:block; margin-left: auto; margin-right: auto;" />
                     </div>
                 </li>
                 <li class="dropdown">

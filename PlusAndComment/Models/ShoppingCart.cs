@@ -28,7 +28,7 @@ namespace PlusAndComment.Models
             return GetCart(controller.HttpContext);
         }
 
-        public async Task<int> AddToCart(ProductEntity product)
+        public async Task<CartEntity> AddToCart(ProductEntity product)
         {
             // Get the matching cart and album instances
             var cartItem = await Task.Run(() => 
@@ -56,7 +56,9 @@ namespace PlusAndComment.Models
                 cartItem.Number++;
             }
             // Save changes
-             return await storeDB.SaveChangesAsync();
+            await storeDB.SaveChangesAsync();
+
+            return cartItem;
         }
 
         public int RemoveFromCart(int id)

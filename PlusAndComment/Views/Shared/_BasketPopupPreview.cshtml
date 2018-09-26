@@ -4,68 +4,48 @@
     ViewBag.Title = "Twoje zamówienie";
 }
 
-<h2>Twoje zamówienie</h2>
-<hr/>
-<p class="button">
-    @*@Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout", new { @id = "CheckoutLink" })*@
-
-    @*<a href="#" style="z-index:100000; position: absolute" id="CheckoutLink">Checkout>>Link</a>*@
-
-    @*<div id="CheckoutLink" style="background-color: palegreen;  position: relative">aaaaaaaaaaaaaa  </div>*@
-    @*@Html.ActionLink("Checkout>> ", "AddressAndPayment", "Checkout", new { @id = "CheckoutLink" })*@
-</p>
-<div id="update-message">
-</div>
-<table cellpadding="10">
-    <tr>
-        <th>
-            Picture
-        </th>
-        <th>
-            Product
-        </th>
-        <th>
-            Price (each)
-        </th>
-        <th>
-            Quantity
-        </th>
-    </tr>
-    @foreach (var item in Model.CartItems)
-    {
-        <tr id="row-@item.RecordId">
-            <td><img src="@item.Product.Pictures?.FirstOrDefault().Path"</td>
-            <td>
-                @Html.ActionLink(item.Product.Name ?? "title generated", "Details", "Store", new { id = item.ProductId }, null)
-            </td>
-            <td>
-                @item.Product.Price
-            </td>
-            <td id="item-count-@item.RecordId">
-                @item.Number
-            </td>
-            <td>
-                <a href="#" class="RemoveLink"
-                   data-id="@item.RecordId">
-                    Remove
-                </a>
-            </td>
-        </tr>
-    }
-    <tr>
-        <td>
-            Total
-        </td>
-        <td></td>
-        <td></td>
-        <td id="cart-total">
-            @Model.CartTotal
-        </td>
-    </tr>
-</table>
-<div>
-    <hr/>
-    @Html.ActionLink("Zamów ", "AddressAndPayment", "Checkout",null, new { @class = "btn btn-primary btn-large", @style = "width: 100%" })
+<div style="min-width: 300px;">
+    <div style="filter: brightness(80%); background-color: lightgrey ">
+        <div id="update-message">
+        </div>
+    </div>
+    <div>
+        <table id="basketTable" cellpadding="10" style="width: 100%">
+            @foreach (var item in Model.CartItems)
+            {
+                <tr id="row-@item.RecordId" style="border-bottom: 1pt solid grey; padding: 15px 15px 15px 15px">
+                    
+                        <td><img src="@Url.Content(item.Product.Pictures?.FirstOrDefault().Path)" style="max-height: 40px;" /></td>
+                        <td>
+                            <div>
+                                @Html.ActionLink(item.Product.Name ?? "title generated", "Details", "Store", new { id = item.ProductId }, null)
+                            </div>
+                        </td>
+                        <td>
+                            <span style="display: inline-block"><a href="#" class="RemoveLink" data-id="@item.RecordId">-</a></span>
+                            <span id="item-count-@item.RecordId" style="display: inline-block">@item.Number</span>
+                            <span style="display: inline-block">x</span>
+                            <span style="display: inline-block"><a href="#" class="AddLink" data-id="@item.RecordId">+</a></span>
+                        </td>
+                        <td>
+                            <span>@item.Product.Price</span><span> zł</span>
+                        </td>
+                    
+                </tr>
+            }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>suma:</td>
+                    <td>
+                        <span id="cart-total">@Model.CartTotal</span>
+                    </td>
+                </tr>
+        </table>
+        <div>
+            @Html.ActionLink("Zamów ", "AddressAndPayment", "Checkout", null, new { @class = "btn btn-primary btn-large", @style = "width: 100%" })
+        </div>
+    </div>
 </div>
 
 <script>
@@ -85,7 +65,31 @@
                         $('#item-count-' + data.DeleteId).text(data.ItemCount);
                     }
                     $('#cart-total').text(data.CartTotal);
-                    $('#update-message').text(data.Message);
+                    //$('#update-message').text(data.Message);
+                    $('#cart-status').text('Cart (' + data.CartCount + ')');
+
+                    $('#trolleyItemsCount').attr("data-count", data.CartCount);
+                });
+        }
+    });
+
+    // Document.ready -> link up remove event handler
+    $(".AddLink").click(function () {
+        // Get the id from the link
+        var recordToDelete = $(this).attr("data-id");
+        if (recordToDelete !== '') {
+            // Perform the ajax post
+            $.post("/ShoppingCart/AddNumberOfProductToCart", { "id": recordToDelete },
+                function (data) {
+                    // Successful requests get here
+                    // Update the page elements
+                    if (data.ItemCount === 0) {
+                        $('#row-' + data.DeleteId).fadeOut('slow');
+                    } else {
+                        $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                    }
+                    $('#cart-total').text(data.CartTotal);
+                    //$('#update-message').text(data.Message);
                     $('#cart-status').text('Cart (' + data.CartCount + ')');
 
                     $('#trolleyItemsCount').attr("data-count", data.CartCount);

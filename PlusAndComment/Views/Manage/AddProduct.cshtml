@@ -4,6 +4,8 @@
     <div class="col-md-6">
         @using (Html.BeginForm())
         {
+            @Html.HiddenFor(m => m.CurrentProduct.CatId, new { @id="catIdAddProduct" })
+
             @Html.AntiForgeryToken()
 
             var listEnumerator = Model.CurrentProduct.Pictures.GetEnumerator();
@@ -11,11 +13,7 @@
             for (var i = 0; listEnumerator.MoveNext() == true; i++)
             {
                 var item = listEnumerator.Current;
-
-                @*@Html.HiddenFor(m => item.PictureId, new { @id = "PictureId_" + i });*@
                 @Html.HiddenFor(m => m.CurrentProduct.Pictures[i].Path, new { @id = "Path_" + i });
-                @*@Html.Hidden(item.PictureId.ToString(), null, new { @id = "PictureId_" + i });
-                    @Html.Hidden(item.Path, null, new { @id = "Path_" + i });*@
             }
 
             <div class="form-horizontal">
@@ -49,7 +47,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.CurrentProduct.Category, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownListFor(m => m.CurrentProduct.CatId, new SelectList(Model.AllCategories, "CategoryId", "Name"), "- Please Select -", new { @class = "form-control" })
+                        @DropDownHierarchy(Model.AllCategories)
 
                         @Html.ValidationMessageFor(model => model.CurrentProduct.Category, "", new { @class = "text-danger" })
                     </div>
@@ -115,33 +113,83 @@
                 @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", new { Model.CurrentProduct.ProductId }, new { @class = "btn btn-primary btn-small" })
             </div>
         </div>
-   </div>
-            <div class="row">
-                <table class="table">
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Product Category</th>
-                        <th>Operation</th>
-                    </tr>
+    </div>
+    <div class="row">
+        <table class="table">
+            <tr>
+                <th>Product Name</th>
+                <th>Product Category</th>
+                <th>Operation</th>
+            </tr>
 
-                    @foreach (var product in Model.AllProducts)
-                    {
-                        <tr>
-                            <td>@Html.Label(product.Name)</td>
-                            <td>@Html.Label(product.Category.Name)</td>
-                            <td>
-                                @Html.ActionLink("Edit", "EditProduct", new { id = product.ProductId }) |
-                                @Html.ActionLink("Details", "Details", new { id = product.ProductId }) |
-                                @Html.ActionLink("Delete", "DeleteProduct", new { id = product.ProductId })
-                            </td>
-                        </tr>
+            @foreach (var product in Model.AllProducts)
+            {
+                <tr>
+                    <td>@Html.Label(product.Name)</td>
+                    <td>@Html.Label(product.Category.Name)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", new { id = product.ProductId }) |
+                        @Html.ActionLink("Details", "Details", new { id = product.ProductId }) |
+                        @Html.ActionLink("Delete", "DeleteProduct", new { id = product.ProductId })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@helper DropDownHierarchy(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+    {
+        <div class="btn-group hierarchy-select" data-resize="auto" id="example-one">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="selected-label pull-left">&nbsp;</span>
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu open">
+                <div class="hs-searchbox">
+                    <input type="text" class="form-control" autocomplete="off">
+                </div>
+                <ul class="dropdown-menu inner" role="menu" id="addProductCategroyDropDown">
+                    <li data-value="" data-level="1" data-default-selected="" class="AddProduct">
+                        <a href="#">Please select</a>
+                    </li>
+                    @{
+                        Model.iteration = 0;
+                        foreach (var element in elements.Where(x => x.ParentId == null))
+                        {
+                            Model.iteration++;
+                            <li data-value="@element.CategoryId" data-level="1" data-default-selected="">
+                                <a href="#">@element.Name</a>
+                            </li>
+                            @DisplayChildForDropdown(element, 1)
+                        }
                     }
-
-                </table>
+                </ul>
             </div>
-
-            <div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>
+            <input class="hidden hidden-field" name="example_one" readonly="readonly" aria-hidden="true" type="text" />
         </div>
+}
 
+@helper DisplayChildForDropdown(PlusAndComment.Models.ViewModel.CategoryVM element, int level)
+    {
+        level++;
+        foreach (var elem in element.Categories)
+        {
+            Model.iteration++;
+            <li data-value="@elem.CategoryId" data-level="@level" data-default-selected="">
+                <a href="#">@elem.Name</a>
+            </li>
+
+            if (elem.Categories.Count() > 0)
+            {
+                @DisplayChildForDropdown(elem, level)
+            }
+
+        }
+}

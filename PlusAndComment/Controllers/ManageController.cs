@@ -755,25 +755,38 @@ namespace PlusAndComment.Controllers
 
                 var parentCategory = db.Categories.Find(category.ParentId);
 
-                var exist = parentCategory.Categories.Any(c => c.Name == cat.Category.Name);
-
-                if(exist)
+                if (parentCategory != null)
                 {
-                    ModelState.AddModelError("error_msg", "Current category exist in the parent category");
-                    var cats = db.Categories.ToList();
-                    cat.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
-                    return View(cat);
-                }
+                    var exist = parentCategory.Categories.Any(c => c.Name == cat.Category.Name);
 
+                    if (exist)
+                    {
+                        ModelState.AddModelError("error_msg", "Current category exist in the parent category");
+                        var cats = db.Categories.ToList();
+                        cat.AllCategories = Mapper.Map<List<CategoryVM>>(cats);
+                        return View(cat);
+                    }
+                }
                 db.Categories.Add(category);
                 db.SaveChanges();
 
                 ViewBag.Message = "Category Added succefully";
             }
             AddCategoryVM acVM = new AddCategoryVM();
-            // acVM.AllCategories = Mapper.Map<List<CategoryVM>>(db.Categories);
 
             return View(acVM);
+        }
+
+        [HttpGet]
+        public ActionResult DeleteCategory(int categoryId)
+        {
+            var entity = db.Categories.Find(categoryId);
+            db.Categories.Remove(entity);
+            db.Entry(entity).State = EntityState.Deleted;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index","Home");
         }
 
         //Product
@@ -828,15 +841,18 @@ namespace PlusAndComment.Controllers
         public ActionResult EditProduct(int id)
         {
             var entity = db.Products.Find(id);
-            var vm = Mapper.Map<ProductVM>(entity);
+            var product = Mapper.Map<ProductVM>(entity);
 
-            return View(vm);
+            var vmAddProduct = new AddProductVM();
+            vmAddProduct.CurrentProduct = product;
+
+            return View(vmAddProduct);
         }
 
         [HttpPost]
-        public ActionResult EditProduct(ProductVM product)
+        public ActionResult EditProduct(AddProductVM product)
         {
-            var entity = Mapper.Map<ProductEntity>(product);
+            var entity = Mapper.Map<ProductEntity>(product.CurrentProduct);
             db.Products.Attach(entity);
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
