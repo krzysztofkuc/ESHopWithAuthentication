@@ -170,10 +170,15 @@ namespace PlusAndComment.Controllers
             }
         }
 
-        //
-        // GET: /Account/Regis+
         [AllowAnonymous]
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
 
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)

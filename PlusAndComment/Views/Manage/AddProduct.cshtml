@@ -1,10 +1,12 @@
 ﻿@model PlusAndComment.Models.ViewModel.AddProductVM
 
+<h4>Add product</h4>
+
 <div class="row">
-    <div class="col-md-6">
+    <div class="col">
         @using (Html.BeginForm())
         {
-            @Html.HiddenFor(m => m.CurrentProduct.CatId, new { @id="catIdAddProduct" })
+            @Html.HiddenFor(m => m.CurrentProduct.CatId, new { @id = "catIdAddProduct" })
 
             @Html.AntiForgeryToken()
 
@@ -15,181 +17,131 @@
                 var item = listEnumerator.Current;
                 @Html.HiddenFor(m => m.CurrentProduct.Pictures[i].Path, new { @id = "Path_" + i });
             }
+            
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.CurrentProduct.Name)
+                @Html.EditorFor(model => model.CurrentProduct.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter product name" } })
+                @Html.ValidationMessageFor(model => model.CurrentProduct.Name, "", new { @class = "text-danger" })
+            </div>
 
-            <div class="form-horizontal">
-                <h4>Add product</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Name, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CurrentProduct.Name, "", new { @class = "text-danger" })
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CurrentProduct.Description)
+                @Html.EditorFor(model => model.CurrentProduct.Description, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter description" } })
+                @Html.ValidationMessageFor(model => model.CurrentProduct.Description, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CurrentProduct.Price)
+                @Html.EditorFor(model => model.CurrentProduct.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter price" } })
+                @Html.ValidationMessageFor(model => model.CurrentProduct.Price, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CurrentProduct.Category)
+                @DropDownHierarchy(Model.AllCategories)
+                @Html.ValidationMessageFor(model => model.CurrentProduct.Category, "", new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+    <div class="col">
+        <div class="row">
+
+            @for (var i = 0; i < 4; i++)
+            {
+                <div class="col-md-6" style="text-align: center; border: 10px">
+                    <label class="imageThumb_uploadLabel" for="imageThumb_upload_@i">
+                        <img class="imageThumb_upload" id=@string.Format("imageThumb_upload_{0}_Preview",i) src="~/Storage/no-image-icon.png" />
+                        <span class="middle">
+                            <span class="textMiddle">Upload</span>
+                        </span>
+                        <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_@i" />
+                    </label>
                 </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Description, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CurrentProduct.Description, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Price, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CurrentProduct.Price, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Category, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @DropDownHierarchy(Model.AllCategories)
-
-                        @Html.ValidationMessageFor(model => model.CurrentProduct.Category, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
+            }
+        </div>
+    </div>
+</div>
+        <div class="col-md-12">
+            <div class="row">
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Create" class="btn btn-default" />
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-    <div class="col-md-6">
-        <div class="row">
 
-            <div class="col-md-6" style="text-align: center; border: 10px">
-                <label class="imageThumb_uploadLabel" for="imageThumb_upload_0">
-                    <img class="imageThumb_upload" id="imageThumb_upload_0_Preview" src="~/Storage/no-image-icon.png" />
-                    <span class="middle">
-                        <span class="textMiddle">Upload</span>
-                    </span>
-                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_0" />
-                </label>
-            </div>
-
-            <div class="col-md-6" style="text-align: center;">
-                <label class="imageThumb_uploadLabel" for="imageThumb_upload_1">
-                    <img class="imageThumb_upload" id="imageThumb_upload_1_Preview" src="~/Storage/no-image-icon.png" />
-                    <span class="middle">
-                        <span class="textMiddle">Upload</span>
-                    </span>
-                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_1" />
-                </label>
-            </div>
-
-            <div class="col-md-6" style="text-align: center;">
-                <label class="imageThumb_uploadLabel" for="imageThumb_upload_2">
-                    <img class="imageThumb_upload" id="imageThumb_upload_2_Preview" src="~/Storage/no-image-icon.png" />
-                    <span class="middle">
-                        <span class="textMiddle">Upload</span>
-                    </span>
-                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_2" />
-                </label>
-            </div>
-
-            <div class="col-md-6" style="text-align: center;">
-                <label class="imageThumb_uploadLabel" for="imageThumb_upload_3">
-                    <img class="imageThumb_upload" id="imageThumb_upload_3_Preview" src="~/Storage/no-image-icon.png" />
-                    <span class="middle">
-                        <span class="textMiddle">Upload</span>
-                    </span>
-                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_3" />
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="row">
-
-            @*Attributes*@
-            <div>
-                @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", new { Model.CurrentProduct.ProductId }, new { @class = "btn btn-primary btn-small" })
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table">
-            <tr>
-                <th>Product Name</th>
-                <th>Product Category</th>
-                <th>Operation</th>
-            </tr>
-
-            @foreach (var product in Model.AllProducts)
-            {
-                <tr>
-                    <td>@Html.Label(product.Name)</td>
-                    <td>@Html.Label(product.Category.Name)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditProduct", new { id = product.ProductId }) |
-                        @Html.ActionLink("Details", "Details", new { id = product.ProductId }) |
-                        @Html.ActionLink("Delete", "DeleteProduct", new { id = product.ProductId })
-                    </td>
-                </tr>
-            }
-
-        </table>
-    </div>
-
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
-</div>
-
-@helper DropDownHierarchy(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
-    {
-        <div class="btn-group hierarchy-select" data-resize="auto" id="example-one">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="selected-label pull-left">&nbsp;</span>
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu open">
-                <div class="hs-searchbox">
-                    <input type="text" class="form-control" autocomplete="off">
+                @*Attributes*@
+                <div>
+                    @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", new { Model.CurrentProduct.ProductId }, new { @class = "btn btn-primary btn-small" })
                 </div>
-                <ul class="dropdown-menu inner" role="menu" id="addProductCategroyDropDown">
-                    <li data-value="" data-level="1" data-default-selected="" class="AddProduct">
-                        <a href="#">Please select</a>
-                    </li>
-                    @{
-                        Model.iteration = 0;
-                        foreach (var element in elements.Where(x => x.ParentId == null))
-                        {
-                            Model.iteration++;
-                            <li data-value="@element.CategoryId" data-level="1" data-default-selected="">
-                                <a href="#">@element.Name</a>
-                            </li>
-                            @DisplayChildForDropdown(element, 1)
-                        }
-                    }
-                </ul>
             </div>
-            <input class="hidden hidden-field" name="example_one" readonly="readonly" aria-hidden="true" type="text" />
         </div>
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Category</th>
+                    <th>Operation</th>
+                </tr>
+
+                @foreach (var product in Model.AllProducts)
+                {
+                    <tr>
+                        <td>@Html.Label(product.Name)</td>
+                        <td>@Html.Label(product.Category.Name)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditProduct", new { id = product.ProductId }) |
+                            @Html.ActionLink("Details", "Details", new { id = product.ProductId }) |
+                            @Html.ActionLink("Delete", "DeleteProduct", new { id = product.ProductId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+
+    @helper DropDownHierarchy(ICollection<PlusAndComment.Models.ViewModel.CategoryVM> elements)
+        {
+            <div class="dropdown hierarchy-select" id="example-one">
+                <button type="button" class="btn btn-secondary dropdown-toggle" id="example-one-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                @*check what is this attribute*@
+                <div class="dropdown-menu" aria-labelledby="example-one-button">
+                    <div class="hs-searchbox">
+                        <input type="text" class="form-control" autocomplete="off">
+                    </div>
+                    <div class="hs-menu-inner">
+                        <a class="dropdown-item" data-value="" data-level="1" data-default-selected="" href="#">All categories</a>
+                        @{
+                            Model.iteration = 0;
+                            foreach (var element in elements.Where(x => x.ParentId == null))
+                            {
+                                Model.iteration++;
+                                <a class="dropdown-item" data-value="@element.CategoryId" data-level="1" href="#">@element.Name</a>
+                                @DisplayChildForDropdown(element, 1)
+                            }
+                        }
+                    </div>
+                </div>
+                <input class="d-none" name="example_one" readonly="readonly" aria-hidden="true" type="text" />
+            </div>
 }
 
-@helper DisplayChildForDropdown(PlusAndComment.Models.ViewModel.CategoryVM element, int level)
-    {
-        level++;
-        foreach (var elem in element.Categories)
+    @helper DisplayChildForDropdown(PlusAndComment.Models.ViewModel.CategoryVM element, int level)
         {
-            Model.iteration++;
-            <li data-value="@elem.CategoryId" data-level="@level" data-default-selected="">
-                <a href="#">@elem.Name</a>
-            </li>
-
-            if (elem.Categories.Count() > 0)
+            level++;
+            foreach (var elem in element.Categories)
             {
-                @DisplayChildForDropdown(elem, level)
-            }
+                Model.iteration++;
+                <a class="dropdown-item" data-value="@elem.CategoryId" data-level="@level" href="#">@elem.Name</a>
 
-        }
+                if (elem.Categories.Count() > 0)
+                {
+                    @DisplayChildForDropdown(elem, level)
+                }
+
+            }
 }

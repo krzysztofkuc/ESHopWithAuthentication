@@ -22,15 +22,12 @@
         <div class="form-horizontal">
             <h4>AddProductAttributeVM</h4>
             <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), htmlAttributes: new { @id = "SelectAttributeDropDown", @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
+            @Html.LabelFor(model => model.Name)
+            @Html.DropDownListFor(m => m.Name, new SelectList(Model.CurrentProduct.Category.Attributes.Select(attr => attr.Name)), htmlAttributes: new { @id = "SelectAttributeDropDown", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
@@ -44,20 +41,16 @@
         {
             //value
             <div class="form-group" id="valueInput" style="display: none">
-                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-                </div>
+                @Html.LabelFor(model => model.Value)
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter value" } })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
             </div>
 
             //Date
             <div class="form-group" id="valueDate" style="display: none">
-                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <input type="text" class="form-control datepicker">
-                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
-                </div>
+                @Html.LabelFor(model => model.Value)
+                <input type="text" class="form-control datepicker">
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
             </div>
 
             <div id="tableAttributeList" style="display:none">

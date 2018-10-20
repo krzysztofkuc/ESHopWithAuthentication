@@ -22,6 +22,7 @@ namespace PlusAndComment.Models.ViewModel
 
         public string Title { get; set; }
 
+        [Required]
         [Display(Name = "Product name")]
         public string Name { get; set; }
 

@@ -216,6 +216,9 @@ namespace PlusAndComment.Controllers
         {
             List<CategoryAttributeVM> filledFilters = GetOnlyFilledFilters(filters);
 
+            if(filledFilters == null)
+                return RedirectToAction("Index");
+
             //TODO: should by dynamic
             var uriBuilder = new UriBuilder("http://localhost:44393/");
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -285,6 +288,9 @@ namespace PlusAndComment.Controllers
 
         private List<CategoryAttributeVM> GetOnlyFilledFilters(List<CategoryAttributeVM> filters)
         {
+            if (filters == null)
+                return null;
+
             List<CategoryAttributeVM> filledFilters = new List<CategoryAttributeVM>();
 
             foreach (var item in filters)

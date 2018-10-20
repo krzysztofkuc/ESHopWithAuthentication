@@ -4,6 +4,10 @@
     color: #161616;
 }*/
 
+.navbar-toggleable-xl .navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
 #basketTable td {
     padding-top: 3px;
     padding-bottom: 3px;
@@ -20,7 +24,6 @@ a:hover{
 }
 
 body {
-    padding-top: 80px;
     padding-bottom: 20px;
 
     background-color: #2D383E;

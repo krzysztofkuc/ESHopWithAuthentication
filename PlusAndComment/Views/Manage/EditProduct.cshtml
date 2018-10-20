@@ -1,89 +1,83 @@
 ﻿@model PlusAndComment.Models.ViewModel.AddProductVM
 
 <div class="row">
-    @using (Html.BeginForm())
-    {
-        <div class="col-md-6">
-            @Html.HiddenFor(m => m.CurrentProduct.CatId, new { @id = "catIdAddProduct" })
+    <div class="col-md-12">
+        @using (Html.BeginForm())
+        {
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.CurrentProduct.CatId, new { @id = "catIdAddProduct" })
 
-            @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                <h4>Add product</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Name, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="form-horizontal">
+                    <h4>Add product</h4>
+                    <hr />
+                    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrentProduct.Name)
+                        @Html.EditorFor(model => model.CurrentProduct.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter name" } })
                         @Html.ValidationMessageFor(model => model.CurrentProduct.Name, "", new { @class = "text-danger" })
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrentProduct.Description)
+                        @Html.EditorFor(model => model.CurrentProduct.Description, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter product description" } })
                         @Html.ValidationMessageFor(model => model.CurrentProduct.Description, "", new { @class = "text-danger" })
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CurrentProduct.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrentProduct.Price)
+                        @Html.EditorFor(model => model.CurrentProduct.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter price" } })
                         @Html.ValidationMessageFor(model => model.CurrentProduct.Price, "", new { @class = "text-danger" })
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CurrentProduct.Category, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <label>@Model.CurrentProduct.Category.Name</label>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CurrentProduct.Category)
+                        @Html.DisplayFor(x => x.CurrentProduct.Name, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="row">
-                @{
-                    var listEnumerator = Model.CurrentProduct.Pictures.GetEnumerator();
-
-                    for (var i = 0; listEnumerator.MoveNext() == true; i++)
-                    {
-                        var item = listEnumerator.Current;
-                        @Html.HiddenFor(m => m.CurrentProduct.Pictures[i].Path, new { @id = "Path_" + i });
-
-                        <div class="col-md-6" style="text-align: center; border: 10px">
-                            <label class="imageThumb_uploadLabel" for="imageThumb_upload_@i">
-                                <img class="imageThumb_upload" id="imageThumb_upload_0_Preview" src=@item.Path />
-                                <span class="middle">
-                                    <span class="textMiddle">Upload</span>
-                                </span>
-                                <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_@i" />
-                            </label>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-outline-primary" />
                         </div>
-                    }
-                }
+                    </div>
+                </div>
             </div>
-        </div>
-    }
-    <div class="col-md-12">
-        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    @{
+                        var listEnumerator = Model.CurrentProduct.Pictures.GetEnumerator();
 
-            @*Attributes*@
-            <div>
-                @Html.ActionLink("Add attribute", "CreateProductAttribute", "Manage", new { Model.CurrentProduct.ProductId }, new { @class = "btn btn-primary btn-small" })
+                        for (var i = 0; listEnumerator.MoveNext() == true; i++)
+                        {
+                            var item = listEnumerator.Current;
+                            @Html.HiddenFor(m => m.CurrentProduct.Pictures[i].Path, new { @id = "Path_" + i });
+
+                            <div class="col-md-6" style="text-align: center; border: 10px">
+                                <label class="imageThumb_uploadLabel" for="imageThumb_upload_@i">
+                                    <img class="imageThumb_upload" id="imageThumb_upload_0_Preview" src=@item.Path />
+                                    <span class="middle">
+                                        <span class="textMiddle">Upload</span>
+                                    </span>
+                                    <input class="imageThumb_upload" type="file" name="image" id="imageThumb_upload_@i" />
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+        <div class="col-md-12">
+            <div class="row">
+
+                @*Attributes*@
+                <div>
+                    @Html.ActionLink("Add attribute", "AddProductAttribute", "Manage", new { Model.CurrentProduct.ProductId }, new { @class = "btn btn-primary btn-small" })
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>

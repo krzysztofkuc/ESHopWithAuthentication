@@ -30,33 +30,33 @@
     }
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-toggleable-xl navbar-inverse bg-dark navbar-fixed-top navbar-expand-lg">
         <div class="container">
-            <div class="navbar-header">
+            <a class="navbar-brand" href='@Url.Action("index", "Home")'><img src='@Url.Content("~/Storage/logo.png")' style="height: 50px;" /></a>
+            <ul class="navbar-nav ml-auto flex-row">
+                @Html.Partial("_LoginPartial")
+            </ul>
+
+            <div id="basket">
+            </div>
+        </div>
+            @*<div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <div><a href='@Url.Action("index", "Home")'><img src='@Url.Content("~/Storage/logo.png")' style="height: 50px;" /></a></div>
-
-                <div class="navbar-inner visible-xs">
-                    <div class="nav-center">
-                        <div><a href='@Url.Action("index", "Home")'><img src='@Url.Content("~/Storage/logo.png")' style="height: 50px;" /></a></div>
-                    </div>
-                </div>
-
-            </div>
-            @Html.Partial("_LoginPartial")
-            <div class="navbar-collapse collapse">
+            </div>*@
+            @*@Html.Partial("_LoginPartial")*@
+            @*<div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
                         <div class="@CheckActive("Articles", "Home")" style="display: inline-block; padding-top: 9px;"><a href="/Home/Articles" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="glyphicon glyphicon-list-alt" style="padding-right: 5px;"></span>Z sieci</a></div>
                     </li>
                 </ul>
-            </div>
-        </div>
-    </div>
+            </div>*@
+
+    </nav>
 
 
     <div class="container body-content">

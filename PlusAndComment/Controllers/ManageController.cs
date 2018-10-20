@@ -852,6 +852,11 @@ namespace PlusAndComment.Controllers
         [HttpPost]
         public ActionResult EditProduct(AddProductVM product)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(product);
+            }
+
             var entity = Mapper.Map<ProductEntity>(product.CurrentProduct);
             db.Products.Attach(entity);
             db.Entry(entity).State = EntityState.Modified;

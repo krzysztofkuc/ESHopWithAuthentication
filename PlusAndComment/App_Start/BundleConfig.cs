@@ -18,6 +18,8 @@ namespace PlusAndComment
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui.js",
                         "~/Scripts/jquery-ui.min.js",
+                        "~/Scripts/umd/popper-utils.min.js",
+                        "~/Scripts/umd/popper.min.js",
                         "~/Scripts/hierarchy-select.min.js",
                         "~/Scripts/site.js"));
 

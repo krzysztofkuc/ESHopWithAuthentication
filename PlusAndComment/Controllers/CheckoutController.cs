@@ -44,6 +44,12 @@ namespace PlusAndComment.Controllers
             var order = new OrderVM();
             TryUpdateModel(order);
 
+            if (!ModelState.IsValid)
+            {
+                return View(order);
+            }
+
+
             try
             {
                 //if (string.Equals(values["PromoCode"], PromoCode,
